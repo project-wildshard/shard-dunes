@@ -1,0 +1,132 @@
+[
+  {
+    "file": "test/crack-every-player.test.ts",
+    "disposition": "engine",
+    "reason": "Engine runtime behavior (simulation, networking, admission, restore or quest/weather lifecycle), with engine-owned fixtures. Listed for the engine port; file retained and excluded here."
+  },
+  {
+    "file": "test/eased-weather-fields.test.ts",
+    "disposition": "engine",
+    "reason": "Engine runtime behavior (simulation, networking, admission, restore or quest/weather lifecycle), with engine-owned fixtures. Listed for the engine port; file retained and excluded here."
+  },
+  {
+    "file": "test/explorer-catalogue.test.ts",
+    "disposition": "engine",
+    "reason": "Engine runtime behavior (simulation, networking, admission, restore or quest/weather lifecycle), with engine-owned fixtures. Listed for the engine port; file retained and excluded here."
+  },
+  {
+    "file": "test/hybrid-product-rows.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: coupled unit test pins private generated hashes, metadata/array shapes, buffer allocations or mutable factory internals rather than an author/player boundary."
+  },
+  {
+    "file": "test/matriarch-borrowed-body.test.ts",
+    "disposition": "engine",
+    "reason": "Engine runtime behavior (simulation, networking, admission, restore or quest/weather lifecycle), with engine-owned fixtures. Listed for the engine port; file retained and excluded here."
+  },
+  {
+    "file": "test/net-fuzz.test.ts",
+    "disposition": "engine",
+    "reason": "Engine runtime behavior (simulation, networking, admission, restore or quest/weather lifecycle), with engine-owned fixtures. Listed for the engine port; file retained and excluded here."
+  },
+  {
+    "file": "test/quest-mechanics.test.ts",
+    "disposition": "engine",
+    "reason": "Engine runtime behavior (simulation, networking, admission, restore or quest/weather lifecycle), with engine-owned fixtures. Listed for the engine port; file retained and excluded here."
+  },
+  {
+    "file": "test/signal-bucket-mover.test.ts",
+    "disposition": "ran",
+    "reason": "Retained the real Dunes bucket command/save-restore behavior via the released mover facade; removed private native-clock/body-layout assertions."
+  },
+  {
+    "file": "test/signal-ember-binary.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: coupled unit test pins private generated hashes, metadata/array shapes, buffer allocations or mutable factory internals rather than an author/player boundary."
+  },
+  {
+    "file": "test/signal-skirt-scene.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: coupled unit test pins private generated hashes, metadata/array shapes, buffer allocations or mutable factory internals rather than an author/player boundary."
+  },
+  {
+    "file": "test/standalone-server.test.ts",
+    "disposition": "engine",
+    "reason": "Engine runtime behavior (simulation, networking, admission, restore or quest/weather lifecycle), with engine-owned fixtures. Listed for the engine port; file retained and excluded here."
+  },
+  {
+    "file": "test/sunscar-fire-book.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: coupled unit test pins private generated hashes, metadata/array shapes, buffer allocations or mutable factory internals rather than an author/player boundary."
+  },
+  {
+    "file": "test/sunscar-generated-source.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: coupled unit test pins private generated hashes, metadata/array shapes, buffer allocations or mutable factory internals rather than an author/player boundary."
+  },
+  {
+    "file": "test/sunscar-map-program.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: private generator/cache inventory and byte-hash unit pins. Existing sunscar-config-boundary tests cover the author entry; another per-module bundle check duplicates it."
+  },
+  {
+    "file": "test/sunscar-navigation-program.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: private generator/cache inventory and byte-hash unit pins. Existing sunscar-config-boundary tests cover the author entry; another per-module bundle check duplicates it."
+  },
+  {
+    "file": "test/sunscar-painted-source.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: coupled unit test pins private generated hashes, metadata/array shapes, buffer allocations or mutable factory internals rather than an author/player boundary."
+  },
+  {
+    "file": "test/sunscar-rest-bindings.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: coupled unit test pins private generated hashes, metadata/array shapes, buffer allocations or mutable factory internals rather than an author/player boundary."
+  },
+  {
+    "file": "test/sunscar-rest-fire.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: private generator/cache inventory and byte-hash unit pins. Existing sunscar-config-boundary tests cover the author entry; another per-module bundle check duplicates it."
+  },
+  {
+    "file": "test/sunscar-rest-oil.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: coupled unit test pins private generated hashes, metadata/array shapes, buffer allocations or mutable factory internals rather than an author/player boundary."
+  },
+  {
+    "file": "test/sunscar-rest-well.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: private generator/cache inventory and byte-hash unit pins. Existing sunscar-config-boundary tests cover the author entry; another per-module bundle check duplicates it."
+  },
+  {
+    "file": "test/sunscar-rig-program.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: private generator/cache inventory and byte-hash unit pins. Existing sunscar-config-boundary tests cover the author entry; another per-module bundle check duplicates it."
+  },
+  {
+    "file": "test/sunscar-sand-program.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: private generator/cache inventory and byte-hash unit pins. Existing sunscar-config-boundary tests cover the author entry; another per-module bundle check duplicates it."
+  },
+  {
+    "file": "test/sunscar-source-handoffs.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: coupled unit test pins private generated hashes, metadata/array shapes, buffer allocations or mutable factory internals rather than an author/player boundary."
+  },
+  {
+    "file": "test/sunscar-view-source.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: coupled unit test pins private generated hashes, metadata/array shapes, buffer allocations or mutable factory internals rather than an author/player boundary."
+  },
+  {
+    "file": "test/sunscar-world-factories.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: coupled unit test pins private generated hashes, metadata/array shapes, buffer allocations or mutable factory internals rather than an author/player boundary."
+  },
+  {
+    "file": "test/sunscar-world-program.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: private generator/cache inventory and byte-hash unit pins. Existing sunscar-config-boundary tests cover the author entry; another per-module bundle check duplicates it."
+  }
+]
