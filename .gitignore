@@ -10,3 +10,12 @@ blob-report/
 .env.*
 # No worktrees here (D27); ignored so a stray one never gets committed.
 .claude/worktrees/
+
+# Lifted from singleplayer (P5).
+out/
+tmp/
+.cache/
+/public/assets/sunscar-dunes/map/top.webp
+/public/assets/sunscar-dunes/entry-reads.json
+/src/shards/sunscar-dunes/discovery.generated.ts
+/public/assets/sunscar-dunes/
