@@ -2,7 +2,7 @@
 // installed engine, takes real player commands, and resumes its own save.
 import '@wildshard/engine/scripts/sim-node-loader.mjs';
 import assert from 'node:assert/strict';
-import { readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { resolve, join } from 'node:path';
 import { test } from 'node:test';
@@ -12,9 +12,12 @@ const { createTrustedHeadlessAdapter } = await import('@wildshard/engine/host/he
 const { HeadlessSimulation } = await import('@wildshard/engine/host/headless');
 const { outputDescriptor, serverReadsFile } = await import('@wildshard/engine/game/shardfile/outputDescriptor');
 const { loadRapier } = await import('@wildshard/engine/physics/rapier');
+const { manifestFolders, shardProducts } = await import('@wildshard/engine/scripts/shard-outputs.mjs');
 const engineRequire = createRequire(import.meta.resolve('@wildshard/engine/package.json'));
 const products = readdirSync('out', { withFileTypes: true }).filter(row => row.isDirectory() && !row.name.startsWith('.') && row.name !== 'tars');
 assert.ok(products.length, 'Build this shard before running its product proof');
+assert.deepEqual(products.map(row => row.name).sort(), shardProducts(process.cwd(), manifestFolders(process.cwd())).map(row => row.slug).sort(), 'Every declared product must be built');
+const tapes = existsSync('test/ci/content-tapes.json') ? JSON.parse(readFileSync('test/ci/content-tapes.json', 'utf8')) : {};
 
 for (const { name: slug } of products) test(`${slug}: boot, walk and resume on the installed engine`, { timeout: 9_500 }, async () => {
   const directory = resolve('out', slug), product = await loadHeadlessProduct(directory), shard = product.shardfile;
@@ -34,6 +37,16 @@ for (const { name: slug } of products) test(`${slug}: boot, walk and resume on t
   };
   try {
     const runtime = await create();
+    if (tapes[slug]) {
+      const { plan: content, expect } = tapes[slug];
+      const played = declared ? (await runtime.verbTapePart(content)).report : await runtime.verbTape(content);
+      for (const fact of expect) {
+        const at = played.observations.find(row => row.id === fact.at);
+        assert.ok(at, `Missing real observation ${fact.at}`);
+        for (const flag of fact.flags ?? []) assert.ok(at.flags.includes(flag), `Playing must earn ${flag}`);
+        for (const flag of fact.absent ?? []) assert.ok(!at.flags.includes(flag), `Unreachable input must not earn ${flag}`);
+      }
+    }
     const plan = { version: 1, observe: [], segments: [
       { id: 'spawn', ticks: 1, commands: [] },
       { id: 'walk', ticks: 120, commands: [{ kind: 'player', moveX: 0, moveZ: -1, yaw: 0 }] },

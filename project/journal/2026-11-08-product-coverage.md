@@ -17,3 +17,8 @@ The installed engine v0.1.0 has no public cook entry point. Cooking, client
 boot and authored quest/encounter tapes remain explicit plan gaps, rather
 than reaching into the installed package's private tree. This proof shows
 server admission, walking and continuation, not drawn client play.
+
+The Dunes tape also walks to Sefa and earns the scout flag through the
+real talk command. A distant logbook command earns nothing. The product
+list is compared with authored outputs so an omitted product fails early.
+Candidate and pinned runs use separate concurrency groups.

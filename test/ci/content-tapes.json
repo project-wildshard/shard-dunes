@@ -1,0 +1,17 @@
+{
+  "sunscar-dunes": {
+    "plan": {
+      "version": 1,
+      "observe": [],
+      "segments": [
+        { "id": "distant-logbook", "ticks": 1, "commands": [{ "kind": "script", "actorId": "sunscar.interact", "value": 1 }] },
+        { "id": "walk-to-sefa", "ticks": 1200, "commands": [], "route": [{ "x": 0, "z": 70 }, { "x": 6, "z": 73 }] },
+        { "id": "talk-to-sefa", "ticks": 1, "commands": [{ "kind": "script", "actorId": "sunscar.interact", "value": 0 }] }
+      ]
+    },
+    "expect": [
+      { "at": "distant-logbook", "absent": ["sunscar.logbook"] },
+      { "at": "talk-to-sefa", "flags": ["sunscar.scout"] }
+    ]
+  }
+}
