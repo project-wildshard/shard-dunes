@@ -22,3 +22,9 @@ The Dunes tape also walks to Sefa and earns the scout flag through the
 real talk command. A distant logbook command earns nothing. The product
 list is compared with authored outputs so an omitted product fails early.
 Candidate and pinned runs use separate concurrency groups.
+
+The follow-up closes the package-discovery and cleared-queue/import gates
+for this repo too. The real installed CLI admits the complete published
+tarball, and an AST check resolves public imports. Both are CI-only.
+Correction: engine v0.1.0 does export game/shardCook. Cooking its real
+packs and booting from them remains work; lack of an export is not a blocker.
