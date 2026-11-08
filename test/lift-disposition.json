@@ -1,18 +1,23 @@
 [
   {
     "file": "test/crack-every-player.test.ts",
-    "disposition": "engine",
-    "reason": "Engine runtime behavior (simulation, networking, admission, restore or quest/weather lifecycle), with engine-owned fixtures. Listed for the engine port; file retained and excluded here."
+    "disposition": "moved-engine",
+    "reason": "Run the real host, wire, physics or durable-store flow against engine and admitted pin data; remove imports of retired shard author modules.",
+    "engineOutcome": "migrated",
+    "engineTarget": "project-wildshard/engine/test/crack-every-player.test.ts",
+    "ring": 1
   },
   {
     "file": "test/eased-weather-fields.test.ts",
-    "disposition": "engine",
-    "reason": "Engine runtime behavior (simulation, networking, admission, restore or quest/weather lifecycle), with engine-owned fixtures. Listed for the engine port; file retained and excluded here."
+    "disposition": "deleted",
+    "reason": "J186: Directly pins private row/factory/owner representation or an internal callback projection against a copied fixture. Its asserted contract is the implementation layout or projection, including direct guards for that layout.",
+    "engineOutcome": "deleted-j186"
   },
   {
     "file": "test/explorer-catalogue.test.ts",
-    "disposition": "engine",
-    "reason": "Engine runtime behavior (simulation, networking, admission, restore or quest/weather lifecycle), with engine-owned fixtures. Listed for the engine port; file retained and excluded here."
+    "disposition": "deleted",
+    "reason": "J186: Coupled unit harness with 8 mock/spy references. It fabricates page/owner/service dependencies and asserts private construction, preparation, ownership or callback behavior instead of traversing a real player/author boundary.",
+    "engineOutcome": "deleted-j186"
   },
   {
     "file": "test/hybrid-product-rows.test.ts",
@@ -21,18 +26,27 @@
   },
   {
     "file": "test/matriarch-borrowed-body.test.ts",
-    "disposition": "engine",
-    "reason": "Engine runtime behavior (simulation, networking, admission, restore or quest/weather lifecycle), with engine-owned fixtures. Listed for the engine port; file retained and excluded here."
+    "disposition": "moved-engine",
+    "reason": "Removed the direct author catalogue shape check; kept the native borrowed-body/restore flow.",
+    "engineOutcome": "migrated",
+    "engineTarget": "project-wildshard/engine/test/matriarch-borrowed-body.test.ts",
+    "ring": 1
   },
   {
     "file": "test/net-fuzz.test.ts",
-    "disposition": "engine",
-    "reason": "Engine runtime behavior (simulation, networking, admission, restore or quest/weather lifecycle), with engine-owned fixtures. Listed for the engine port; file retained and excluded here."
+    "disposition": "moved-engine",
+    "reason": "Run the real host, wire, physics or durable-store flow against engine and admitted pin data; remove imports of retired shard author modules.",
+    "engineOutcome": "migrated",
+    "engineTarget": "project-wildshard/engine/test/net-fuzz.test.ts",
+    "ring": 2
   },
   {
     "file": "test/quest-mechanics.test.ts",
-    "disposition": "engine",
-    "reason": "Engine runtime behavior (simulation, networking, admission, restore or quest/weather lifecycle), with engine-owned fixtures. Listed for the engine port; file retained and excluded here."
+    "disposition": "moved-engine",
+    "reason": "Removed the fake Cable/encounter callback-count units; kept a real admitted mover commanded through the quest graph to its committed endpoint.",
+    "engineOutcome": "migrated",
+    "engineTarget": "project-wildshard/engine/test/quest-mechanics.test.ts",
+    "ring": 1
   },
   {
     "file": "test/signal-bucket-mover.test.ts",
@@ -51,8 +65,11 @@
   },
   {
     "file": "test/standalone-server.test.ts",
-    "disposition": "engine",
-    "reason": "Engine runtime behavior (simulation, networking, admission, restore or quest/weather lifecycle), with engine-owned fixtures. Listed for the engine port; file retained and excluded here."
+    "disposition": "moved-engine",
+    "reason": "Run the real host, wire, physics or durable-store flow against engine and admitted pin data; remove imports of retired shard author modules.",
+    "engineOutcome": "migrated",
+    "engineTarget": "project-wildshard/engine/test/standalone-server.test.ts",
+    "ring": 1
   },
   {
     "file": "test/sunscar-fire-book.test.ts",

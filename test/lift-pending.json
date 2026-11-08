@@ -1,9 +1,1 @@
-[
-  "test/crack-every-player.test.ts",
-  "test/eased-weather-fields.test.ts",
-  "test/explorer-catalogue.test.ts",
-  "test/matriarch-borrowed-body.test.ts",
-  "test/net-fuzz.test.ts",
-  "test/quest-mechanics.test.ts",
-  "test/standalone-server.test.ts"
-]
+[]
