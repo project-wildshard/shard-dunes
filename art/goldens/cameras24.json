@@ -1,0 +1,485 @@
+{
+ "about": "G859 24-camera set: cameras 1-4 are the CO6 cameras (art/legacy-vs-shardfile/round-1-2026-10-28/cameras.json); 5-24 are POI, coverage, aerial and hands views. yaw / pitch in degrees (yaw 0 = -z, 90 = +x; the engine camera rotation.y is -yaw). probe = the player pose (radians); eye = the camera, resolved from the LEGACY capture (the player eye after settling, plus lift).",
+ "cameras": {
+  "sunscar-dunes": [
+   {
+    "name": "spawn",
+    "eye": [
+     0.0009986528715351655,
+     23.046813753321395,
+     69.99647511429802
+    ],
+    "yaw": 0,
+    "pitch": 2,
+    "feet": [
+     0,
+     21.363867328746412,
+     70
+    ],
+    "fov": 72,
+    "kind": "co6",
+    "poi": "CO6 camera spawn",
+    "n": 1
+   },
+   {
+    "name": "whip",
+    "eye": [
+     0.0008932897829774354,
+     22.0156232587707,
+     65.99541261620735
+    ],
+    "yaw": -20,
+    "pitch": -4,
+    "feet": [
+     0,
+     20.318243261176367,
+     66
+    ],
+    "fov": 72,
+    "kind": "co6",
+    "poi": "CO6 camera whip",
+    "n": 2
+   },
+   {
+    "name": "ray",
+    "eye": [
+     0.0010042021983454326,
+     23.046708301687364,
+     69.99645553346755
+    ],
+    "yaw": -3,
+    "pitch": 9,
+    "feet": [
+     0,
+     21.363867328746412,
+     70
+    ],
+    "fov": 72,
+    "kind": "co6",
+    "poi": "CO6 camera ray",
+    "n": 3
+   },
+   {
+    "name": "quest",
+    "eye": [
+     3.99981067679047,
+     20.645222890912752,
+     -62.99510491620133
+    ],
+    "yaw": 14.999999999999998,
+    "pitch": 21.999999999999996,
+    "feet": [
+     4,
+     18.95843583893206,
+     -63
+    ],
+    "fov": 72,
+    "kind": "co6",
+    "poi": "CO6 camera quest",
+    "n": 4
+   },
+   {
+    "name": "signal-tower",
+    "kind": "poi",
+    "poi": "Signal tower (layout TOWER)",
+    "probe": {
+     "x": 6.3,
+     "z": -45.0,
+     "yaw": -0.055851,
+     "pitch": 0.20944
+    },
+    "yaw": 3.2,
+    "pitch": 12,
+    "fov": 72,
+    "n": 5,
+    "eye": [
+     6.299,
+     12.634,
+     -44.981
+    ]
+   },
+   {
+    "name": "caravan",
+    "kind": "poi",
+    "poi": "Caravan (layout CARAVAN)",
+    "probe": {
+     "x": -58.6,
+     "z": 38.4,
+     "yaw": 1.078613,
+     "pitch": 0.0
+    },
+    "yaw": -61.8,
+    "pitch": 0,
+    "fov": 72,
+    "n": 6,
+    "eye": [
+     -58.6,
+     16.23,
+     38.4
+    ]
+   },
+   {
+    "name": "well",
+    "kind": "poi",
+    "poi": "Well (layout WELL)",
+    "probe": {
+     "x": 66.0,
+     "z": -4.7,
+     "yaw": -1.499238,
+     "pitch": 0.0
+    },
+    "yaw": 85.9,
+    "pitch": 0,
+    "fov": 72,
+    "n": 7,
+    "eye": [
+     66.004,
+     20.451,
+     -4.679
+    ]
+   },
+   {
+    "name": "basin",
+    "kind": "poi",
+    "poi": "Basin (layout BASIN)",
+    "probe": {
+     "x": -10.3,
+     "z": -110.2,
+     "yaw": 0.092502,
+     "pitch": 0.0
+    },
+    "yaw": -5.3,
+    "pitch": 0,
+    "fov": 72,
+    "n": 8,
+    "eye": [
+     -10.301,
+     3.99,
+     -110.206
+    ]
+   },
+   {
+    "name": "brazier-east",
+    "kind": "poi",
+    "poi": "Brazier (layout BRAZIERS[0])",
+    "probe": {
+     "x": 45.9,
+     "z": -26.9,
+     "yaw": -1.040216,
+     "pitch": 0.0
+    },
+    "yaw": 59.6,
+    "pitch": 0,
+    "fov": 72,
+    "n": 9,
+    "eye": [
+     45.896,
+     26.235,
+     -26.897
+    ]
+   },
+   {
+    "name": "brazier-west",
+    "kind": "poi",
+    "poi": "Brazier (layout BRAZIERS[1])",
+    "probe": {
+     "x": -31.5,
+     "z": -15.7,
+     "yaw": 1.104793,
+     "pitch": 0.0
+    },
+    "yaw": -63.3,
+    "pitch": 0,
+    "fov": 72,
+    "n": 10,
+    "eye": [
+     -31.497,
+     18.918,
+     -15.698
+    ]
+   },
+   {
+    "name": "brazier-south",
+    "kind": "poi",
+    "poi": "Brazier (layout BRAZIERS[2])",
+    "probe": {
+     "x": 29.6,
+     "z": -88.7,
+     "yaw": -0.319395,
+     "pitch": 0.0
+    },
+    "yaw": 18.3,
+    "pitch": 0,
+    "fov": 72,
+    "n": 11,
+    "eye": [
+     29.598,
+     12.218,
+     -88.708
+    ]
+   },
+   {
+    "name": "great-mound",
+    "kind": "poi",
+    "poi": "Great mound (layout LANDFORMS)",
+    "probe": {
+     "x": -120,
+     "z": -34,
+     "yaw": 0.98262,
+     "pitch": 0.0
+    },
+    "yaw": -56.3,
+    "pitch": 0,
+    "fov": 72,
+    "n": 12,
+    "eye": [
+     -119.993,
+     15.715,
+     -34.012
+    ]
+   },
+   {
+    "name": "grid-160-160",
+    "kind": "grid",
+    "poi": "coverage (-160, -160) looking south-east",
+    "probe": {
+     "x": -160,
+     "z": -160,
+     "yaw": -2.356194,
+     "pitch": 0.0
+    },
+    "yaw": 135,
+    "pitch": 0,
+    "fov": 72,
+    "n": 13,
+    "eye": [
+     -159.996,
+     3.979,
+     -160.001
+    ]
+   },
+   {
+    "name": "grid+0-160",
+    "kind": "grid",
+    "poi": "coverage (0, -160) looking north",
+    "probe": {
+     "x": 0,
+     "z": -160,
+     "yaw": 0.0,
+     "pitch": 0.0
+    },
+    "yaw": 0,
+    "pitch": 0,
+    "fov": 72,
+    "n": 14,
+    "eye": [
+     0.0,
+     2.5,
+     -160.0
+    ]
+   },
+   {
+    "name": "grid+160-160",
+    "kind": "grid",
+    "poi": "coverage (160, -160) looking south-west",
+    "probe": {
+     "x": 160,
+     "z": -160,
+     "yaw": -3.926991,
+     "pitch": 0.0
+    },
+    "yaw": 225,
+    "pitch": 0,
+    "fov": 72,
+    "n": 15,
+    "eye": [
+     159.994,
+     8.381,
+     -159.996
+    ]
+   },
+   {
+    "name": "grid-160+0",
+    "kind": "grid",
+    "poi": "coverage (-160, 0) looking west",
+    "probe": {
+     "x": -160,
+     "z": 0,
+     "yaw": -4.712389,
+     "pitch": 0.0
+    },
+    "yaw": 270,
+    "pitch": 0,
+    "fov": 72,
+    "n": 16,
+    "eye": [
+     -160.009,
+     6.756,
+     0.011
+    ]
+   },
+   {
+    "name": "grid+160+0",
+    "kind": "grid",
+    "poi": "coverage (160, 0) looking east",
+    "probe": {
+     "x": 160,
+     "z": 0,
+     "yaw": -1.570796,
+     "pitch": 0.0
+    },
+    "yaw": 90,
+    "pitch": 0,
+    "fov": 72,
+    "n": 17,
+    "eye": [
+     160.021,
+     12.912,
+     -0.004
+    ]
+   },
+   {
+    "name": "grid-160+160",
+    "kind": "grid",
+    "poi": "coverage (-160, 160) looking north-east",
+    "probe": {
+     "x": -160,
+     "z": 160,
+     "yaw": -0.785398,
+     "pitch": 0.0
+    },
+    "yaw": 45,
+    "pitch": 0,
+    "fov": 72,
+    "n": 18,
+    "eye": [
+     -160.008,
+     8.485,
+     160.01
+    ]
+   },
+   {
+    "name": "grid+0+160",
+    "kind": "grid",
+    "poi": "coverage (0, 160) looking south",
+    "probe": {
+     "x": 0,
+     "z": 160,
+     "yaw": -3.141593,
+     "pitch": 0.0
+    },
+    "yaw": 180,
+    "pitch": 0,
+    "fov": 72,
+    "n": 19,
+    "eye": [
+     0.002,
+     4.926,
+     159.999
+    ]
+   },
+   {
+    "name": "grid+160+160",
+    "kind": "grid",
+    "poi": "coverage (160, 160) looking north-west",
+    "probe": {
+     "x": 160,
+     "z": 160,
+     "yaw": -5.497787,
+     "pitch": 0.0
+    },
+    "yaw": 315,
+    "pitch": 0,
+    "fov": 72,
+    "n": 20,
+    "eye": [
+     160.009,
+     10.181,
+     160.0
+    ]
+   },
+   {
+    "name": "aerial-south",
+    "kind": "aerial",
+    "poi": "the whole shard from hover height",
+    "probe": {
+     "x": 0,
+     "z": 140,
+     "yaw": -0.0,
+     "pitch": -0.383972
+    },
+    "yaw": 0.0,
+    "pitch": -22,
+    "lift": 80,
+    "fov": 72,
+    "n": 21,
+    "eye": [
+     0.0,
+     84.528,
+     140.0
+    ]
+   },
+   {
+    "name": "aerial-west",
+    "kind": "aerial",
+    "poi": "the whole shard from hover height",
+    "probe": {
+     "x": -150,
+     "z": -20,
+     "yaw": -1.453859,
+     "pitch": -0.453786
+    },
+    "yaw": 83.3,
+    "pitch": -26,
+    "lift": 90,
+    "fov": 72,
+    "n": 22,
+    "eye": [
+     -150.005,
+     107.14,
+     -19.989
+    ]
+   },
+   {
+    "name": "hands-down",
+    "kind": "hands",
+    "poi": "hands and held item, first-person close-up",
+    "probe": {
+     "x": 0,
+     "z": 70,
+     "yaw": 0.0,
+     "pitch": -0.261799
+    },
+    "yaw": 0,
+    "pitch": -15,
+    "fov": 72,
+    "n": 23,
+    "eye": [
+     0.002,
+     23.046,
+     69.992
+    ]
+   },
+   {
+    "name": "hands-up",
+    "kind": "hands",
+    "poi": "hands and held item, first-person close-up",
+    "probe": {
+     "x": 84,
+     "z": 10,
+     "yaw": 0.0,
+     "pitch": 0.244346
+    },
+    "yaw": 0,
+    "pitch": 14,
+    "fov": 72,
+    "n": 24,
+    "eye": [
+     84.001,
+     14.996,
+     10.003
+    ]
+   }
+  ]
+ }
+}
