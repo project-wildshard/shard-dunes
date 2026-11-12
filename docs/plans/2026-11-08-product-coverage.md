@@ -11,7 +11,8 @@ Status: in progress 2026-11-08: installed product coverage.
 | Cook and served play | Real cold tar cook, hash-verified server packs, actual Sefa approach/talk earning scout, and five identical restored ticks. Ring 2: cold cook measured 12.35 s locally; hosted pinned/candidate proof is being verified |
 | Cook size ceiling | Open: real manifests are emitted; no invented wire ceiling is asserted |
 | Client title to play | Open: requires the installed dev-client path, not this server proof |
-| Authored quest, fight and traversal tapes | Open: walking does not prove sleeping hosts |
+| Authored quest, fight and traversal tapes | Signal quest done 2026-11-12 (DUN-1): `test/ci/signal-journey.test.mjs` walks the built product through Sefa, logbook, crank and oil, three waymarks, the tower stair and fire, then fights the Matriarch to her fall, on page inputs only (routes, [E] acts, whip cracks, aimed attacks); refusals checked on the way. ~2-3.5 s locally. Durable Ledger and sleeping hosts still open |
+| Falling out of the world | Open, found 2026-11-12 (DUN-1): headless, a player walking due south from the basin (x -14) leaves the terrain near z -250 and falls forever (y -150 000 after 9 000 ticks); no kill floor or respawn fires. Repro: after the fire, hold `{kind:'player',moveX:0,moveZ:-1,yaw:0}` from (-14, -140) for 3 000 ticks. Owner: engine world bounds or the shard's edge collider |
 | Goldens and GPU | Existing graphical owner and Mac mini; outside this lane |
 
 New coverage stays outside hooks under J186. Nothing uploads or deploys.

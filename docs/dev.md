@@ -27,6 +27,9 @@ settling, disposes the real runtime and refuses a later tick. Routes live
 in this repo; no quest flags, poses or host state are forced. Each case
 keeps a 9.5 s limit and stays outside commit/push hooks.
 
+`test/ci/signal-journey.test.mjs` (same flags) plays the whole Signal
+quest and the Matriarch fight on page inputs only, under the same cap.
+
 ## Layout
 
 The root stays thin: README.md and AGENTS.md (humans only), CLAUDE.md
