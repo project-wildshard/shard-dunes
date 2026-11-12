@@ -29,6 +29,10 @@ keeps a 9.5 s limit and stays outside commit/push hooks.
 
 `test/ci/signal-journey.test.mjs` (same flags) plays the whole Signal
 quest and the Matriarch fight on page inputs only, under the same cap.
+`test/ci/durable-ledger.test.mjs` plays the same route (shared in
+`test/ci/signal-route.mjs`), checks the two Ledger facts and purses are
+filed once, saves, restores from the save alone, and plays on with
+nothing filed again.
 
 ## Layout
 
