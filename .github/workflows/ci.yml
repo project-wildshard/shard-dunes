@@ -109,6 +109,9 @@ jobs:
         env:
           NODE_OPTIONS: --import=${{ github.workspace }}/test/ci/refuse-legacy-generation.mjs
         run: pnpm build:shards
+      - name: Check the shard source as an author would (TS21)
+        if: github.event_name != 'push'
+        run: pnpm exec wildshard check . tmp/ci/check
       - name: Prove the owned generator is a real build input
         if: github.event_name != 'push'
         run: node --test test/ci/generation-inputs.test.mjs
@@ -229,6 +232,8 @@ jobs:
         env:
           NODE_OPTIONS: --import=${{ github.workspace }}/test/ci/refuse-legacy-generation.mjs
         run: pnpm build:shards
+      - name: Check the shard source as an author would (TS21)
+        run: pnpm exec wildshard check . tmp/ci/check
       - name: Prove the owned generator is a real build input
         run: node --test test/ci/generation-inputs.test.mjs
       - name: Walk the owned 1800-tick authored route
