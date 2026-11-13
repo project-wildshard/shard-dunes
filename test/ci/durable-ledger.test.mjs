@@ -12,7 +12,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { ACT, DOWN_STAIR, MATRIARCH, SEGMENTS, TOWER_TO_BASIN, UP_STAIR, fightMatriarch, loadSignalProduct, press, walk } from './signal-route.mjs';
 
-const { createTrustedHeadlessResident } = await import('@wildshard/engine/host/headlessRuntime');
+const { openWorld } = await import('@wildshard/engine/host/openWorld');
 const { runTrustedHeadlessTape } = await import('@wildshard/engine/host/headlessTape');
 const { regionalContinuation, serializeSimSnapshot, snapshotSimHostBytes } = await import('@wildshard/engine/sim/snapshot');
 
@@ -29,7 +29,7 @@ const PLAY_ON = [
 
 test('sunscar-dunes: the Signal Ledger files once and stays filed across a durable restore', { timeout: 9_500 }, async () => {
   const started = performance.now(), input = await loadSignalProduct();
-  let resident = await createTrustedHeadlessResident(input);
+  let resident = (await openWorld(input, { room: true })).resident;
   try {
     const journey = tape(resident, SEGMENTS), earned = journey.flatMap(row => row.effects);
     const won = fightMatriarch(resident, effects => { earned.push(...effects); });
@@ -37,7 +37,8 @@ test('sunscar-dunes: the Signal Ledger files once and stays filed across a durab
     for (let tick = 0; tick < 60; tick++) { resident.step([]); earned.push(...resident.effects); }
     assert.deepEqual(ledger(earned), [
       { kind: 'fact', name: 'sunscar.signal', actorId: 'sunscar.signal' }, { kind: 'coins', amount: 5, actorId: 'actor.player' },
-      { kind: 'fact', name: 'sunscar.matriarch', actorId: 'sunscar.matriarch' }, { kind: 'coins', amount: 20, actorId: MATRIARCH },
+      // A room (HS1's world) pays a kill's purse to the player who earned it, not to the body (J105).
+      { kind: 'fact', name: 'sunscar.matriarch', actorId: 'sunscar.matriarch' }, { kind: 'coins', amount: 20, actorId: 'actor.player' },
     ], 'The quest and the Matriarch each file one Ledger fact and pay one purse');
     // Every rule in the built product's Ledger is earned by play, and nothing it has no rule for is filed.
     assert.deepEqual(earned.filter(row => row.kind === 'fact').map(row => row.name).sort(), input.shard.ledger.map(rule => rule.fact).sort(), 'The filed facts are exactly the product Ledger');
@@ -46,7 +47,7 @@ test('sunscar-dunes: the Signal Ledger files once and stays filed across a durab
     // The durable save: the worker's commit encoding, restored from the wire alone into a fresh residency.
     const { host } = resident, tick = host.state.tick, regional = regionalContinuation(host), saved = flags(host);
     const wire = serializeSimSnapshot(snapshotSimHostBytes(host));
-    resident.dispose(); resident = undefined; resident = await createTrustedHeadlessResident(input, wire);
+    resident.dispose(); resident = undefined; resident = (await openWorld(input, { room: true, snapshot: wire })).resident;
     const restored = resident.host;
     assert.notEqual(restored, host);
     assert.equal(restored.state.tick, tick, 'The restored world keeps its tick');

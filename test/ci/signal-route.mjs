@@ -47,7 +47,8 @@ export const SEGMENTS = [
   ...press('pour-north', ACT.pour + 2),
   ...press('light-north', ACT.light + 2, 60),
   walk('climb-tower', [[35, -100.3], [32, -99], [24, -88], [14, -70], [12, -60], ...UP_STAIR]),
-  ...press('light-signal-fire', ACT.fire, 30),
+  // The fire summons the Matriarch; a room (HS1's world) holds every player in her arena still through her intro.
+  ...press('light-signal-fire', ACT.fire, 300),
   walk('walk-to-basin', [...DOWN_STAIR, ...TOWER_TO_BASIN], 8000),
 ];
 // What each input earns (flags present, flags still absent, the quest's current step after it).

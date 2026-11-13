@@ -8,12 +8,12 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { EXPECT, FIGHT_TICKS, SEGMENTS, fightMatriarch, loadSignalProduct } from './signal-route.mjs';
 
-const { createTrustedHeadlessResident } = await import('@wildshard/engine/host/headlessRuntime');
+const { openWorld } = await import('@wildshard/engine/host/openWorld');
 const { runTrustedHeadlessTape } = await import('@wildshard/engine/host/headlessTape');
 
 test('sunscar-dunes: the full Signal journey on real inputs', { timeout: 9_500 }, async () => {
   const started = performance.now();
-  const resident = await createTrustedHeadlessResident(await loadSignalProduct()), { host } = resident;
+  const resident = (await openWorld(await loadSignalProduct(), { room: true })).resident, { host } = resident;
   try {
     const report = runTrustedHeadlessTape(host, input => { resident.step(input); }, () => resident.effects, { version: 1, observe: [], segments: SEGMENTS });
     for (const [id, fact] of Object.entries(EXPECT)) {
