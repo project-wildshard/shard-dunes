@@ -24,5 +24,5 @@ Only the scaffold exists:
 
 ## Coming with the import
 
-- `src/shards/sunscar-dunes/`
+- `src/`
 - `public/assets/sunscar-dunes/`

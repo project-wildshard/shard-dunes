@@ -19,5 +19,5 @@ tmp/
 .cache/
 /public/assets/sunscar-dunes/map/top.webp
 /public/assets/sunscar-dunes/entry-reads.json
-/src/shards/sunscar-dunes/discovery.generated.ts
+/src/discovery.generated.ts
 /public/assets/sunscar-dunes/

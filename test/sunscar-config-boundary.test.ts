@@ -18,7 +18,7 @@ for (const [entry, nativeBakeImport] of [['shard.config.ts', false], ['generator
         return source.replace("import { placeEffects } from './placeEffects';", "import { placeBindings } from './restScene';")
           .replace('const bindings = placeEffects();', 'const bindings = placeBindings();');
       } }],
-      build: { write: false, minify: false, lib: { entry: resolve('src/shards/sunscar-dunes', entry), formats: ['es'] },
+      build: { write: false, minify: false, lib: { entry: resolve('src', entry), formats: ['es'] },
         rolldownOptions: { external: [/^node:/u, 'assemblyscript/dist/asc.js'], output: { codeSplitting: false } } },
     });
     expect(rewrites).toBe(nativeBakeImport ? 1 : 0);

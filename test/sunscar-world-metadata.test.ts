@@ -1,10 +1,10 @@
 // oxlint-disable-next-line import/no-nodejs-modules -- Bake the original author model; no published world file seeds this proof.
 import { readFileSync } from 'node:fs';
 import { expect, test } from 'vitest';
-import { bakeSignalWorldSources } from '../src/shards/sunscar-dunes/generators/worldSources';
-import { signalWorldMetadata } from '../src/shards/sunscar-dunes/generators/worldMetadata';
+import { bakeSignalWorldSources } from '../src/generators/worldSources';
+import { signalWorldMetadata } from '../src/generators/worldMetadata';
 
-const { files } = await bakeSignalWorldSources(new Uint8Array(readFileSync('src/shards/sunscar-dunes/assets/models/dry-well.glb')));
+const { files } = await bakeSignalWorldSources(new Uint8Array(readFileSync('src/assets/models/dry-well.glb')));
 const encoder = new TextEncoder();
 const metadata = signalWorldMetadata(files);
 function record(value: unknown): value is Record<string, unknown> { return typeof value === 'object' && value !== null && !Array.isArray(value); }

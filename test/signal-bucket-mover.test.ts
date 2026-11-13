@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest';
 import { Scope } from '@wildshard/engine/app/scope';
 import { createMoverHost, MoverRuntime } from '@wildshard/engine/game/plugin/mover';
-import { SIGNAL_BUCKET_MOVERS } from '../src/shards/sunscar-dunes/generators/bucket';
-import { FLAG } from '../src/shards/sunscar-dunes/generators/rows/flags';
+import { SIGNAL_BUCKET_MOVERS } from '../src/generators/bucket';
+import { FLAG } from '../src/generators/rows/flags';
 
 
 async function bucket(flags: ReadonlySet<string>) {
