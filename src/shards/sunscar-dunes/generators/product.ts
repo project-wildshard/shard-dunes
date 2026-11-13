@@ -6,7 +6,7 @@ import type { SignalNavigation } from './navigationProgram';
 import bossStages from '../data/bossStages.json' with { type: 'json' };
 import SIGNAL_DUNES_RUNTIME_COST from '../data/runtimeCost.json' with { type: 'json' };
 import { emptyShardfile } from '@wildshard/sharddev/author';
-import { parseShardfile, type Shardfile } from '@wildshard/engine/host/shardfile';
+import { parseShardfile, type Shardfile } from '@wildshard/format/shardSchema';
 import { AUDIO } from './rows/audio';
 import tiles from '../data/tiles.json' with { type: 'json' };
 import { SIGNAL_LEDGER } from './rows/ledger';

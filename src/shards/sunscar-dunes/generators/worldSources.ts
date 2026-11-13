@@ -1,4 +1,4 @@
-import { hashImmutableBytes } from '@wildshard/engine/host/immutable';
+import { hashImmutableBytes } from '@wildshard/format/immutable';
 import { bakeOwned, type BakedScene } from '@wildshard/sharddev/bake';
 import { signalDunesScene } from './scene';
 import { signalTerrainSource } from './tiles';

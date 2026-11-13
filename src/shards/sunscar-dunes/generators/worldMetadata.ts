@@ -1,5 +1,5 @@
 import type { BakedKind } from '@wildshard/sharddev/bake/kinds';
-import { hashImmutableBytes } from '@wildshard/engine/host/immutable';
+import { hashImmutableBytes } from '@wildshard/format/immutable';
 import type { SignalBox, SignalSurface } from './kinds';
 
 type WorldBox = SignalBox & { readonly surface: SignalSurface };

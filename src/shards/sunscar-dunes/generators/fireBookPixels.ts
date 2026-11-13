@@ -1,6 +1,6 @@
 import { bakeRawColourPixels } from '@wildshard/sharddev/bake/rawTexture';
 import type { ImagePixels } from '@wildshard/sharddev/bake/image';
-import { hashImmutableBytes } from '@wildshard/engine/host/immutable';
+import { hashImmutableBytes } from '@wildshard/format/immutable';
 import { parseKtx2 } from '@wildshard/sharddev/assets';
 
 /** The original admitted single-level texture, including generated mip residency. */
