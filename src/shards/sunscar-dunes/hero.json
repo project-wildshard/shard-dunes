@@ -1,10 +1,10 @@
 {
-  "content": "ace365e5d3ad2ee2b279e97ff1bdf08598ecb63073b7d27d54907141b46344af",
-  "captured": "2026-11-13T01:02:35.884Z",
-  "base": "stamp-existing: the hero files already in the shard, adopted without a capture",
+  "content": "fece3ca28a0ec24a58c2527ac6d0ecc8a18be5c4edd4598738758386d62b29fc",
+  "captured": "2026-11-13T11:30:51.732Z",
+  "base": "http://127.0.0.1:4877",
   "card": {
-    "thumbs/sunscar-dunes.jpg": "9f7c40dfb28c8761937843f5c9acf592b2de8c559994018f0c7de7a259940959",
-    "thumbs/sunscar-dunes-portrait.jpg": "40a66e35cec793dcfa92a8ee6517fa1ccf446f8df7c804d1f8787a7459578f07",
-    "thumbs/sunscar-dunes-landscape.jpg": "6a354a8effc4e93057314f0351827a6aaa02036320a3a5f2bfbe1fd35ec4360e"
+    "thumbs/sunscar-dunes.jpg": "d9399837e3628b023c62eafb634245f53deadd9d01b6fcf6c6e8e24a3bfc1763",
+    "thumbs/sunscar-dunes-portrait.jpg": "a928c5ad89cad473b3b53be3781a753b6f367bf3a78af9232f12beb6562c8c18",
+    "thumbs/sunscar-dunes-landscape.jpg": "61a4c9295c78cefa9ecc3b3f8b2c2f99e5af31ac719ca92c6e5c7227f568d3bb"
   }
 }
