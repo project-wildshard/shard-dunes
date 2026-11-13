@@ -1,7 +1,3 @@
 {
-  "budgets": {},
-  "wildshard/generator-imports": {
-    "src/shards/sunscar-dunes/generators/landscape.ts": 1,
-    "src/shards/sunscar-dunes/generators/rows/headlessOwners.ts": 1
-  }
+  "budgets": {}
 }
