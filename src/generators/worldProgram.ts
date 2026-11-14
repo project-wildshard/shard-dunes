@@ -21,13 +21,13 @@ export async function signalWorldFiles(ctx: Pick<ProjectGenerationContext, 'cach
   return files;
 }
 
-/** All original world bytes and their validated metadata belong to this product. */
-export interface SignalWorldProduct {
+/** The world program's data: all original world bytes and their validated metadata. */
+export interface SignalWorldData {
   readonly world: SignalWorldMetadata; readonly blobs: readonly NamedBlob[];
   readonly files: { readonly urls: Readonly<Record<string, string>>; readonly resources: readonly (Omit<(typeof WORLD_BYTES)[number], 'url'> & { readonly url: string })[] };
 }
 /** Admit the unchanged seven GLBs and deflated three-map plait companion. */
-export async function signalWorld(ctx: Pick<ProjectGenerationContext, 'cached' | 'asset'>): Promise<SignalWorldProduct> {
+export async function signalWorld(ctx: Pick<ProjectGenerationContext, 'cached' | 'asset'>): Promise<SignalWorldData> {
   const files = await signalWorldFiles(ctx), world = signalWorldMetadata(files);
   const need = (name: string): Uint8Array => { const bytes = files.get(name); if (bytes === undefined) throw new Error('Missing world asset'); return bytes; };
   const blobs = pieces.map(name => nameBlob(`geometry/world/${name}.glb`, 'glb', need(`${name}.glb`)));

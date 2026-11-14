@@ -48,8 +48,8 @@ alone (E357 Z3, round 4). No engine edits.
 | `audio/cues.ts` | the whip's cues on kit voices until its own crack is generated |
 
 The fixed coordinate recipes in `generators/layout.ts` and `generators/duneRows.ts`
-feed the source product directly. `generators/minimap.ts` supplies its actual
-palette through validated product discovery; runtime discovery stays data-only.
+feed the source program directly. `generators/minimap.ts` supplies its actual
+palette through validated shard file discovery; runtime discovery stays data-only.
 
 ## Budgets
 
@@ -78,13 +78,13 @@ fog from 70 to 330 m; the tower and the ray read as dark silhouettes. The baseli
 
 The manifest declares a required ground (`createBakedTerrainField({ key })`)
 whose samples are the shardfile's own terrain collider: in a grid cell the
-session's loader reads it from the admitted product before collision, and
+session's loader reads it from the admitted shard file before collision, and
 standalone the look binds it before any height query. There is no WSTR
 `terrain.bin`. `generators/manifestGround.ts` supplies the original developer
 pose heights and f64 tint means directly from the authored landscape. The
 obsolete ground JSON job and its unused native sample grid are retired;
 neither a retained grid nor runtime code seeds these queries. A missing
-collider, a product of another seed or no loader refuses entry. Native
+collider, a shard file of another seed or no loader refuses entry. Native
 actor/prompt authoring retains its original analytic f64 placement queries
 through `signalHeightAt`; the client reads the baked collider.
 
@@ -95,7 +95,7 @@ all costs are preserved without a generated source-tree texture or metadata
 handoff. The retained declaration adapter derives its rows from the same
 pixels. The source program also caches the original map lattice from the
 real world/rest bakes, admitted terrain and five explicit model inputs.
-The SDK packs its byte-exact lossless image into the charged product and
+The SDK packs its byte-exact lossless image into the charged shard file and
 publishes the existing map URL; no source-tree map image or stamp remains.
-Public input roots are explicit, and the product receipt retains world
+Public input roots are explicit, and the build receipt retains world
 freshness and byte validation.

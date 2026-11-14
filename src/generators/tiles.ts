@@ -28,7 +28,7 @@ export function signalTerrainSource(): TerrainBakeSource {
   } };
 }
 
-/** The terrain alone, through `bake` (an empty scene): `bake` sorts the rows into the product's canonical order. */
+/** The terrain alone, through `bake` (an empty scene): `bake` sorts the rows into the shard file's canonical order. */
 export function signalDunesTiles(): BakedTerrain {
   const baked = bakeOwned(new Scene(), { slug: 'sunscar-dunes' }, { terrain: signalTerrainSource() }).terrain;
   if (baked === null) throw new Error('Signal terrain did not bake');

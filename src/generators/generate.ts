@@ -1,5 +1,5 @@
 import type { GeneratedProject, ProjectGenerationContext } from '@wildshard/sharddev/projectGeneration';
-import { signalProductRows } from './product';
+import { signalShardfileRows } from './shardfile';
 import { signalFireBook } from './fireBookProgram';
 import { signalSourceOutput } from './sourceOutput';
 import { signalRigs } from './rigProgram';
@@ -27,7 +27,7 @@ export async function generate(ctx: ProjectGenerationContext): Promise<Generated
   const scene = signalWorldScenes(world.world, signalSceneSources(world.world, rigs.library, [restWell.pool, restOil.pool, restFire.pool], world.files), placeBindings());
   const models = scene.blobs.find(blob => blob.file.name === 'world/sources/models.json');
   if (models === undefined) throw new Error('Missing world model descriptor');
-  return { shard: signalProductRows(fire.file, sand, navigation), output: signalSourceOutput(models, [...rigs.blobs, ...world.blobs, restFire.blob, restWell.blob, restOil.blob], scene, signalClientPlan(signalQuestPage(signalQuestMarkers(world.world)))),
+  return { shard: signalShardfileRows(fire.file, sand, navigation), output: signalSourceOutput(models, [...rigs.blobs, ...world.blobs, restFire.blob, restWell.blob, restOil.blob], scene, signalClientPlan(signalQuestPage(signalQuestMarkers(world.world)))),
     map: { pixels: await signalMap(ctx), name: 'ui/map' },
     discovery: { navigation, mapPalette: SIGNAL_DUNES_MAP, budgets: BUDGETS, poses: SIGNAL_DEV_POSES, audioCues: cues, 'boot.lateReads': LATE_READS, 'boot.files': boot.files, 'boot.sources': boot.sources } };
 }

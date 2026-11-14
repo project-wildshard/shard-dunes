@@ -23,7 +23,7 @@ import { signalQuestMarkers } from '../../src/generators/questMarkers';
 import { signalQuestPage } from '../../src/generators/questPage';
 import { signalClientPlan } from '../../src/generators/clientPlan';
 import { generate } from '../../src/generators/generate';
-import { signalProductRows as product } from '../../src/generators/product';
+import { signalShardfileRows as shardfileRows } from '../../src/generators/shardfile';
 import { fireBookFile } from '../../src/generators/fireBookPixels';
 import { runSnapshot } from './runSnapshot';
 
@@ -54,6 +54,6 @@ export const sourceBlobs = signalSceneSources(world, rigLibrary, restPools), sce
 export const originalOutput = signalSceneOutput(scene, client);
 const fireBytes = [...assets.values()].find(bytes => bytes[0] === 0xab && bytes[1] === 0x4b && bytes[2] === 0x54 && bytes[3] === 0x58);
 if (fireBytes === undefined || assets.size !== 20) throw new Error('Missing source-owned fire-book, pools, rigs or world');
-export const signalProductRows = () => product(fireBookFile(fireBytes), sand, navigation);
+export const signalShardfileRows = () => shardfileRows(fireBookFile(fireBytes), sand, navigation);
 export const source = generated.shard;
 export const sourceAssets = projectAssets(root, source, 'project', assets);

@@ -1,7 +1,7 @@
 // J186 SH-dunes-4, CI only, never a hook. The Signal quest's Ledger is
-// durable on the built product. Played on page inputs only (signal-route.mjs),
+// durable on the built output. Played on page inputs only (signal-route.mjs),
 // the quest and the Matriarch each file their Ledger fact once, exactly the
-// built product's Ledger rules (rows/ledger.ts), and pay their purse once.
+// built shard file's Ledger rules (rows/ledger.ts), and pay their purse once.
 // The world is then saved with the worker's own commit encoding and restored
 // from that wire alone into a fresh residency: same tick, regional
 // continuation, flags and complete quest. Playing on by the same real inputs
@@ -10,7 +10,7 @@
 // lit from, and walking back down to her basin.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { ACT, DOWN_STAIR, MATRIARCH, SEGMENTS, TOWER_TO_BASIN, UP_STAIR, fightMatriarch, loadSignalProduct, press, walk } from './signal-route.mjs';
+import { ACT, DOWN_STAIR, MATRIARCH, SEGMENTS, TOWER_TO_BASIN, UP_STAIR, fightMatriarch, loadSignalOutput, press, walk } from './signal-route.mjs';
 
 const { openWorld } = await import('@wildshard/engine/host/openWorld');
 const { runTrustedHeadlessTape } = await import('@wildshard/engine/host/headlessTape');
@@ -28,7 +28,7 @@ const PLAY_ON = [
 ];
 
 test('sunscar-dunes: the Signal Ledger files once and stays filed across a durable restore', { timeout: 9_500 }, async () => {
-  const started = performance.now(), input = await loadSignalProduct();
+  const started = performance.now(), input = await loadSignalOutput();
   let resident = (await openWorld(input, { room: true })).resident;
   try {
     const journey = tape(resident, SEGMENTS), earned = journey.flatMap(row => row.effects);
@@ -40,8 +40,8 @@ test('sunscar-dunes: the Signal Ledger files once and stays filed across a durab
       // A room (HS1's world) pays a kill's purse to the player who earned it, not to the body (J105).
       { kind: 'fact', name: 'sunscar.matriarch', actorId: 'sunscar.matriarch' }, { kind: 'coins', amount: 20, actorId: 'actor.player' },
     ], 'The quest and the Matriarch each file one Ledger fact and pay one purse');
-    // Every rule in the built product's Ledger is earned by play, and nothing it has no rule for is filed.
-    assert.deepEqual(earned.filter(row => row.kind === 'fact').map(row => row.name).sort(), input.shard.ledger.map(rule => rule.fact).sort(), 'The filed facts are exactly the product Ledger');
+    // Every rule in the built shard file's Ledger is earned by play, and nothing it has no rule for is filed.
+    assert.deepEqual(earned.filter(row => row.kind === 'fact').map(row => row.name).sort(), input.shard.ledger.map(rule => rule.fact).sort(), 'The filed facts are exactly the shard file Ledger');
     const firstFire = journey.find(row => row.id === 'light-signal-fire'); assert.ok(firstFire);
 
     // The durable save: the worker's commit encoding, restored from the wire alone into a fresh residency.

@@ -6,13 +6,13 @@ import { resolve } from 'node:path';
 import { test } from 'node:test';
 import { pathToFileURL } from 'node:url';
 
-test('the fresh Sunscar product proves its source generator without generated inputs', () => {
+test('the fresh Sunscar output proves its source generator without generated inputs', () => {
   const slug = 'sunscar-dunes';
   const source = 'src/generators/generate.ts';
   const key = `F ${source}`;
   const receipt = JSON.parse(readFileSync(`out/.app/product-inputs/${slug}.json`, 'utf8'));
-  const product = JSON.parse(readFileSync(`out/${slug}/shard.json`, 'utf8'));
-  assert.equal(product.identity.slug, slug);
+  const shardfile = JSON.parse(readFileSync(`out/${slug}/shard.json`, 'utf8'));
+  assert.equal(shardfile.identity.slug, slug);
   assert.ok(receipt.inputs.includes(key));
   assert.equal(receipt.values[key], createHash('sha256').update(readFileSync(source)).digest('hex'));
   assert.deepEqual(receipt.inputs.filter(input => input.startsWith('F src/')

@@ -1,4 +1,4 @@
-// oxlint-disable-next-line import/no-nodejs-modules -- Bundle the real author entry without executing a product build.
+// oxlint-disable-next-line import/no-nodejs-modules -- Bundle the real author entry without executing an output build.
 import { resolve } from 'node:path';
 import { expect, test } from 'vitest';
 import { build } from 'vite';

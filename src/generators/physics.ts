@@ -32,7 +32,7 @@ function lobe(x: number, z: number, hw: number, hd: number, rot: number, yBottom
   return { kind: 'box', x, y: (yTop + yBottom) / 2, z, hx: hw, hy: Math.max(0.005, (yTop - yBottom) / 2), hz: hd, yaw: -rot, surface: 'rock' };
 }
 
-/** G350-SD: Signal's physics product from authoring inputs only: the placement, tower, ridge and scout recipes, the species
+/** G350-SD: Signal's physics data from authoring inputs only: the placement, tower, ridge and scout recipes, the species
  * scale ranges with the manager's seed stream, and the authored rows no recipe computes (arena, dressing tree, species, spots). */
 export function signalPhysics(): Record<string, unknown> & { readonly spots: typeof rows.spots } {
   const heightAt = signalHeightAt(), ridges = RIDGES.flatMap(r => [0, 1, 2].map(j => {
@@ -61,5 +61,5 @@ export function signalPhysics(): Record<string, unknown> & { readonly spots: typ
     pieces: [tower, caravan, well, rocks, rows.dressing, ...braziers, rows.arena, scout], spots: rows.spots, promptRegistrations, bosses };
 }
 
-/** One evaluated declaration shared by the product and its target rows. */
+/** One evaluated declaration shared by the program and its target rows. */
 export const SIGNAL_PHYSICS: Record<string, unknown> & { readonly spots: typeof rows.spots; } = signalPhysics();

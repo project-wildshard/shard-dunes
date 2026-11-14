@@ -1,19 +1,19 @@
 // J186 Ring 2, CI only, never a hook. The whole Signal quest on the built
-// product: Sefa, logbook, well, three waymarks, the tower fire and the
+// output: Sefa, logbook, well, three waymarks, the tower fire and the
 // Matriarch, driven only by the inputs the page sends (walking, [E]
 // prompts, whip cracks, attacks). No flag, pose or quest state is written;
 // the fight reads where the Matriarch is to aim, as a player's eyes do.
 // The route itself lives in signal-route.mjs.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { EXPECT, FIGHT_TICKS, SEGMENTS, fightMatriarch, loadSignalProduct } from './signal-route.mjs';
+import { EXPECT, FIGHT_TICKS, SEGMENTS, fightMatriarch, loadSignalOutput } from './signal-route.mjs';
 
 const { openWorld } = await import('@wildshard/engine/host/openWorld');
 const { runTrustedHeadlessTape } = await import('@wildshard/engine/host/headlessTape');
 
 test('sunscar-dunes: the full Signal journey on real inputs', { timeout: 9_500 }, async () => {
   const started = performance.now();
-  const resident = (await openWorld(await loadSignalProduct(), { room: true })).resident, { host } = resident;
+  const resident = (await openWorld(await loadSignalOutput(), { room: true })).resident, { host } = resident;
   try {
     const report = runTrustedHeadlessTape(host, input => { resident.step(input); }, () => resident.effects, { version: 1, observe: [], segments: SEGMENTS });
     for (const [id, fact] of Object.entries(EXPECT)) {

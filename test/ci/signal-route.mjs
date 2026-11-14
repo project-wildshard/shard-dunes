@@ -68,8 +68,8 @@ export const EXPECT = {
 };
 export const FIGHT_TICKS = 9000;
 
-/** The built product's admitted server files and the native physics, as the headless worker reads them. */
-export async function loadSignalProduct() {
+/** The built output's admitted server files and the native physics, as the headless worker reads them. */
+export async function loadSignalOutput() {
   const directory = resolve('out/sunscar-dunes'), product = await loadHeadlessProduct(directory), shard = product.shardfile;
   const descriptor = outputDescriptor(shard); assert.ok(descriptor, 'The built shard must pass admission');
   const assets = new Map(descriptor.index.files.filter(file => serverReadsFile(file, shard.terrain?.collider) && (file.name === undefined || file.kind === 'wasm' || file.kind === 'tile'))
