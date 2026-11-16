@@ -8,8 +8,17 @@
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "types": ["node"]
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "types": [
+      "node"
+    ]
   },
-  "include": ["sunscar-fire-wires.test.ts"]
+  "files": [
+    "sunscar-fire-wires.test.ts"
+  ],
+  "include": []
 }

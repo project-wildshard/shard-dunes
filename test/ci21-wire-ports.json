@@ -1,0 +1,19 @@
+{
+  "sourceRepository": "project-wildshard/engine",
+  "sourceRevision": "de22e1a170f7b1cff4069ef6623145d6180a6990",
+  "files": [
+    {
+      "sourcePath": "test/view-author-metadata.test.ts",
+      "sourceBlob": "515eaa3b4ea66dac2a5dcf15d28b96eec39f3aaf",
+      "targetPath": "test/sunscar-fire-wires.test.ts",
+      "originalTests": [
+        "complete Titan, elite and four fire-profile wires retain every original field and order"
+      ],
+      "wireKeys": [
+        "fires"
+      ],
+      "fixturePath": "test/fixtures/view-author-original.json",
+      "fixtureBlob": "723fd5778f4428b752956b6fe12be0b77cd3ffd0"
+    }
+  ]
+}
