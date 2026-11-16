@@ -1,0 +1,1 @@
+- mini-push2 concurrency proof, lane A: two main-push runs at once in one checkout (meta M1).
