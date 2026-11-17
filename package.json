@@ -38,9 +38,9 @@
     "check:bin-pins": "node kit/scripts/bin-pins.mjs"
   },
   "dependencies": {
-    "@wildshard/engine": "0.1.32",
-    "@wildshard/format": "npm:@wildshard/shard-format@0.12.0",
-    "@wildshard/sharddev": "npm:@wildshard/sdk@0.3.7",
+    "@wildshard/engine": "0.1.33",
+    "@wildshard/format": "npm:@wildshard/shard-format@0.13.0",
+    "@wildshard/sharddev": "npm:@wildshard/sdk@0.3.9",
     "three": "0.186.0",
     "valibot": "1.5.0",
     "vitest": "5.0.1"
@@ -137,10 +137,10 @@
       "@typescript/typescript-win32-x64"
     ],
     "overrides": {
-      "@wildshard/engine": "0.1.32",
+      "@wildshard/engine": "0.1.33",
       "binaryen": "npm:@pre-bundled/binaryen@132.0.0-patch-1",
       "assemblyscript>binaryen": "npm:@pre-bundled/binaryen@131.0.0-nightly.20260721-patch-1",
-      "@wildshard/format": "npm:@wildshard/shard-format@0.12.0"
+      "@wildshard/format": "npm:@wildshard/shard-format@0.13.0"
     }
   },
   "binDependencies": {
