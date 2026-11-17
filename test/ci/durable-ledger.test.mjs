@@ -62,7 +62,11 @@ test('sunscar-dunes: the Signal Ledger files once and stays filed across a durab
     // Play on: stand over the fallen Matriarch striking her, then relight the fire from the deck and walk back down.
     // Only quest-step flags make the quest re-check, so its completion is read again at the end, not inferred from silence.
     const after = [];
-    let inReach = 0;
+    // dead:actor.player is a sticky death record, not life: on engine 0.1.32 the
+    // storm phase can kill the player once before the retried fight wins, so the
+    // restored save may already hold it. Count deaths from here on instead.
+    let inReach = 0, deaths = 0;
+    restored.events.on('player.died', () => { deaths++; }, restored.scope);
     for (let tick = 0; tick < 90; tick++) {
       const player = [...restored.players.values()][0]; assert.ok(player);
       const dx = fallen.position.x - player.position.x, dz = fallen.position.z - player.position.z, distance = Math.hypot(dx, dz);
@@ -71,7 +75,7 @@ test('sunscar-dunes: the Signal Ledger files once and stays filed across a durab
       after.push(...resident.effects);
     }
     assert.ok(inReach > 60, `The player stands in whip reach of her body (${inReach} of 90 ticks)`);
-    assert.ok(!restored.flags.has('dead:actor.player'), 'The player is alive while striking her');
+    assert.equal(deaths, 0, 'The player is alive while striking her');
     const playOn = tape(resident, PLAY_ON); after.push(...playOn.flatMap(row => row.effects));
     const relight = playOn.find(row => row.id === 'relight-signal-fire'); assert.ok(relight);
     assert.ok(Math.hypot(relight.position[0] - firstFire.position[0], relight.position[1] - firstFire.position[1], relight.position[2] - firstFire.position[2]) < 1,
