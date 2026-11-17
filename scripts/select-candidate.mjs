@@ -12,4 +12,7 @@ for (const [name, sha] of choices) {
   pkg.pnpm ??= {}; pkg.pnpm.overrides ??= {};
   pkg.pnpm.overrides[`@wildshard/${name}`] = spec;
 }
+// Keep the candidate engine's declared schema dependency. A root format
+// override belongs to the ordinary pinned graph and can hide required exports.
+if (choices[0][1]) delete pkg.pnpm.overrides['@wildshard/format'];
 if (choices.some(([, value]) => value)) writeFileSync('package.json', `${JSON.stringify(pkg, null, 2)}\n`);
