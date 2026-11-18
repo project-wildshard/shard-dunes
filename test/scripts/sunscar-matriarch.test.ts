@@ -1,9 +1,9 @@
 // CI21 C9 port of engine test/scripts/sunscar-matriarch.test.ts (engine blob edd0df93): every case, assertion and
 // budget unchanged; engine and SDK imports are public exports. Scenario creation moves
 // to beforeAll (as engine's far-reach-roc did), so each 2 s body times gameplay only.
-import { builtProduct } from '@wildshard/engine/test/builtProduct';
+import { builtFolder } from '@wildshard/engine/test/builtFolder';
 import { beforeAll, expect, test } from 'vitest';
-import { scenario, type DiskScriptScenario } from '@wildshard/sharddev/test/scriptScenario';
+import { scenario, type DiskScriptScenario } from '@wildshard/dev/test/scriptScenario';
 
 let directory: string;
 // Disk admission and independent host allocation are fixture preparation, as in
@@ -11,7 +11,7 @@ let directory: string;
 // The unchanged two-second bodies measure every gameplay/save/restore step.
 let prepared: readonly [DiskScriptScenario, DiskScriptScenario, DiskScriptScenario] | undefined;
 beforeAll(async () => {
-  directory = builtProduct('sunscar-dunes');
+  directory = builtFolder('sunscar-dunes');
   const create = () => scenario('sunscar-dunes', 'sunscar.matriarch.decision', { productDirectory: directory, seed: 6511,
     actors: [{ id: 'matriarch', at: [-14, 18, -150] }], players: [{ id: 101, at: [-14, 0, -130] }],
   });

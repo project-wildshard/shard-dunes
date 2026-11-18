@@ -13,18 +13,18 @@ import '@wildshard/engine/core/portableMathFirst';
 // oxlint-disable-next-line import/no-nodejs-modules -- Read the admitted product's own files.
 import {readFileSync} from 'node:fs';
 import {HeadlessSimulation} from '@wildshard/engine/host/headless';
-import {loadHeadlessProduct} from '@wildshard/engine/host/headlessProduct';
-import {productHeadlessSections} from '@wildshard/engine/host/headlessSections';
+import {loadHeadlessFolder} from '@wildshard/engine/host/headlessFolder';
+import {folderHeadlessSections} from '@wildshard/engine/host/headlessSections';
 import {outputDescriptor} from '@wildshard/engine/game/shardfile/outputDescriptor';
-import {builtProduct} from '@wildshard/engine/test/builtProduct';
+import {builtFolder} from '@wildshard/engine/test/builtFolder';
 
 type ProductSimulation=Pick<HeadlessSimulation,'verbTape'|'verbTapePart'|'streamVerbTape'|'journey'|'walkLeg'|'step'|'dispose'|'quarantined'|'checkpoint'>;
 
 /** The same checked product and ordinary native runtime as the original Signal journey. */
-export async function openProductSession(slug:string,snapshot?:string):Promise<{sim:ProductSimulation;product:Awaited<ReturnType<typeof loadHeadlessProduct>>}> {
-  const directory=builtProduct(slug),product=await loadHeadlessProduct(directory),descriptor=outputDescriptor(product.shardfile);
+export async function openProductSession(slug:string,snapshot?:string):Promise<{sim:ProductSimulation;product:Awaited<ReturnType<typeof loadHeadlessFolder>>}> {
+  const directory=builtFolder(slug),product=await loadHeadlessFolder(directory),descriptor=outputDescriptor(product.shardfile);
   if(descriptor===undefined)throw new Error('Missing admitted headless inventory');
   const assets=new Map(descriptor.index.files.map(file=>[file.commons===true?`commons:${file.hash}`:file.hash,Uint8Array.from(readFileSync(`${directory}/${file.path}`))]));
-  const sim=await HeadlessSimulation.create(product.shardfile,assets,snapshot,{deadline:'advisory',sections:productHeadlessSections(product)});
+  const sim=await HeadlessSimulation.create(product.shardfile,assets,snapshot,{deadline:'advisory',sections:folderHeadlessSections(product)});
   return {sim,product};
 }

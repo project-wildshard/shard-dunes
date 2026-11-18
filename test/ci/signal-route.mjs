@@ -8,7 +8,7 @@ import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { join, resolve } from 'node:path';
 
-const { loadHeadlessProduct } = await import('@wildshard/engine/host/headlessProduct');
+const { loadHeadlessFolder } = await import('@wildshard/engine/host/headlessFolder');
 const { outputDescriptor, serverReadsFile } = await import('@wildshard/engine/game/shardfile/outputDescriptor');
 const { loadRapier } = await import('@wildshard/engine/physics/rapier');
 const engineRequire = createRequire(import.meta.resolve('@wildshard/engine/package.json'));
@@ -70,7 +70,7 @@ export const FIGHT_TICKS = 9000;
 
 /** The built output's admitted server files and the native physics, as the headless worker reads them. */
 export async function loadSignalOutput() {
-  const directory = resolve('out/sunscar-dunes'), product = await loadHeadlessProduct(directory), shard = product.shardfile;
+  const directory = resolve('out/sunscar-dunes'), product = await loadHeadlessFolder(directory), shard = product.shardfile;
   const descriptor = outputDescriptor(shard); assert.ok(descriptor, 'The built shard must pass admission');
   const assets = new Map(descriptor.index.files.filter(file => serverReadsFile(file, shard.terrain?.collider) && (file.name === undefined || file.kind === 'wasm' || file.kind === 'tile'))
     .map(file => [file.commons === true ? `commons:${file.hash}` : file.hash, readFileSync(join(directory, file.path))]));

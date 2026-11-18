@@ -12,8 +12,8 @@ import { canonicalSimDigest } from '@wildshard/engine/test/simState';
 import { SaveStore, type SaveStorage } from '@wildshard/engine/saves/store';
 import type { AnimalSim } from '@wildshard/engine/entities/AnimalSim';
 import { Ledger, LedgerEmitter, type LedgerReceipt } from '@wildshard/engine/game/ledger';
-import { loadHeadlessProduct } from '@wildshard/engine/host/headlessProduct';
-import { productHeadlessSections } from '@wildshard/engine/host/headlessSections';
+import { loadHeadlessFolder } from '@wildshard/engine/host/headlessFolder';
+import { folderHeadlessSections } from '@wildshard/engine/host/headlessSections';
 import { hashImmutableBytes } from '@wildshard/engine/host/immutable';
 import { outputDescriptor } from '@wildshard/engine/game/shardfile/outputDescriptor';
 import { prepareNativeRuntime, type HeadlessRuntimeInstallation, type HeadlessRuntimePlan } from '@wildshard/engine/host/headlessRuntime';
@@ -49,7 +49,7 @@ const baked: unknown = JSON.parse(physicsDocument);
  * fights the Dune Matriarch to her fall. Nothing writes health, flags, positions or facts: every outcome is gameplay.
  */
 export const ENTRY = 'sim/runtime-plan';
-function productAssets(product: Awaited<ReturnType<typeof loadHeadlessProduct>>): Map<string, Uint8Array> {
+function productAssets(product: Awaited<ReturnType<typeof loadHeadlessFolder>>): Map<string, Uint8Array> {
   const descriptor = outputDescriptor(product.shardfile);
   if (descriptor === undefined) throw new Error('Missing admitted Signal native output');
   return new Map(descriptor.index.files.map(file => {
@@ -58,7 +58,7 @@ function productAssets(product: Awaited<ReturnType<typeof loadHeadlessProduct>>)
     return [file.commons === true ? `commons:${file.hash}` : file.hash, bytes];
   }));
 }
-const admitted = await loadHeadlessProduct('out/sunscar-dunes'), source = admitted.shardfile;
+const admitted = await loadHeadlessFolder('out/sunscar-dunes'), source = admitted.shardfile;
 const assets = productAssets(admitted);
 const EYE = 1.68;
 const identity = { instance: 'sunscar-witness', shard: source.identity.slug, revision: source.identity.revision };
@@ -81,7 +81,7 @@ const requireValue = <T>(value: T | undefined | null, message: string): T => { i
 const digest = (host: SimHost): string => canonicalSimDigest(snapshotSimHost(host));
 
 export function signalRapier(): Promise<Rapier> { return loadRapier(readFileSync(nativeRapierFile)); }
-export async function signalPlan(rapier: Rapier): Promise<HeadlessRuntimePlan> { return prepareNativeRuntime({ shard: source, assets, rapier, product: await loadHeadlessProduct('out/sunscar-dunes') }); }
+export async function signalPlan(rapier: Rapier): Promise<HeadlessRuntimePlan> { return prepareNativeRuntime({ shard: source, assets, rapier, product: await loadHeadlessFolder('out/sunscar-dunes') }); }
 
 function context(session: Omit<Session, 'host'>, saved?: string): HeadlessRuntimeInstallation {
   return { restoring: saved !== undefined, ...(saved === undefined ? {} : { snapshot: decodeSimSnapshot(saved) }), commands: () => session.tape, emit: effect => { session.tick.push(effect); } };
@@ -275,8 +275,8 @@ export async function replayProof(rapier: Rapier): Promise<object> {
     const hash = digest(original.host), replayHash = digest(restored.host);
     if (hash !== replayHash || JSON.stringify(original.effects) !== JSON.stringify(restored.effects)) throw new Error('Continuation diverged');
     // the shipping worker, started from the same checkpoint, continues to the same state
-    const product = await loadHeadlessProduct('out/sunscar-dunes'), workerAssets = productAssets(product);
-    worker = await HeadlessSimulation.create(product.shardfile, workerAssets, checkpoint, { deadline: 'advisory', sections: productHeadlessSections(product) });
+    const product = await loadHeadlessFolder('out/sunscar-dunes'), workerAssets = productAssets(product);
+    worker = await HeadlessSimulation.create(product.shardfile, workerAssets, checkpoint, { deadline: 'advisory', sections: folderHeadlessSections(product) });
     let commit;
     for (const tick of commands.slice(0, WORKER)) commit = await worker.step([{ source: 'witness.tape', commands: tick }]);
     if (commit === undefined || canonicalSimDigest(commit.snapshot) !== atWorker) throw new Error('The worker continuation diverged from the in-process restore');

@@ -12,9 +12,9 @@ import assert from 'node:assert/strict';
 import * as v from 'valibot';
 import {nativeRapierFile} from '../native-rapier-file';
 import {openProductSession} from './productSession';
-import {builtProduct} from '@wildshard/engine/test/builtProduct';
+import {builtFolder} from '@wildshard/engine/test/builtFolder';
 import {outputDescriptor} from '@wildshard/engine/game/shardfile/outputDescriptor';
-import {productHeadlessSections} from '@wildshard/engine/host/headlessSections';
+import {folderHeadlessSections} from '@wildshard/engine/host/headlessSections';
 import {createTrustedHeadlessResident} from '@wildshard/engine/host/headlessRuntime';
 import type {HeadlessCommand,HeadlessEffect} from '@wildshard/engine/host/tickProtocol';
 import type {HeadlessTapeObservation,HeadlessTapeSegment} from '@wildshard/engine/host/headlessTape';
@@ -33,11 +33,11 @@ const slug='sunscar-dunes',session=await openProductSession(slug),{product}=sess
 let resident:Awaited<ReturnType<typeof createTrustedHeadlessResident>>|undefined;
 try{
   const descriptor=outputDescriptor(product.shardfile);assert.ok(descriptor);
-  const directory=builtProduct(slug),assets=new Map(descriptor.index.files.map(file=>[
+  const directory=builtFolder(slug),assets=new Map(descriptor.index.files.map(file=>[
     file.commons===true?`commons:${file.hash}`:file.hash,Uint8Array.from(readFileSync(`${directory}/${file.path}`)),
   ]));
   const rapier=await loadRapier(readFileSync(nativeRapierFile));
-  resident=await createTrustedHeadlessResident({shard:product.shardfile,assets,product,rapier,sections:productHeadlessSections(product)});
+  resident=await createTrustedHeadlessResident({shard:product.shardfile,assets,product,rapier,sections:folderHeadlessSections(product)});
   const {SignalTape}=await import('../../proof/sunscar-dunes/witness');
   const controller=new SignalTape(),{host}=resident,quest=host.quests[0];assert.ok(quest);
   const bossOwner=host.adapters.get(MATRIARCH_ID);assert.ok(bossOwner);

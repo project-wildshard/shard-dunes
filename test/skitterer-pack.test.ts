@@ -3,11 +3,11 @@
 // physics bytes come from the installed engine's rapier package (identical bytes).
 // oxlint-disable-next-line import/no-nodejs-modules -- The scenario reads the admitted product and native physics.
 import { readFileSync } from 'node:fs';
-import { builtProduct } from '@wildshard/engine/test/builtProduct';
+import { builtFolder } from '@wildshard/engine/test/builtFolder';
 import { beforeAll, expect, test, vi } from 'vitest';
 import * as v from 'valibot';
 import { nativeRapierFile } from './fixtures/native-rapier-file';
-import { loadHeadlessProduct } from '@wildshard/engine/host/headlessProduct';
+import { loadHeadlessFolder } from '@wildshard/engine/host/headlessFolder';
 import { actorDecisionRows, parseDecisionScripts } from '@wildshard/format/decisionScripts';
 import { parseActorMoves } from '@wildshard/format/actorMoves';
 import { parseWorldTargets } from '@wildshard/format/worldTargets';
@@ -15,7 +15,7 @@ import { readCreatureStrikes } from '@wildshard/format/creatures';
 import { buildDecisionRegistries, decisionBindingMap, DECISION_PLAYER_HANDLE } from '@wildshard/format/decisionBindings';
 import { DecisionHost, type DecisionScript, type DecisionTrace } from '@wildshard/engine/script/decision';
 import { DecisionModule } from '@wildshard/engine/script/decisionModule';
-import { ScenarioWorld, scenario } from '@wildshard/sharddev/test/scriptScenario';
+import { ScenarioWorld, scenario } from '@wildshard/dev/test/scriptScenario';
 import { SCRIPT_V1_READS, SCRIPT_V1_LISTS, type ScriptV1ReadName, type ScriptV1ListName } from '@wildshard/format/scriptAbiV1';
 import { outputDescriptor } from '@wildshard/engine/game/shardfile/outputDescriptor';
 import { loadRapier } from '@wildshard/engine/physics/rapier';
@@ -28,10 +28,10 @@ import { borrowedDecisionControl } from '@wildshard/engine/game/shardfile/borrow
 import { leadPlayer } from '@wildshard/engine/sim/leadPlayer';
 
 let directory: string;
-beforeAll(() => { directory = builtProduct('sunscar-dunes'); });
+beforeAll(() => { directory = builtFolder('sunscar-dunes'); });
 
 async function pack(seed = 6511) {
-  const product = await loadHeadlessProduct(directory), source = product.shardfile, descriptor = outputDescriptor(source);
+  const product = await loadHeadlessFolder(directory), source = product.shardfile, descriptor = outputDescriptor(source);
   if (descriptor === undefined) throw new Error('Missing admitted product');
   const { sections } = descriptor;
   const rows = parseDecisionScripts(sections.get('sim/scripts'));
@@ -91,7 +91,7 @@ test('one pack row surfaces, ring-runs, retreats and burrows with independent se
 }, 5_000);
 
 test('native pack uses one module, real contacts and an exact fresh-host continuation', async () => {
-  const product = await loadHeadlessProduct(directory), descriptor = outputDescriptor(product.shardfile);
+  const product = await loadHeadlessFolder(directory), descriptor = outputDescriptor(product.shardfile);
   if (descriptor === undefined) throw new Error('Missing product');
   const plan = parseNativeRuntimePlan(product.section('sim/runtime-plan'));
   const assets = new Map(descriptor.index.files.map(file => [file.commons === true ? `commons:${file.hash}` : file.hash,
