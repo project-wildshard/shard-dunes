@@ -11,7 +11,7 @@ const { loadRapier } = await import('@wildshard/engine/physics/rapier');
 const { snapshotSimHost, serializeSimSnapshot, decodeSimSnapshot } = await import('@wildshard/engine/sim/snapshot');
 const { restoreSimHost } = await import('@wildshard/engine/sim/restore');
 const { createShardfileSim, bindShardfileSim, prepareShardfileSimRestore } = await import('@wildshard/engine/game/plugin/simulation');
-const { createTrustedHeadlessResident } = await import('@wildshard/engine/host/headlessRuntime');
+const { createNativeHeadlessResident } = await import('@wildshard/engine/host/headlessRuntime');
 const { hasDeclaredClientPage } = await import('@wildshard/format/runtimeBinds');
 const { folderHeadlessSections } = await import('@wildshard/engine/host/headlessSections');
 const { ScriptHost } = await import('@wildshard/engine/script/host');
@@ -32,7 +32,7 @@ for (const row of owner.products) test(`${row.slug}: evict and re-enter with kit
   const preparation = await supplied(row), { product, shard, assets, rapier } = preparation;
   const sections = folderHeadlessSections(product);
   const native = shard.runtime !== null || hasDeclaredClientPage(shard) || product.has('sim/runtime-plan');
-  const first = native ? await createTrustedHeadlessResident(preparation) : createShardfileSim(shard, assets, { rapier, sections, quest });
+  const first = native ? await createNativeHeadlessResident(preparation) : createShardfileSim(shard, assets, { rapier, sections, quest });
   let saved;
   try {
     for (const progress of first.host.quests) {
@@ -53,7 +53,7 @@ for (const row of owner.products) test(`${row.slug}: evict and re-enter with kit
     }
     saved = decodeSimSnapshot(serializeSimSnapshot(snapshotSimHost(first.host)));
   } finally { first.dispose(); }
-  const again = native ? await createTrustedHeadlessResident(preparation, saved) : {
+  const again = native ? await createNativeHeadlessResident(preparation, saved) : {
     host: restoreSimHost(first.host.level, { rapier }, saved, host => bindShardfileSim(host, shard, assets, { rapier, sections, quest, restoring: true })),
     dispose() { this.host.dispose(); },
   };

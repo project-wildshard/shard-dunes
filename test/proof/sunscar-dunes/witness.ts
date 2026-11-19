@@ -41,7 +41,7 @@ const baked: unknown = JSON.parse(physicsDocument);
 
 /**
  * Signal Dunes' whole-shard witness (E435 §C / SF72) on its admitted sim/runtime-plan section, composed
- * exactly as the platform's trusted adapter composes it (`createTrustedHeadlessAdapter`: the plan's level and ports, one
+ * exactly as the platform's trusted adapter composes it (`createNativeHeadlessAdapter`: the plan's level and ports, one
  * install, the tick's commands lent to the runtime, its effects buffered per tick), and cross-checked against the
  * shipping worker (`HeadlessSimulation` + `trustedRuntime`) from the mid-fight checkpoint. The player's tape is a set of
  * tick commands only (`player` moves and whip attacks, `script` interactions), chosen each tick from what a player sees:
@@ -116,6 +116,13 @@ function encounter(host: SimHost): Encounter {
   if (typeof saved !== 'string') throw new Error('Missing Matriarch continuation');
   const value = JSON.parse(saved) as { boss: Omit<Encounter, 'storm'>; fight: { storm: number } };
   return { ...value.boss, storm: value.fight.storm };
+}
+
+/** How many times her fight has started: the encounter's own count, read off its adapter alone (no whole-host snapshot). */
+function bossAttempts(host: SimHost): number {
+  const saved = host.adapters.get(MATRIARCH_ID)?.snapshot();
+  if (typeof saved !== 'string') throw new Error('Missing Matriarch continuation');
+  return (JSON.parse(saved) as { boss: { attempts: number } }).boss.attempts;
 }
 
 /** The player's eyes: is a prompt in reach, is a creature inside the lash (the shared contact rule, @wildshard/engine/game/systems/items/lash)? */
@@ -193,7 +200,11 @@ export class SignalTape {
     let goal = { x: stand.x + Math.sin(t * 0.5) * 10, z: stand.z + Math.cos(t * 0.5) * 10 }, near = 1;
     if (her !== undefined && her.alive && (her.mem['phase'] ?? 0) >= 2) { goal = { x: her.position.x, z: her.position.z }; near = 7; }
     const dx = goal.x - p.x, dz = goal.z - p.z, d = Math.hypot(dx, dz), walk = d > near;
-    const strike = her !== undefined && lashable(host, her);
+    // ONE-FORMAT OF19a: on her first attempt the tape holds its lash through the storm phase, so the storm is what
+    // fells the player and earns the retry. Cracking through it left that to hit timing: on engine 0.1.47 three more
+    // lashes land before the player falls, she reaches phase 2 first and the retry is no storm retry.
+    const firstStorm = her !== undefined && (her.mem['phase'] ?? 0) === 1 && bossAttempts(host) < 2;
+    const strike = her !== undefined && !firstStorm && lashable(host, her);
     return [{ kind: 'player', moveX: walk ? dx / d : 0, moveZ: walk ? dz / d : 0, yaw: leadPlayer(host).yaw, ...(strike ? { attack: { targetId: MATRIARCH_ID } } : {}) }];
   }
   get walked(): boolean { return this.leg >= this.route.length; }

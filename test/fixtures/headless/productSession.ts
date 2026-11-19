@@ -3,7 +3,7 @@
 // HeadlessSimulation.create with advisory timing and the product's headless sections,
 // and no product folder. Engine 0.1.32's exported productSession also passes the built
 // folder, so its worker runs the room's world (openWorldAdapter), while the Signal
-// runner records on the bare createTrustedHeadlessResident. The two worlds part two
+// runner records on the bare createNativeHeadlessResident. The two worlds part two
 // ticks after sunscar.lit (tick 9280: the room's Matriarch fight). That is not replay
 // drift: a room-world recorder replays through the exported productSession exactly,
 // but on the room world the unchanged SignalTape wins without the storm-phase death

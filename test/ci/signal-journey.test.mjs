@@ -9,13 +9,13 @@ import { test } from 'node:test';
 import { EXPECT, FIGHT_TICKS, SEGMENTS, fightMatriarch, loadSignalOutput } from './signal-route.mjs';
 
 const { openWorld } = await import('@wildshard/engine/host/openWorld');
-const { runTrustedHeadlessTape } = await import('@wildshard/engine/host/headlessTape');
+const { runNativeHeadlessTape } = await import('@wildshard/engine/host/headlessTape');
 
 test('sunscar-dunes: the full Signal journey on real inputs', { timeout: 9_500 }, async () => {
   const started = performance.now();
   const resident = (await openWorld(await loadSignalOutput(), { room: true })).resident, { host } = resident;
   try {
-    const report = runTrustedHeadlessTape(host, input => { resident.step(input); }, () => resident.effects, { version: 1, observe: [], segments: SEGMENTS });
+    const report = runNativeHeadlessTape(host, input => { resident.step(input); }, () => resident.effects, { version: 1, observe: [], segments: SEGMENTS });
     for (const [id, fact] of Object.entries(EXPECT)) {
       const at = report.observations.find(row => row.id === id); assert.ok(at, `Missing observation ${id}`);
       for (const flag of fact.flags ?? []) assert.ok(at.flags.includes(flag), `${id} must earn ${flag}`);

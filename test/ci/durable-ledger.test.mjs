@@ -13,14 +13,14 @@ import { test } from 'node:test';
 import { ACT, DOWN_STAIR, MATRIARCH, SEGMENTS, TOWER_TO_BASIN, UP_STAIR, fightMatriarch, loadSignalOutput, press, walk } from './signal-route.mjs';
 
 const { openWorld } = await import('@wildshard/engine/host/openWorld');
-const { runTrustedHeadlessTape } = await import('@wildshard/engine/host/headlessTape');
+const { runNativeHeadlessTape } = await import('@wildshard/engine/host/headlessTape');
 const { regionalContinuation, serializeSimSnapshot, snapshotSimHostBytes } = await import('@wildshard/engine/sim/snapshot');
 
 const LEDGER = new Set(['fact', 'coins']);
 const ledger = effects => effects.filter(row => LEDGER.has(row.kind));
 const flags = host => [...host.flags.all].sort();
 const signal = host => host.quests.find(row => row.def.id === 'sunscar.signal');
-const tape = (resident, segments) => runTrustedHeadlessTape(resident.host, input => { resident.step(input); }, () => resident.effects, { version: 1, observe: [], segments }).observations;
+const tape = (resident, segments) => runNativeHeadlessTape(resident.host, input => { resident.step(input); }, () => resident.effects, { version: 1, observe: [], segments }).observations;
 const PLAY_ON = [
   walk('back-to-tower', [...[...TOWER_TO_BASIN].reverse(), [12, -60], ...UP_STAIR], 8000),
   ...press('relight-signal-fire', ACT.fire, 300),
