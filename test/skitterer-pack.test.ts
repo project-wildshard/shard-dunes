@@ -5,13 +5,13 @@
 import { readFileSync } from 'node:fs';
 import { builtFolder } from '@wildshard/engine/test/builtFolder';
 import { beforeAll, expect, test, vi } from 'vitest';
-import * as v from 'valibot';
 import { nativeRapierFile } from './fixtures/native-rapier-file';
 import { loadHeadlessFolder } from '@wildshard/engine/host/headlessFolder';
 import { actorDecisionRows, parseDecisionScripts } from '@wildshard/format/decisionScripts';
 import { parseActorMoves } from '@wildshard/format/actorMoves';
 import { parseWorldTargets } from '@wildshard/format/worldTargets';
 import { readCreatureStrikes } from '@wildshard/format/creatures';
+import { decisionStrikeRows } from '@wildshard/sharddev/projectDecisions';
 import { buildDecisionRegistries, decisionBindingMap, DECISION_PLAYER_HANDLE } from '@wildshard/format/decisionBindings';
 import { DecisionHost, type DecisionScript, type DecisionTrace } from '@wildshard/engine/script/decision';
 import { DecisionModule } from '@wildshard/engine/script/decisionModule';
@@ -24,7 +24,6 @@ import { snapshotSimHost } from '@wildshard/engine/sim/snapshot';
 import { restoreSimHost } from '@wildshard/engine/sim/restore';
 import { prepareRuntimeWorld } from '@wildshard/engine/game/plugin/simulation';
 import { nativeRuntimeActorIds, parseNativeRuntimePlan } from '@wildshard/format/nativeRuntimePlan';
-import { borrowedDecisionControl } from '@wildshard/engine/game/shardfile/borrowedDecisions';
 import { leadPlayer } from '@wildshard/engine/sim/leadPlayer';
 
 let directory: string;
@@ -38,7 +37,7 @@ async function pack(seed = 6511) {
   const row = rows.find(candidate => 'spawnGroup' in candidate.binding);
   if (row === undefined) throw new Error('Missing pack row');
   const registries = buildDecisionRegistries(source, parseActorMoves(sections.get('actors/moves')), parseWorldTargets(sections.get('world/targets')),
-    readCreatureStrikes(sections.get('actors/strikes')), rows, source.runtime === null ? nativeRuntimeActorIds(sections.get('sim/runtime-plan')) : []);
+    decisionStrikeRows(source, readCreatureStrikes(sections.get('actors/strikes'))), rows, source.runtime === null ? nativeRuntimeActorIds(sections.get('sim/runtime-plan')) : []);
   const scripts: DecisionScript[] = [];
   for (const member of actorDecisionRows(row)) scripts.push({ ...member, ids: decisionBindingMap(member, registries).ids,
     state: member.state.map(slot => { if (slot.scope !== 'actor') throw new Error('Pack slots must be actor-scoped'); return { ...slot, scope: slot.scope }; }),
@@ -99,36 +98,26 @@ test('native pack uses one module, real contacts and an exact fresh-host continu
   const rapier = await loadRapier(Uint8Array.from(readFileSync(nativeRapierFile)));
   const world = await prepareRuntimeWorld(product.shardfile, assets, plan.baked, plan.recipe, descriptor.sections), host = createSimHost(world.level, { ...world.ports, rapier });
   let resumed: ReturnType<typeof restoreSimHost> | undefined;
+  // ONE-FORMAT OF19b: the pack members are declared spawns; the declared host's `ShardDecisions` runs their one module
+  // (it starts at install), not the keeper's borrowed authority, so the keeper-only restart and `mem` checks went
+  const calls = vi.spyOn(DecisionModule.prototype, 'invoke');
   try {
     world.install(host, { restoring: false, emit: () => undefined }).keeper.settle();
     const actor = host.entities.get('sunscar.home:1'); if (actor === undefined) throw new Error('Missing pack member');
     leadPlayer(host).position.copy(actor.position); leadPlayer(host).position.z += 1;
     let hits = 0; host.events.on('damage.dealt', event => { if (event.req.target === leadPlayer(host).health) hits++; }, host.scope);
-    const calls = vi.spyOn(DecisionModule.prototype, 'invoke');
-    try {
-      for (let i = 0; i < 240; i++) host.step();
-      expect(calls.mock.calls.filter(call => call[0] === 'ws_init')).toHaveLength(1);
-      expect(calls.mock.calls.filter(call => call[0] === 'ws_handle').length).toBeLessThanOrEqual(400);
-    } finally { calls.mockRestore(); }
-    expect(hits).toBeGreaterThan(0); expect(actor.mem['burrow']).toBe(0);
-    const saved = snapshotSimHost(host), invoke = vi.spyOn(DecisionModule.prototype, 'invoke');
-    try {
-      resumed = restoreSimHost(world.level, { ...world.ports, rapier }, saved, fresh => {
-        world.install(fresh, { restoring: true, emit: () => undefined, snapshot: saved }).keeper.settle();
-      });
-      expect(invoke.mock.calls.filter(call => call[0] === 'ws_handle')).toHaveLength(0);
-      expect(invoke.mock.calls.filter(call => call[0] === 'ws_init')).toHaveLength(1);
-    } finally { invoke.mockRestore(); }
+    for (let i = 0; i < 240; i++) host.step();
+    expect(calls.mock.calls.filter(call => call[0] === 'ws_init')).toHaveLength(1);
+    expect(calls.mock.calls.filter(call => call[0] === 'ws_handle').length).toBeLessThanOrEqual(400);
+    calls.mockClear();
+    expect(hits).toBeGreaterThan(0);
+    const saved = snapshotSimHost(host);
+    resumed = restoreSimHost(world.level, { ...world.ports, rapier }, saved, fresh => {
+      world.install(fresh, { restoring: true, emit: () => undefined, snapshot: saved }).keeper.settle();
+    });
+    expect(calls.mock.calls.filter(call => call[0] === 'ws_handle')).toHaveLength(0);
+    expect(calls.mock.calls.filter(call => call[0] === 'ws_init')).toHaveLength(1);
     for (let i = 0; i < 120; i++) { host.step(); resumed.step(); }
     expect(snapshotSimHost(resumed)).toEqual(snapshotSimHost(host));
-    const mate = host.entities.get('sunscar.home:2'); if (mate === undefined) throw new Error('Missing mate');
-    const states = () => {
-      const wire = v.parse(v.object({ decision: v.string() }), JSON.parse(v.parse(v.string(), borrowedDecisionControl(mate).snapshot())));
-      return v.parse(v.object({ decision: v.object({ bindings: v.array(v.object({ id: v.number(), slots: v.record(v.string(), v.union([v.number(), v.boolean()])) })) }) }), JSON.parse(wire.decision)).decision.bindings;
-    };
-    const before = states(); borrowedDecisionControl(actor).restart();
-    const after = states(); expect(after[0]?.slots).toEqual({ step: 0, far: 0, ring: 0 });
-    expect(after.slice(1)).toEqual(before.slice(1));
-
-  } finally { resumed?.dispose(); host.dispose(); }
+  } finally { calls.mockRestore(); resumed?.dispose(); host.dispose(); }
 }, 30_000);
