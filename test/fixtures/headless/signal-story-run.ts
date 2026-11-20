@@ -40,7 +40,8 @@ try{
   resident=await createNativeHeadlessResident({shard:product.shardfile,assets,product,rapier,sections:folderHeadlessSections(product)});
   const {SignalTape}=await import('../../proof/sunscar-dunes/witness');
   const controller=new SignalTape(),{host}=resident,quest=host.quests[0];assert.ok(quest);
-  const bossOwner=host.adapters.get(MATRIARCH_ID);assert.ok(bossOwner);
+  // OF19c1: her fight is her declared encounter's step (the owner row's own step keeps only the room's earners)
+  const FIGHT=`encounter.${MATRIARCH_ID}`,bossOwner=host.adapters.get(FIGHT);assert.ok(bossOwner);
   const retryPhases:number[]=[];
   host.events.on('boss.attempt',event=>{
     if(event.boss===MATRIARCH_ID&&event.outcome==='died')retryPhases.push(bossState(bossOwner.snapshot()).phase);
@@ -72,14 +73,14 @@ try{
   assert.equal(finalBoss.attempts,retryPhases.length+1);assert.equal(finalBoss.state,'victory');assert.equal(finalBoss.saved.defeated,true);
   for(const flag of ['sunscar.scout','sunscar.logbook','sunscar.oil','sunscar.brazier.0','sunscar.brazier.1',
     'sunscar.brazier.2','sunscar.lit','sunscar.matriarch.down','sunscar.complete'])assert.ok(host.flags.has(flag),flag);
-  const report=await session.sim.verbTape({version:1,observe:[MATRIARCH_ID],segments});
+  const report=await session.sim.verbTape({version:1,observe:[FIGHT],segments});
   for(const wanted of expected){
     const actual=report.observations.find(row=>row.id===wanted.id);assert.ok(actual);
     assert.deepEqual(actual.flags,wanted.flags,'fresh actual commands must earn the same transitions');
     assert.deepEqual(actual.effects,wanted.effects,'a worker replay must neither lose nor duplicate earned effects');
     const replayed:HeadlessTapeObservation['quests'][number]|undefined=actual.quests.find(row=>row.id===quest.def.id);assert.ok(replayed);
     assert.equal(replayed.currentId,wanted.current);assert.equal(replayed.complete,wanted.complete);
-    const actualBoss=actual.adapters.find(row=>row.id===MATRIARCH_ID);assert.ok(actualBoss);
+    const actualBoss=actual.adapters.find(row=>row.id===FIGHT);assert.ok(actualBoss);
     assert.deepEqual(bossState(actualBoss.state),wanted.boss,'fresh replay must earn the same retry, checkpoint and victory');
   }
   const reward=product.shardfile.quests.quests.find(row=>row.id===quest.def.id)?.onComplete;

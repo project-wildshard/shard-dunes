@@ -5,7 +5,6 @@ import { WHIP_ITEMS } from './rows/items';
 import { SIGNAL_SCENE_MOTION } from './clientMotion';
 import { SIGNAL_EMITTERS } from './lightEmitters';
 import { SIGNAL_WEATHER_FIELDS } from './weatherFields';
-import { FLAG } from './rows/flags';
 
 const calls = new Map<string, unknown>([['dusk', { settle: 'weather.fields' }], ['logbook', { action: 'logbook' }],
   ['well.pull', { action: 'crank' }], ['well.take', { action: 'well' }],
@@ -26,7 +25,7 @@ return parseClientPlan({ version: 1, features: [
       const call = calls.get(step.call); if (call === undefined) throw new Error('Unknown authored Signal capture'); return call;
     })])) },
   },
-  { kind: 'boss.spawned', actor: SIGNAL_PAGE_PROGRAM.fight.id, armed: { flag: FLAG.lit } },
+  // OF19c1: her fight is a declared encounter (the quest page summons it); the marked telegraph blows her storm off its row
   { kind: 'boss.telegraph', actor: SIGNAL_PAGE_PROGRAM.fight.id, view: { kind: 'marked', rows: SIGNAL_PAGE_PROGRAM.fight.presentation } },
   { kind: 'population.homes', ...SIGNAL_PAGE_PROGRAM.population },
   { kind: 'debug.expose', name: 'sunscar' },

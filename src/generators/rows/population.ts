@@ -13,9 +13,10 @@ export const SIGNAL_PAGE_PROGRAM: { readonly species: { readonly program: typeof
     record: { kind: 'flags', actor: SIGNAL_HEADLESS.boss.row.id, names: SIGNAL_HEADLESS.boss.record },
     victory: { ...SIGNAL_HEADLESS.boss.victory, once: false } },
 } as const;
-// ONE-FORMAT OF19b: the keeper keeps only the Matriarch (until OF19c); the ray, the packs and the striders are declared
-// spawns (`declaredCreatures.ts`), so the plan stands no home and holds nothing (the ray's hold is its spawn row's)
+// ONE-FORMAT OF19b/OF19c1: the ray, the packs, the striders and the Matriarch are declared spawns (`declaredCreatures.ts`)
+// and her fight a declared boss encounter, so the plan's keeper stands nothing: no home, no hold, no boss. The plan keeps
+// its owner row, which names her declared spawn (engine OF20c/OF19c1: flag, fact, coins, record, marks and storm).
 const { holds: _holds, rows: _rows, ...keeper } = SIGNAL_HEADLESS.homes;
-const keeperProgram = { ...program, species: program.species.filter(row => row.kind === SIGNAL_HEADLESS.boss.row.kind) };
-export const SIGNAL_NATIVE_POPULATION: Readonly<typeof keeper> & { readonly program: typeof keeperProgram; readonly admission: 'prepare'; readonly homes: readonly never[]; readonly boss: typeof SIGNAL_HEADLESS.boss.row } = { program: keeperProgram, ...keeper, admission: 'prepare',
-  homes: [], boss: SIGNAL_HEADLESS.boss.row } as const;
+const keeperProgram = { ...program, species: [] as typeof program.species };
+export const SIGNAL_NATIVE_POPULATION: Readonly<typeof keeper> & { readonly program: typeof keeperProgram; readonly admission: 'prepare'; readonly homes: readonly never[] } = { program: keeperProgram, ...keeper, admission: 'prepare',
+  homes: [] } as const;

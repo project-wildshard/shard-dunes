@@ -22,6 +22,7 @@ import { HeadlessSimulation } from '@wildshard/engine/host/headless';
 import type { QuestGraphSpot as SignalSpot } from '@wildshard/engine/game/plugin/quests';
 import { SIGNAL_ACT, SIGNAL_INTERACT, SIGNAL_INTERACTIONS } from '../../../src/generators/signalInteractions';
 import { MATRIARCH_ID } from '../../../src/generators/rows/matriarchEncounter';
+import { MATRIARCH_BOSS_PROFILE } from '../../../src/generators/rows/matriarchBoss';
 import { readRuntimeWorldMetadata, nativeMeleeVolumeHit } from '@wildshard/engine/game/plugin/simulation';
 import { weaponContactDistance } from '@wildshard/engine/combat/contactWeapon';
 import { WHIP_ITEM, WHIP_PROFILE } from '../../../src/generators/rows/items';
@@ -111,16 +112,19 @@ function step(session: Session, commands: readonly HeadlessCommand[]): HeadlessE
 }
 
 interface Encounter { state: string; phase: number; checkpoint: number; attempts: number; storm: number; saved: { defeated: boolean; rewardTaken: boolean; kills: number } }
+/** OF19c1: her fight is her declared encounter's step; the storm is the page's (off the encounter's row), so the witness
+ *  reads its goal by the same rule: 1 while the fight or its beat is in a storm phase. */
+const FIGHT = `encounter.${MATRIARCH_ID}`;
 function encounter(host: SimHost): Encounter {
-  const saved = snapshotSimHost(host).adapters.find(adapter => adapter.id === MATRIARCH_ID)?.state;
+  const saved = snapshotSimHost(host).adapters.find(adapter => adapter.id === FIGHT)?.state;
   if (typeof saved !== 'string') throw new Error('Missing Matriarch continuation');
-  const value = JSON.parse(saved) as { boss: Omit<Encounter, 'storm'>; fight: { storm: number } };
-  return { ...value.boss, storm: value.fight.storm };
+  const value = JSON.parse(saved) as { boss: Omit<Encounter, 'storm'> }, boss = value.boss;
+  return { ...boss, storm: (boss.state === 'fight' || boss.state === 'beat') && MATRIARCH_BOSS_PROFILE.fight.stormPhases.some(phase => phase === boss.phase) ? 1 : 0 };
 }
 
 /** How many times her fight has started: the encounter's own count, read off its adapter alone (no whole-host snapshot). */
 function bossAttempts(host: SimHost): number {
-  const saved = host.adapters.get(MATRIARCH_ID)?.snapshot();
+  const saved = host.adapters.get(FIGHT)?.snapshot();
   if (typeof saved !== 'string') throw new Error('Missing Matriarch continuation');
   return (JSON.parse(saved) as { boss: { attempts: number } }).boss.attempts;
 }

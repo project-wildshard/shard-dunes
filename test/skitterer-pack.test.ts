@@ -107,7 +107,8 @@ test('native pack uses one module, real contacts and an exact fresh-host continu
     leadPlayer(host).position.copy(actor.position); leadPlayer(host).position.z += 1;
     let hits = 0; host.events.on('damage.dealt', event => { if (event.req.target === leadPlayer(host).health) hits++; }, host.scope);
     for (let i = 0; i < 240; i++) host.step();
-    expect(calls.mock.calls.filter(call => call[0] === 'ws_init')).toHaveLength(1);
+    // OF19c1: the Matriarch's decision row is the declared host's too (her encounter's), so two modules start
+    expect(calls.mock.calls.filter(call => call[0] === 'ws_init')).toHaveLength(2);
     expect(calls.mock.calls.filter(call => call[0] === 'ws_handle').length).toBeLessThanOrEqual(400);
     calls.mockClear();
     expect(hits).toBeGreaterThan(0);
@@ -116,7 +117,8 @@ test('native pack uses one module, real contacts and an exact fresh-host continu
       world.install(fresh, { restoring: true, emit: () => undefined, snapshot: saved }).keeper.settle();
     });
     expect(calls.mock.calls.filter(call => call[0] === 'ws_handle')).toHaveLength(0);
-    expect(calls.mock.calls.filter(call => call[0] === 'ws_init')).toHaveLength(1);
+    // OF19c1: the Matriarch's decision row is the declared host's too (her encounter's), so two modules start
+    expect(calls.mock.calls.filter(call => call[0] === 'ws_init')).toHaveLength(2);
     for (let i = 0; i < 120; i++) { host.step(); resumed.step(); }
     expect(snapshotSimHost(resumed)).toEqual(snapshotSimHost(host));
   } finally { calls.mockRestore(); resumed?.dispose(); host.dispose(); }

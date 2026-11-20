@@ -5,6 +5,15 @@ import { SIGNAL_PHYSICS } from '../physics';
 import { SIGNAL_SPECIES, SIGNAL_STRIKES } from './brains';
 import { SIGNAL_OWNER_ROWS } from './hostOwners';
 import { SIGNAL_SPAWNS } from './spawns';
+import { MAW_DATA, TAIL_SWEEP_DATA, BUFFET_DATA } from './species/matriarch';
+import type { StrikeData } from '@wildshard/sharddev/species';
+import * as LAYOUT from '../layout';
+
+/** A decision strike as a species ability, as `speciesProgramToRows` writes one. */
+function ability(strike: StrikeData): { use: string; range: number; cooldown: number; weight: number; damage: number; windup: number } {
+  return { use: strike.id, range: strike.range ?? 0, cooldown: strike.cooldown, weight: strike.weight.kind === 'constant' ? strike.weight.value : 1,
+    damage: strike.damage, windup: strike.windup };
+}
 
 // ONE-FORMAT OF19b: the dune's creatures are rows. The ray, the skitterer packs and the striders leave the runtime plan's
 // keeper for declared spawns the engine's declared host runs beside it (OF19b0); the Matriarch stays the keeper's boss
@@ -13,11 +22,18 @@ import { SIGNAL_SPAWNS } from './spawns';
 // their decision row's spawn group (format 0.46.2), and the first ray keeps its hold until the scout (format 0.47.0).
 
 type Kind = keyof typeof rows.species;
-const homeKinds = new Set<string>(SIGNAL_SPAWNS.homes.map(home => home.kind));
+// OF19c1: the Matriarch's species joins them; her decision row (`sim/scripts`) is her declared boss encounter's
+const MATRIARCH_KIND = 'duneMatriarch';
+const homeKinds = new Set<string>([...SIGNAL_SPAWNS.homes.map(home => home.kind), MATRIARCH_KIND]);
 const program = { species: SIGNAL_SPECIES.filter(row => homeKinds.has(row.kind)), strikes: SIGNAL_STRIKES };
 const looks = new Map(program.species.map(row => [row.kind, { look: `sunscar.look.${row.kind}`, dims: rows.species[row.kind as Kind].spec.dims }] as const));
 /** The home kinds' rows: species with their layers, the brains they name and the plain strikes. */
-export const SIGNAL_DECLARED_ROWS: ConvertedSpecies = speciesProgramToRows(program, looks);
+const converted = speciesProgramToRows(program, looks);
+/** Her decision strikes all three (the dive's maw, the grounded tail sweep and buffet), so all three are her abilities; the
+ *  maw aims 1.2 m up the player as the keeper's strike effect did (format 0.49.0 ability `aimHeight`). */
+const MATRIARCH_ABILITIES = [{ ...ability(MAW_DATA), aimHeight: 1.2 }, ability(TAIL_SWEEP_DATA), ability(BUFFET_DATA)];
+export const SIGNAL_DECLARED_ROWS: ConvertedSpecies = { ...converted,
+  species: converted.species.map(row => row.kind === MATRIARCH_KIND ? Object.assign(structuredClone(row), { abilities: MATRIARCH_ABILITIES }) : row) };
 
 /** One look row per species, naming the shard's rig recipe; the page draws the bodies through its `species.program`
  *  feature until declared looks can name a rig library (the server never reads a look). */
@@ -43,3 +59,12 @@ export const SIGNAL_DECLARED_SPAWNS = SIGNAL_SPAWNS.homes.map((home, index) => {
   if (hold !== undefined) spawn.hold = { field: hold.field, until: hold.until };
   return spawn;
 });
+
+const matriarch = SIGNAL_SPAWNS.bosses[0], matriarchSpecies = SIGNAL_DECLARED_ROWS.species.find(row => row.kind === MATRIARCH_KIND);
+if (matriarch === undefined || matriarchSpecies === undefined) throw new Error('Missing declared Dune Matriarch');
+/** OF19c1: the Dune Matriarch is a declared spawn in the basin, out of the world until her declared boss encounter's fight
+ *  begins (`start: 'spawned'`); no brain (her encounter's decision row flies her) and no respawn (her fight brings her back). */
+export const MATRIARCH_SPAWN = { id: matriarch.id, species: matriarchSpecies.id, variant: matriarchSpecies.variants[0]?.id ?? 'matriarch', brain: null, strike: null,
+  seed: SIGNAL_SPAWNS.homes.length + 1, scale: 3.6, at: [matriarch.at[0], heightAt(matriarch.at[0], matriarch.at[1]), matriarch.at[1]] as [number, number, number], yaw: matriarch.yaw };
+/** Her declared spawn's ground: below it (plus a margin) her decision rises before it circles. */
+export const MATRIARCH_GROUND = heightAt(LAYOUT.BASIN.x, LAYOUT.BASIN.z);

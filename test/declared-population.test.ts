@@ -24,7 +24,7 @@ test('every home is a declared spawn: held ray, pack and striders stand, a skitt
   const directory = builtFolder('sunscar-dunes'), product = await loadHeadlessFolder(directory), descriptor = outputDescriptor(product.shardfile);
   if (descriptor === undefined) throw new Error('Missing admitted product');
   const shard = product.shardfile, plan = parseNativeRuntimePlan(product.section('sim/runtime-plan'));
-  expect(shard.creatures.spawns.map(row => row.id)).toEqual(Array.from({ length: HOMES }, (_, index) => `sunscar.home:${String(index)}`));
+  expect(shard.creatures.spawns.map(row => row.id)).toEqual([...Array.from({ length: HOMES }, (_, index) => `sunscar.home:${String(index)}`), 'sunscar.matriarch']);
   expect(plan.recipe.population.rows.homes).toEqual([]);
   expect(product.has('actors/species-programs')).toBe(true); // the page still draws through `species.program`
   const assets = new Map(descriptor.index.files.map(file => [file.commons === true ? `commons:${file.hash}` : file.hash,
@@ -32,10 +32,11 @@ test('every home is a declared spawn: held ray, pack and striders stand, a skitt
   const rapier = await loadRapier(Uint8Array.from(readFileSync(nativeRapierFile)));
   const world = await prepareRuntimeWorld(shard, assets, plan.baked, plan.recipe, descriptor.sections), host = createSimHost(world.level, { ...world.ports, rapier });
   world.install(host, { restoring: false, emit: () => undefined }).keeper.settle();
-  for (const row of shard.creatures.spawns) expect(host.entities.get(row.id)?.alive, row.id).toBe(true);
-  // the keeper keeps only the Matriarch, a spawned boss: her body stands when the quest summons her, not at load
-  expect(plan.recipe.population.rows.boss?.id).toBe('sunscar.matriarch');
-  expect(host.entities.has('sunscar.matriarch')).toBe(false);
+  for (const row of shard.creatures.spawns.filter(row => row.id !== 'sunscar.matriarch')) expect(host.entities.get(row.id)?.alive, row.id).toBe(true);
+  // OF19c1: the keeper keeps nothing; the Matriarch is a declared spawned boss, out of the world until her fight begins
+  expect(plan.recipe.population.rows.boss).toBeUndefined();
+  expect(host.entities.get('sunscar.matriarch')?.alive).toBe(false);
+  expect(host.entities.get('sunscar.matriarch')?.position.y).toBeLessThan(-1000);
   const ray = host.entities.get(RAY), skitterer = host.entities.get(SKITTERER);
   if (ray === undefined || skitterer === undefined) throw new Error('Missing declared bodies');
   host.step();

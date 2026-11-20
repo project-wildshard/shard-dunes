@@ -22,7 +22,12 @@ const flags = host => [...host.flags.all].sort();
 const signal = host => host.quests.find(row => row.def.id === 'sunscar.signal');
 const tape = (resident, segments) => runNativeHeadlessTape(resident.host, input => { resident.step(input); }, () => resident.effects, { version: 1, observe: [], segments }).observations;
 const PLAY_ON = [
-  walk('back-to-tower', [...[...TOWER_TO_BASIN].reverse(), [12, -60], ...UP_STAIR], 8000),
+  // OF19c1: her declared fight ends where she falls, not in the basin, so the walk back meets the stair still carrying
+  // its approach from the dunes, and the motor stood blocked on the first step face (8.8, -59.9). The player stops at
+  // the tower's foot and climbs from rest, as the forward climb does.
+  walk('back-to-tower', [...[...TOWER_TO_BASIN].reverse(), [12, -60]], 8000),
+  { id: 'tower-foot', ticks: 30, commands: [] },
+  walk('climb-back', [[12, -60], ...UP_STAIR], 3000),
   ...press('relight-signal-fire', ACT.fire, 300),
   walk('back-to-basin', [...DOWN_STAIR, ...TOWER_TO_BASIN], 8000),
 ];

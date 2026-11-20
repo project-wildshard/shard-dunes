@@ -1,5 +1,7 @@
-// Durable step = phase*10 + mode (orbit, dive, climb, stalk/strike, dead).
-// The existing encounter owns spawning, rise, phases, retry, weather and rewards.
+// Durable step = phase*10 + mode (orbit, dive, climb, stalk/strike, dead, rising).
+// Her declared boss encounter owns her body's absence until the fight, her phases, retry, rewards and (through the plan's
+// owner row) her marks and storm. A phase change and a retry stop and restart this decision, so a start reads her phase off
+// her health and, standing on the basin floor, rises first (ONE-FORMAT OF19c1).
 import { Actor, Move, Strike, Timer, State, Params, Do, Read, Event } from './generated/sunscarMatriarchDecision';
 @inline function orbit(phase:i32):void {
   State.step=phase*10+1; Do.move(Actor.matriarch,phase==0?Move.orbit:Move.stormOrbit);
@@ -11,11 +13,17 @@ import { Actor, Move, Strike, Timer, State, Params, Do, Read, Event } from './ge
 @inline function climb(phase:i32):void {
   State.step=phase*10+3; Do.move(Actor.matriarch,phase==0?Move.climb:Move.stormClimb);
 }
-// Mode 0 is a phase not yet flown: a fresh fight (step 0), or a retry whose kept phase arrived as a threshold while the
-// fight was off (step 10). Either starts circling at that phase; without it a retried fight in the storm never moved again.
+@inline function phaseNow():i32 {
+  const share=Read.hpShare(Actor.matriarch);
+  return share>Params.stormAt?0:(share>Params.groundAt?1:2);
+}
+// Every start is a fresh step (stop zeroed it): the phase is her health's, a body on the basin floor (a new fight or a
+// retry) rises before it circles, and the grounded phase lies down, or stalks at once when she already lies there.
 export function onStart():void {
-  if(State.step%10!=0) return;
-  orbit(State.step/10); Do.timer(Timer.beat,Params.firstRest);
+  const phase=phaseNow(), low=Read.y(Actor.matriarch)<Params.lowY;
+  if(phase==2) { if(low) ground(); else { State.step=21; Do.move(Actor.matriarch,Move.lie); } return; }
+  if(low) { State.step=phase*10+6; Do.move(Actor.matriarch,Move.rise); return; }
+  orbit(phase); Do.timer(Timer.beat,Params.firstRest);
 }
 export function onStop():void { Do.stop(Actor.matriarch); Do.timer(Timer.beat,0); State.step=0; }
 export function onThreshold(index:i32):void {
@@ -36,7 +44,8 @@ export function onTimer(timer:i32):void {
 export function onMoveDone(move:i32,ok:bool):void {
   const step=State.step, phase=step/10, mode=step%10;
   if(i32(Event.subject)!=Actor.matriarch || mode==0 || mode==5) return;
-  if(phase==2 && move==Move.lie) ground();
+  if(mode==6 && move==Move.rise) { orbit(phase); Do.timer(Timer.beat,Params.firstRest); }
+  else if(phase==2 && move==Move.lie) ground();
   else if(phase==2 && move==Move.stalk) {
     const target=Read.nearestPlayer(Actor.matriarch); if(target==0) { Do.timer(Timer.beat,0.2); return; }
     State.step=24; Do.strike(Actor.matriarch,Strike.tail,target);
