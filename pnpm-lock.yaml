@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@wildshard/engine': file:tmp/opus-of19-dunes/wildshard-engine-0.1.53.tgz
+  '@wildshard/engine': 0.1.53
   binaryen: npm:@pre-bundled/binaryen@132.0.0-patch-1
   assemblyscript>binaryen: npm:@pre-bundled/binaryen@131.0.0-nightly.20260721-patch-1
   '@wildshard/format': npm:@wildshard/shard-format@0.55.0
@@ -48,8 +48,8 @@ importers:
         specifier: 6.0.2
         version: 6.0.2
       '@wildshard/engine':
-        specifier: file:tmp/opus-of19-dunes/wildshard-engine-0.1.53.tgz
-        version: file:tmp/opus-of19-dunes/wildshard-engine-0.1.53.tgz(@types/three@0.186.0)(@typescript/typescript6@6.0.2)(playwright@1.65.0)(sharp@0.35.5(@types/node@24.3.1))(typescript@6.0.3)(vite@8.3.0(@types/node@24.3.1)(esbuild@0.28.2))
+        specifier: 0.1.53
+        version: 0.1.53(@types/three@0.186.0)(@typescript/typescript6@6.0.2)(playwright@1.65.0)(sharp@0.35.5(@types/node@24.3.1))(typescript@6.0.3)(vite@8.3.0(@types/node@24.3.1)(esbuild@0.28.2))
       npm-bin-deps:
         specifier: 2.1.0
         version: 2.1.0
@@ -604,9 +604,8 @@ packages:
     peerDependencies:
       three: 0.186.0
 
-  '@wildshard/engine@file:tmp/opus-of19-dunes/wildshard-engine-0.1.53.tgz':
-    resolution: {integrity: sha512-7hTxi86qTg90sv1jsRY9BOI+GYtuJLB2cdWlpbStmwfExvMo0znvv8e3+S3Uf/dKxrcL80JLn+yBsuQUs8q+dg==, tarball: file:tmp/opus-of19-dunes/wildshard-engine-0.1.53.tgz}
-    version: 0.1.53
+  '@wildshard/engine@0.1.53':
+    resolution: {integrity: sha512-gvYwgz25Okn3d2RJTsRwnstn+icRuHUd5hq25qIN9zIMwejhoBV0MvJVd37TX6T6NkcHs0Xft8nDfaDQwhIgsQ==}
     engines: {node: '>=24.18.0'}
     hasBin: true
     peerDependencies:
@@ -622,6 +621,8 @@ packages:
         optional: true
       sharp:
         optional: true
+    bundledDependencies:
+      - '@wildshard/format'
 
   '@wildshard/kit@0.4.17':
     resolution: {integrity: sha512-rwAg5vKCB1tWUCLFm9dTLbnW6G+12YIK8BOqHsQSh0lnnAbPw21gCuc8Wn3P+yHbEFkilOMGAkyweWKuNHj+DA==}
@@ -1769,7 +1770,7 @@ snapshots:
       '@types/three': 0.186.0
       '@typescript/typescript6': 6.0.2
       '@wildshard/build': 0.4.17(@types/node@24.3.1)(three@0.186.0)(typescript@6.0.3)
-      '@wildshard/engine': file:tmp/opus-of19-dunes/wildshard-engine-0.1.53.tgz(@types/three@0.186.0)(@typescript/typescript6@6.0.2)(playwright@1.65.0)(sharp@0.35.5(@types/node@24.3.1))(typescript@6.0.3)(vite@8.3.0(@types/node@24.3.1)(esbuild@0.28.2))
+      '@wildshard/engine': 0.1.53(@types/three@0.186.0)(@typescript/typescript6@6.0.2)(playwright@1.65.0)(sharp@0.35.5(@types/node@24.3.1))(typescript@6.0.3)(vite@8.3.0(@types/node@24.3.1)(esbuild@0.28.2))
       '@wildshard/format': '@wildshard/shard-format@0.55.0(typescript@6.0.3)'
       '@wildshard/kit': 0.4.17(@wildshard/sdk@0.4.17(@types/node@24.3.1)(three@0.186.0)(typescript@6.0.3))(typescript@6.0.3)
       '@wildshard/sdk': 0.4.17(@types/node@24.3.1)(three@0.186.0)(typescript@6.0.3)
@@ -1808,7 +1809,7 @@ snapshots:
       - vite-plus
       - yaml
 
-  '@wildshard/engine@file:tmp/opus-of19-dunes/wildshard-engine-0.1.53.tgz(@types/three@0.186.0)(@typescript/typescript6@6.0.2)(playwright@1.65.0)(sharp@0.35.5(@types/node@24.3.1))(typescript@6.0.3)(vite@8.3.0(@types/node@24.3.1)(esbuild@0.28.2))':
+  '@wildshard/engine@0.1.53(@types/three@0.186.0)(@typescript/typescript6@6.0.2)(playwright@1.65.0)(sharp@0.35.5(@types/node@24.3.1))(typescript@6.0.3)(vite@8.3.0(@types/node@24.3.1)(esbuild@0.28.2))':
     dependencies:
       '@dimforge/rapier3d-simd': 0.21.0
       '@hono/node-server': 2.1.8(hono@4.13.19)
@@ -1817,7 +1818,6 @@ snapshots:
       '@sentry/core': 11.0.0
       '@typescript/typescript6': 6.0.2
       '@valibot/to-json-schema': 1.8.0(valibot@1.5.0(typescript@6.0.3))
-      '@wildshard/format': '@wildshard/shard-format@0.55.0(typescript@6.0.3)'
       '@wildshard/wire': 1.5.0(typescript@6.0.3)
       ajv: 6.15.0
       fflate: 0.8.3

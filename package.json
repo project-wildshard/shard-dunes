@@ -54,7 +54,7 @@
     "vite": "8.3.0",
     "vitest": "5.0.1",
     "npm-bin-deps": "2.1.0",
-    "@wildshard/engine": "file:tmp/opus-of19-dunes/wildshard-engine-0.1.53.tgz"
+    "@wildshard/engine": "0.1.53"
   },
   "pnpm": {
     "ignoredOptionalDependencies": [
@@ -140,7 +140,7 @@
       "@typescript/typescript-win32-x64"
     ],
     "overrides": {
-      "@wildshard/engine": "file:tmp/opus-of19-dunes/wildshard-engine-0.1.53.tgz",
+      "@wildshard/engine": "0.1.53",
       "binaryen": "npm:@pre-bundled/binaryen@132.0.0-patch-1",
       "assemblyscript>binaryen": "npm:@pre-bundled/binaryen@131.0.0-nightly.20260721-patch-1",
       "@wildshard/format": "npm:@wildshard/shard-format@0.55.0"
