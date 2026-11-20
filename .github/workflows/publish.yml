@@ -32,7 +32,7 @@ on:
         type: string
         default: ''
       preparation:
-        description: Preparation client release tag (defaults to v0.1.47 for pinned builds, or the engine candidate's client)
+        description: Preparation client release tag (empty follows the installed engine pin, or the engine candidate's client)
         type: string
         default: ''
       rehearse:
@@ -164,7 +164,9 @@ jobs:
       - name: Prepare in phone WebKit
         env:
           PRODUCT: ${{ steps.product.outputs.product }}
-          PREPARATION: ${{ inputs.preparation || (inputs.engine == '' && inputs.sharddev == '' && 'v0.1.47') || '' }}
+          # Empty: `wildshard prepare` fetches the preparation client of the engine
+          # the shard installs (its own pin, or its pnpm override past the sdk's).
+          PREPARATION: ${{ inputs.preparation }}
           # `gh run rerun <id> --debug` turns on the recorder's full output (NET-LAG NL12).
           WILDSHARD_PREPARATION_DEBUG: ${{ runner.debug }}
         run: |

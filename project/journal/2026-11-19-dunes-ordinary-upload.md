@@ -6,3 +6,7 @@ Every declared look names `platform.rig` over the `models` scene library
 (format 0.50.0), so the page draws all 13 homes and the Matriarch rigged
 with no `species.program` feature and no `actors/species-programs`
 section: Dunes is an ordinary upload. Hero recaptured on this candidate.
+
+Pins: engine 0.1.53 and format 0.55.0 (SDK 0.4.18's pin) carry OF19c1 and OF19d2;
+
+publish.yml's preparation client now follows the installed engine pin.
