@@ -10,3 +10,7 @@ section: Dunes is an ordinary upload. Hero recaptured on this candidate.
 Pins: engine 0.1.53 and format 0.55.0 (SDK 0.4.18's pin) carry OF19c1 and OF19d2;
 
 publish.yml's preparation client now follows the installed engine pin.
+
+Ray dive test: a freed ray on the declared host dives at a player standing
+
+under its circle and its swoop lands (`test/ray-dive.test.ts`).
