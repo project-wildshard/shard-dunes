@@ -26,7 +26,7 @@ test('every home is a declared spawn: held ray, pack and striders stand, a skitt
   const shard = product.shardfile, plan = parseNativeRuntimePlan(product.section('sim/runtime-plan'));
   expect(shard.creatures.spawns.map(row => row.id)).toEqual([...Array.from({ length: HOMES }, (_, index) => `sunscar.home:${String(index)}`), 'sunscar.matriarch']);
   expect(plan.recipe.population.rows.homes).toEqual([]);
-  expect(product.has('actors/species-programs')).toBe(true); // the page still draws through `species.program`
+  expect(product.has('actors/species-programs')).toBe(false); // OF19d: the page draws its declared looks' rigs
   const assets = new Map(descriptor.index.files.map(file => [file.commons === true ? `commons:${file.hash}` : file.hash,
     Uint8Array.from(readFileSync(`${directory}/${file.path}`))]));
   const rapier = await loadRapier(Uint8Array.from(readFileSync(nativeRapierFile)));

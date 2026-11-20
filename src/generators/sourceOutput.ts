@@ -4,7 +4,6 @@ import { WHIP_ROW } from './rows/equipment';
 import type { signalWorldScenes } from './worldScenes';
 import { emitNamedBlobs, type NamedBlob } from '@wildshard/sharddev/blobs';
 import STRINGS from '../data/strings.json' with { type: 'json' };
-import { SIGNAL_PAGE_PROGRAM } from './rows/population';
 import { emitPlatformSections } from '@wildshard/sharddev/platformSections';
 import type { ProjectOutput } from '@wildshard/sharddev/projectOutput';
 import { MATRIARCH_DECISION, MATRIARCH_MOVES } from './rows/matriarchDecision';
@@ -32,7 +31,6 @@ export function signalSceneOutput(scene: ReturnType<typeof signalWorldScenes>, p
     ['client/plan', plan],
       ['explore/catalogue', {"version": 1, "entries": [{"kind": "held", "item": WHIP_ROW.id}, {"kind": "rigs", "library": "models"}, {"kind": "npc", "npc": "sunscar.scout"}, {"kind": "scene", "part": "tower.root"}, {"kind": "scene", "part": "caravan.root"}, {"kind": "scene", "part": "well.root"}, {"kind": "scene", "part": "brazier.0.root"}]}],
       ['world/scenes', scene.worldScenes],
-      ['actors/species-programs', { page: SIGNAL_PAGE_PROGRAM.species.page, native: [], program: SIGNAL_PAGE_PROGRAM.species.program }],
       ['sim/runtime-plan', { kind: 'held-melee', recipe: SIGNAL_NATIVE_WORLD, baked }],
     ['sim/scripts', [...MATRIARCH_DECISION, SKITTERER_DECISION]], ['actors/moves', [...MATRIARCH_MOVES, ...SKITTERER_MOVES]], ['actors/strikes', SIGNAL_STRIKES],
     ['world/targets', SIGNAL_LASH_TARGETS],

@@ -18,7 +18,6 @@ return parseClientPlan({ version: 1, features: [
   { kind: 'light.emitters', rows: SIGNAL_EMITTERS },
   { kind: 'weather.fields', rows: SIGNAL_WEATHER_FIELDS, quest: quest.id },
   { kind: 'held.melee', item: WHIP_ITEMS.loadout.primary, stage: 'equipment', targets: 'raycast' },
-  { kind: 'species.program', library: 'models' },
   { kind: 'quest.page', rows: quest, promptOrder: 'page-npc',
     capture: { dusk: [{ settle: 'weather.fields' }], ...Object.fromEntries(Object.entries(capture ?? {}).map(([name, steps]) => [name, steps.map(step => {
       if ('flag' in step) return step;

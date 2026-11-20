@@ -35,10 +35,10 @@ const MATRIARCH_ABILITIES = [{ ...ability(MAW_DATA), aimHeight: 1.2 }, ability(T
 export const SIGNAL_DECLARED_ROWS: ConvertedSpecies = { ...converted,
   species: converted.species.map(row => row.kind === MATRIARCH_KIND ? Object.assign(structuredClone(row), { abilities: MATRIARCH_ABILITIES }) : row) };
 
-/** One look row per species, naming the shard's rig recipe; the page draws the bodies through its `species.program`
- *  feature until declared looks can name a rig library (the server never reads a look). */
+/** One look row per species: OF19d, the page draws each body from the `models` scene library's rig of its kind (format
+ *  0.50.0 `platform.rig`), as an ordinary upload does, with no `species.program` feature (the server never reads a look). */
 export const SIGNAL_DECLARED_LOOKS = SIGNAL_DECLARED_ROWS.species.map(row => ({ id: `sunscar.look.${row.kind}`, species: row.id,
-  recipe: 'sunscar.rig', material: null, parameters: {}, animation: { recipe: 'sunscar.clips', parameters: {} } }));
+  recipe: 'platform.rig', material: null, parameters: { library: 'models' }, animation: { recipe: 'platform.rig', parameters: {} } }));
 
 const SKITTERER_GROUP = 'sunscar.skitterers';
 const keeperBodies = new Map((SIGNAL_PHYSICS['actors'] as { id: string; seed: number; scale: number }[]).map(row => [row.id, row]));
