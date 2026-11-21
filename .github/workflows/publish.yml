@@ -5,6 +5,10 @@ name: publish
 # there, never in a shard repo. From any machine or a phone:
 #   gh workflow run publish.yml -R project-wildshard/shard-dunes -f channel=staging
 #   (-f slug=<slug> when the repo builds more than one; -f version=X.Y.Z)
+# The version is package.json's (SHARD-COMPAT CP13): bump it in the repo; a
+# version that does not rise above the catalogue's is refused before upload.
+# After the cook, `record` tags the commit r<revision> and commits
+# published.json (version, revision, digest, channel) back to main.
 # `build` gates, checks, builds and prepares with no secret in reach; only
 # `upload` reads the org secrets, inside the channel's environment.
 on:
@@ -20,9 +24,9 @@ on:
         options: [staging, prod]
         default: staging
       version:
-        description: X.Y.Z, or auto (the catalogue's version, patch + 1)
+        description: repo (package.json's version, must rise), X.Y.Z, or auto (the catalogue's patch + 1)
         type: string
-        default: auto
+        default: repo
       engine:
         description: Exact candidate engine commit (empty keeps the pin)
         type: string
@@ -282,6 +286,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 110
     environment: ${{ inputs.channel }}
+    outputs:
+      revision: ${{ steps.report.outputs.revision }}
     env:
       SLUG: ${{ needs.build.outputs.slug }}
       CHANNEL: ${{ inputs.channel }}
@@ -321,3 +327,48 @@ jobs:
             -F "client_payload[slug]=$SLUG" -F "client_payload[revision]=$REVISION" \
             -F "client_payload[hash]=$HASH" -F "client_payload[channel]=$CHANNEL"
           echo "engine shard-pin dispatched for $SLUG rev $REVISION" >> "$GITHUB_STEP_SUMMARY"
+
+  # SHARD-COMPAT CP13: the repo records what it published. The built commit gets tag r<revision> (<slug>-r<revision>
+  # when r<revision> names another slug's commit) and main gets published.json. Engine's pins stop being the only record.
+  record:
+    needs: [build, upload, cook]
+    if: ${{ needs.cook.outputs.revision != '' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    env:
+      SLUG: ${{ needs.build.outputs.slug }}
+      VERSION: ${{ needs.build.outputs.version }}
+      REVISION: ${{ needs.cook.outputs.revision }}
+      HASH: ${{ needs.upload.outputs.hash }}
+      CHANNEL: ${{ inputs.channel }}
+      BUILT: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+          fetch-tags: true
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: package.json
+      - name: Tag the built commit and commit published.json
+        id: record
+        run: |
+          node scripts/publish-shard.mjs record "$SLUG" "$VERSION" "$REVISION" "$HASH" "$CHANNEL" "$BUILT"
+          tag=$(sed -n 's/^tag=//p' "$GITHUB_OUTPUT" | tail -1)
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if ! git rev-parse -q --verify "refs/tags/$tag" >/dev/null; then
+            git tag "$tag" "$BUILT"
+            git push origin "refs/tags/$tag"
+          fi
+          git add published.json
+          if git diff --cached --quiet; then
+            echo "published.json already records $SLUG rev $REVISION"
+          else
+            git commit -m "chore(publish): $SLUG $VERSION r$REVISION on $CHANNEL" -m "SHARD-COMPAT CP13: recorded by publish.yml run $GITHUB_RUN_ID."
+            git push origin HEAD || { git pull --rebase origin HEAD && git push origin HEAD; }
+          fi
+          echo "$SLUG $VERSION: tag $tag, published.json on main" >> "$GITHUB_STEP_SUMMARY"

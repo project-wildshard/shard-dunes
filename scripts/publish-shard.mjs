@@ -6,7 +6,7 @@
 //   node scripts/publish-shard.mjs gate              refuse a dispatch that is not
 //                                                    main's tip, or whose main is red
 //   node scripts/publish-shard.mjs build [slug]      build, then name the product folder
-//   node scripts/publish-shard.mjs version <slug> <X.Y.Z|auto>
+//   node scripts/publish-shard.mjs version <slug> <repo|X.Y.Z|auto>
 //                                                    the version upload sends
 //   node scripts/publish-shard.mjs preparation       refuse an empty or malformed
 //                                                    PREPARATION before anything runs
@@ -23,7 +23,7 @@
 import { agentFetch as fetch } from './wildshard-agent-requests.mjs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { appendFileSync, existsSync, readFileSync, readdirSync } from 'node:fs';
+import { appendFileSync, existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
 import { pathToFileURL } from 'node:url';
@@ -46,8 +46,14 @@ export function compareVersions(a, b) {
   return 0;
 }
 
-/** The version upload sends: `auto` is the catalogue's patch + 1, or package.json's when higher. */
+/** The version upload sends. `repo` (SHARD-COMPAT CP13, the default) is package.json's own version, refused unless it
+ * rises above the catalogue's; `auto` is the catalogue's patch + 1, or package.json's when higher. */
 export function nextVersion(wanted, catalogued, own) {
+  if (wanted === 'repo') {
+    if (!own || !SEMVER.test(own) || own === '0.0.0') throw new Refusal(`package.json declares no shard version X.Y.Z (${own ?? 'none'}): set "version" in the repo (CP13)`);
+    if (catalogued && compareVersions(own, catalogued) <= 0) throw new Refusal(`package.json version ${own} is not above the catalogue's ${catalogued}: bump "version" in the repo and push (CP13)`);
+    return own;
+  }
   if (wanted !== 'auto') {
     if (catalogued && compareVersions(wanted, catalogued) <= 0) throw new Refusal(`version ${wanted} is not above the catalogue's ${catalogued}`);
     compareVersions(wanted, wanted);
@@ -219,6 +225,35 @@ async function version(slug, wanted) {
   output('version', nextVersion(wanted, row?.version ?? undefined, own));
 }
 
+/** CP13: published.json after a publish: one row per slug, merged into what the repo already records. */
+export function publishedRecord(existing, row) {
+  const rows = existing && typeof existing === 'object' && !Array.isArray(existing) ? existing : {};
+  const { slug, ...rest } = row;
+  return { ...rows, [slug]: rest };
+}
+
+/** CP13: the tag a published revision gets: `r<revision>`, or `<slug>-r<revision>` when `r<revision>` already names
+ * another commit (a repo that builds more than one slug). `taken` is the commit `r<revision>` names now, if any. */
+export function publishedTag(revision, slug, taken, commit) {
+  const plain = `r${revision}`;
+  return !taken || taken === commit ? plain : `${slug}-${plain}`;
+}
+
+function record(slug, version, revision, hash, channel, commit) {
+  if (!/^\d+$/u.test(revision)) throw new Refusal(`no catalogue revision to record for ${slug}: ${revision}`);
+  const file = 'published.json';
+  const existing = existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')) : undefined;
+  const rows = publishedRecord(existing, { slug, version, revision: Number(revision), hash, channel, commit });
+  writeFileSync(file, `${JSON.stringify(rows, null, 2)}\n`);
+  let taken = '';
+  try {
+    taken = execFileSync('git', ['rev-parse', '-q', '--verify', `refs/tags/r${revision}^{commit}`], { encoding: 'utf8' }).trim();
+  } catch {
+    taken = '';
+  }
+  output('tag', publishedTag(revision, slug, taken, commit));
+}
+
 function report(slug, channel, logFile, shardFile) {
   const parsed = uploadLines(readFileSync(logFile, 'utf8'));
   const hash = parsed.hash ?? (shardFile ? createHash('sha256').update(readFileSync(shardFile)).digest('hex') : undefined);
@@ -288,10 +323,11 @@ async function main(argv) {
   if (command === 'gate') return gate();
   if (command === 'build') return build(rest[0] || undefined);
   if (command === 'version' && rest.length === 2) return version(rest[0], rest[1]);
+  if (command === 'record' && rest.length === 6) return record(...rest);
   if (command === 'preparation') return preparation();
   if (command === 'summary' && (rest.length === 3 || rest.length === 4)) return report(...rest);
   if (command === 'cook' && (rest.length === 3 || rest.length === 4)) return cook(rest[0], rest[1], rest[2], rest[3] || undefined);
-  throw new Refusal('usage: publish-shard.mjs gate | preparation | build [slug] | version <slug> <X.Y.Z|auto> | summary <slug> <channel> <log> [shard file] | cook <slug> <channel> <hash> [upload id]');
+  throw new Refusal('usage: publish-shard.mjs gate | preparation | build [slug] | version <slug> <repo|X.Y.Z|auto> | record <slug> <version> <revision> <hash> <channel> <commit> | summary <slug> <channel> <log> [shard file] | cook <slug> <channel> <hash> [upload id]');
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
