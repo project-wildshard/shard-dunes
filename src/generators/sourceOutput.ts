@@ -9,7 +9,7 @@ import type { ProjectOutput } from '@wildshard/sharddev/projectOutput';
 import { MATRIARCH_DECISION, MATRIARCH_MOVES } from './rows/matriarchDecision';
 import { SIGNAL_NATIVE_WORLD } from './rows/nativeWorld';
 import { SIGNAL_PHYSICS } from './physics';
-import { encodeCanonicalJson } from '@wildshard/format/immutable';
+import { encodeCanonicalJson } from '@wildshard/sharddev/immutable';
 import { SIGNAL_STRIKES } from './rows/brains';
 import { SIGNAL_LASH_TARGETS } from './lashTargets';
 import { SKITTERER_DECISION, SKITTERER_MOVES } from './rows/skittererDecision';
