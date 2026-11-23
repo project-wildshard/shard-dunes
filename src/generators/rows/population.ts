@@ -17,6 +17,6 @@ export const SIGNAL_PAGE_PROGRAM: { readonly species: { readonly program: typeof
 // and her fight a declared boss encounter, so the plan's keeper stands nothing: no home, no hold, no boss. The plan keeps
 // its owner row, which names her declared spawn (engine OF20c/OF19c1: flag, fact, coins, record, marks and storm).
 const { holds: _holds, rows: _rows, ...keeper } = SIGNAL_HEADLESS.homes;
-const keeperProgram = { ...program, species: [] as typeof program.species };
-export const SIGNAL_NATIVE_POPULATION: Readonly<typeof keeper> & { readonly program: typeof keeperProgram; readonly admission: 'prepare'; readonly homes: readonly never[] } = { program: keeperProgram, ...keeper, admission: 'prepare',
+// ONE-FORMAT OF30: an empty keeper names no species programme (format 0.66.1, engine 0a9eff1512)
+export const SIGNAL_NATIVE_POPULATION: Readonly<typeof keeper> & { readonly admission: 'prepare'; readonly homes: readonly never[] } = { ...keeper, admission: 'prepare',
   homes: [] } as const;

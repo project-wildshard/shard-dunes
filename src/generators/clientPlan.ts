@@ -26,7 +26,7 @@ return parseClientPlan({ version: 1, features: [
   },
   // OF19c1: her fight is a declared encounter (the quest page summons it); the marked telegraph blows her storm off its row
   { kind: 'boss.telegraph', actor: SIGNAL_PAGE_PROGRAM.fight.id, view: { kind: 'marked', rows: SIGNAL_PAGE_PROGRAM.fight.presentation } },
-  { kind: 'population.homes', ...SIGNAL_PAGE_PROGRAM.population },
+  // OF29e6: no population.homes row; an engine with OF29e4 stands the page population from the declared files
   { kind: 'debug.expose', name: 'sunscar' },
 ] });
 
