@@ -1,0 +1,9 @@
+{
+  "sunscar-dunes": {
+    "version": "0.0.6",
+    "revision": 7,
+    "hash": "1adcd6d4707fbdd39364811dacc6fbbdbbb391927365c0b156c225b5c3a69f4d",
+    "channel": "staging",
+    "commit": "ba4b72f64fd1a301f1f7dc89bdb3f897e625a5f9"
+  }
+}
