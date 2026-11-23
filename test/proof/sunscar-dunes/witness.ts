@@ -62,7 +62,7 @@ function productAssets(product: Awaited<ReturnType<typeof loadHeadlessFolder>>):
 const admitted = await loadHeadlessFolder('out/sunscar-dunes'), source = admitted.shardfile;
 const assets = productAssets(admitted);
 const EYE = 1.68;
-const identity = { instance: 'sunscar-witness', shard: source.identity.slug, revision: source.identity.revision };
+const identity = { instance: 'sunscar-witness', shard: source.identity.slug, revision: source.identity.saveRevision };
 
 class ProfileStorage implements SaveStorage {
   private readonly data = new Map<string, string>();

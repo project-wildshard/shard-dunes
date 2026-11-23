@@ -62,7 +62,10 @@ const base = emptyShardfile({ slug: 'sunscar-dunes', name: 'Signal Dunes', autho
 const rows = { ...withConvertedRows(base.rows, SIGNAL_DECLARED_ROWS), looks: [...base.rows.looks, ...SIGNAL_DECLARED_LOOKS] };
 // OF19c1: the Matriarch is a declared spawn and her fight a declared boss encounter with its boss panel
 const creatures = { ...base.creatures, brains: SIGNAL_DECLARED_ROWS.brains, spawns: [...SIGNAL_DECLARED_SPAWNS, MATRIARCH_SPAWN] };
-const shardfile = parseShardfile({ ...base, rows, creatures, encounters: [MATRIARCH_ENCOUNTER], ui: [...base.ui, MATRIARCH_PANEL], navigation: navigation.navigation, serverBudget: { ...base.serverBudget, memory: base.serverBudget.memory + decisionMemory + navigation.files.reduce((sum, file) => sum + file.decoded, 0) }, budgets: { ...base.budgets, client: SIGNAL_DUNES_RUNTIME_COST, library, sim }, accent: 'orchid', runtime: null, audio: AUDIO, directors: [bossStages, signalStages],
+/** ONE-FORMAT OF31h3: the awake cost, engine's measured SC8 table (v0.1.19): 0.682 ms per tick with one player; Dunes
+ * shares a worker with Sky Reach (engine's TOGETHER pair). */
+const DUNES_AWAKE_MICROS = 682;
+const shardfile = parseShardfile({ ...base, rows, creatures, encounters: [MATRIARCH_ENCOUNTER], ui: [...base.ui, MATRIARCH_PANEL], navigation: navigation.navigation, serverBudget: { ...base.serverBudget, awakeMicros: DUNES_AWAKE_MICROS, shareWorker: 'far-reach', memory: base.serverBudget.memory + decisionMemory + navigation.files.reduce((sum, file) => sum + file.decoded, 0) }, budgets: { ...base.budgets, client: SIGNAL_DUNES_RUNTIME_COST, library, sim }, accent: 'orchid', runtime: null, audio: AUDIO, directors: [bossStages, signalStages],
   clientChannels: SIGNAL_BUCKET_CHANNELS, movers: SIGNAL_BUCKET_MOVERS, quests: SIGNAL_QUESTS, questNpcs: [QUEST_NPC], questHost: QUEST_HOST, ledger: SIGNAL_LEDGER, items: WHIP_ITEMS,
   // G397: the storm's strength (`shared.storm`) is a host field like the dusk, moving the storm shells' graphs (data/stormLook.ts)
   migrations: slotMigrations, state: { ...base.state, version: 2, shared: [{ id: 1, name: 'dusk', type: 'f64', privacy: 'host', default: 0, min: 0, max: 1 }, STORM_FIELD, { id: 3, name: 'firetime', type: 'f64', privacy: 'host', default: 0, min: 0 }, { id: 4, name: 'burrow', type: 'f64', privacy: 'public', default: 1, min: 0, max: 1 }] },
