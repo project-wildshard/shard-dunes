@@ -1,4 +1,6 @@
 
+import type { PrivateSceneInput } from '@wildshard/format/clientChannels';
+
 type V3 = readonly [number, number, number];
 
 export type CordRgb = readonly [number, number, number];
@@ -71,7 +73,24 @@ export interface LashView {
   readonly flick: { readonly lift: number; readonly push: number; readonly drop: number; readonly back: number; readonly lead: number; readonly loosen: number; readonly sag: readonly [number, number]; readonly tautSag: number; readonly overlap: number };
   /** The wrap round a caught lever: coil radius, height, turns, cord, how long it holds; the helix's samples, tube segments and sides. */
   readonly wrap: { readonly r: number; readonly h: number; readonly turns: number; readonly cord: number; readonly hold: number; readonly samples: number; readonly segments: number; readonly sides: number };
+  /**
+   * QA 11-23-b row 13 (the rebuild): the crack as keys on the stroke's phase `p` (0 to 1 while the lash unrolls to the
+   * 0.12 s land, 1 to 2 as it falls slack and is pulled back in). `hand`: the fist's lift, push (metres, + is back toward
+   * the eye) and pitch / roll (radians) — cocked up and back, snapped through, followed down, recoiled; `heavy` scales it.
+   * `far`: the lash's end as a share of the reach out along the aim, `up` / `right` its height and side (metres, from the
+   * crosshair), `extent` how much of the line the lash covers, `wave` the arc of the travelling loop (+ up, - the sag).
+   * `flash`: the popper's crack at the end (metres across). `ease`: how fast the fist follows its keys (1 / s).
+   */
+  readonly stroke: {
+    readonly hand: { readonly lift: Keys; readonly push: Keys; readonly pitch: Keys; readonly roll: Keys; readonly heavy: number; readonly ease: number };
+    readonly far: Keys; readonly up: Keys; readonly right: Keys; readonly extent: Keys; readonly wave: Keys; readonly heavyWave: number;
+    readonly flash: Keys; readonly heavyFlash: number;
+  };
+  /** The tube's profile (`deformTube`): the loop's arc, the travelling ripple, the sideways bow and the taper with its popper. */
+  readonly tube: { readonly bend: readonly [number, number]; readonly ripple: readonly [number, number, number]; readonly drop: readonly [number, number]; readonly radius: readonly [number, number, number, number, number] };
 }
+/** Ordered keys `[at, value]` on the stroke's phase. */
+export type Keys = readonly (readonly [number, number])[];
 
 /**
  * The bullwhip's look as rows (E374 polish; council rounds 1-25) on the lash item's view (engine `game/systems/items/lashView`):
@@ -120,7 +139,41 @@ export const WHIP_VIEW: LashView = {
   spring: { gain: 0.012, clampYaw: 0.12, clampPitch: 0.1, k: 46, c: 11 },
   flick: { lift: 0.03, push: -0.04, drop: 1.5, back: 2, lead: 0.42, loosen: 0.35, sag: [0.25, 0.4], tautSag: 0.05, overlap: 0.08 },
   wrap: { r: 0.06, h: 0.24, turns: 4, cord: 0.018, hold: 0.9, samples: 40, segments: 80, sides: 5 },
+  // QA 11-23-b row 13: Jake, "the attack animation and the whip is completely fucked, someone has to rebuild that from
+  // scratch". The fist cocks up and back for the first third of the 0.12 s unroll, snaps through to the crack, follows
+  // down and recoils; the lash rises over the fist in a loop that rolls out flat to the crosshair at the land, cracks at
+  // its pale popper, then drops and is pulled back to the coil.
+  stroke: {
+    hand: {
+      lift: [[0, 0], [0.3, 0.05], [0.75, 0.01], [1, -0.015], [1.35, -0.025], [2, 0]],
+      push: [[0, 0], [0.3, 0.05], [0.75, -0.05], [1, -0.07], [1.35, -0.03], [2, 0]],
+      pitch: [[0, 0], [0.3, 0.28], [0.75, -0.16], [1, -0.26], [1.35, -0.18], [2, 0]],
+      roll: [[0, 0], [0.3, -0.12], [1, 0.1], [1.35, 0.06], [2, 0]],
+      heavy: 1.35, ease: 28,
+    },
+    far: [[0, 0.08], [0.3, 0.14], [0.65, 0.6], [1, 1], [1.3, 0.95], [2, 0.35]],
+    up: [[0, 0.2], [0.3, 0.85], [0.65, 0.8], [1, 0], [1.3, -0.7], [2, -1.45]],
+    right: [[0, 0.25], [0.3, 0.45], [1, 0], [2, 0.2]],
+    extent: [[0, 0.15], [0.3, 0.38], [0.65, 0.8], [1, 1], [1.3, 0.97], [2, 0.3]],
+    wave: [[0, 0.05], [0.3, 0.3], [0.65, 0.85], [0.9, 0.3], [1, 0.03], [1.2, -0.25], [2, -0.45]], heavyWave: 1.4,
+    flash: [[0.9, 0], [1, 0.42], [1.08, 0.34], [1.24, 0]], heavyFlash: 1.35,
+  },
+  tube: { bend: [Math.PI, 0.7], ripple: [9, 40, 0.18], drop: [3.1, 0.05], radius: [0.005, 2, 0.0035, 0.93, 0.006] },
 };
+
+/**
+ * Where the hero coil sits in the hold's frame: the generated glove's inner frame (`glove-hd4`'s two fit groups, its
+ * span fitted to `HD_GLOVE_SIZE`) under the glove's pose, frozen as a row so the coil is its own group the stroke can hide
+ * while the lash is out (read from the page's anchor, opus-whip 2026-11-23).
+ */
+export const LOOP_HOLD: { readonly position: V3; readonly rotation: V3; readonly scale: V3 } = {
+  position: [0.0035843336088067224, -0.1073347124354882, -0.03724709946284843], rotation: [-0.5, 0.5, 0.2],
+  scale: [0.0921105077800165, 0.0921105077800165, 0.0921105077800165],
+};
+
+/** The crack's flash: `spikes` thin rays round a unit ball (the stroke scales it), its warm white glow. */
+export const CRACK: { readonly spikes: number; readonly width: number; readonly color: number; readonly emissive: number; readonly glow: number; readonly opacity: number } =
+  { spikes: 14, width: 0.09, color: 0xfff2dc, emissive: 0xffd8a0, glow: 2.2, opacity: 0.9 };
 
 /**
  * The held whip (E374 polish, after Jake's "the custom whip we built was a lot better") on the lash item's held view
@@ -166,23 +219,30 @@ export const HD_GLOVE_SIZE = 0.14;
  */
 export const LASH_TIP: V3 = [-0.04935241128166193, -0.05003700856880042, 0.06305454752961058];
 
-/** Exact private held hierarchy and undecorated material rows; no placement executes at runtime. */
-export const WHIP_SCENE: { readonly version: 1; readonly root: "root"; readonly nodes: readonly [{ readonly kind: "group"; readonly id: "root"; readonly children: readonly ["grip", "coil", "cord", "glove"]; }, { readonly kind: "group"; readonly id: "grip"; }, { readonly kind: "mesh"; readonly id: "coil"; readonly geometry: "coil"; readonly material: "coil"; readonly missing: "group"; readonly position: V3; readonly rotation: V3; readonly visibleWhen: { readonly object: "hero"; readonly present: false; }; }, { readonly kind: "mesh"; readonly id: "cord"; readonly geometry: "cord"; readonly material: "cord"; readonly missing: "empty"; readonly visible: false; }, { readonly kind: "object"; readonly id: "glove"; readonly source: "hero"; readonly missing: "omit"; readonly position: V3; readonly rotation: V3; }, { readonly kind: "anchor"; readonly id: "turn"; readonly source: "glove"; readonly path: readonly [0, 0]; readonly missing: "omit"; readonly children: readonly ["loop"]; }, { readonly kind: "mesh"; readonly id: "loop"; readonly geometry: "loop"; readonly material: "plait"; readonly missing: "omit"; readonly whenTexture: { readonly texture: "plait.map"; readonly present: true; }; }]; readonly materials: readonly [{ readonly kind: "standard"; readonly id: "coil"; readonly properties: { readonly vertexColors: true; readonly roughness: number; readonly metalness: 0; readonly emissive: number; }; readonly userData: Readonly<Record<string, boolean>>; }, { readonly kind: "standard"; readonly id: "cord"; readonly properties: { readonly vertexColors: true; readonly roughness: number; readonly metalness: 0; readonly emissive: number; }; }, { readonly kind: "standard"; readonly id: "plait"; readonly properties: { readonly roughness: 1; readonly metalness: 0; readonly fog: false; }; readonly maps: { readonly map: "plait.map"; readonly normalMap: "plait.normal"; readonly roughnessMap: "plait.roughness"; }; readonly userData: Readonly<Record<string, boolean>>; readonly decorate: "plait"; }]; readonly textures: readonly [{ readonly kind: "rgba"; readonly id: "plait.map"; readonly source: "plait"; readonly width: 128; readonly height: 128; readonly offset: 0; readonly bytes: 196608; readonly colorSpace: "srgb"; readonly repeat: { readonly port: "plait.repeat"; }; readonly wrapS: 1000; readonly wrapT: 1000; readonly magFilter: 1006; readonly minFilter: 1008; readonly mipmaps: true; readonly anisotropy: 4; }, { readonly kind: "rgba"; readonly id: "plait.normal"; readonly source: "plait"; readonly width: 128; readonly height: 128; readonly offset: 65536; readonly bytes: 196608; readonly colorSpace: ""; readonly repeat: { readonly port: "plait.repeat"; }; readonly wrapS: 1000; readonly wrapT: 1000; readonly magFilter: 1006; readonly minFilter: 1008; readonly mipmaps: true; readonly anisotropy: 4; }, { readonly kind: "rgba"; readonly id: "plait.roughness"; readonly source: "plait"; readonly width: 128; readonly height: 128; readonly offset: 131072; readonly bytes: 196608; readonly colorSpace: ""; readonly repeat: { readonly port: "plait.repeat"; }; readonly wrapS: 1000; readonly wrapT: 1000; readonly magFilter: 1006; readonly minFilter: 1008; readonly mipmaps: true; readonly anisotropy: 4; }]; } = { version: 1, root: 'root', nodes: [
-    {kind:'group',id:'root',children:['grip','coil','cord','glove']}, {kind:'group',id:'grip'},
-    {kind:'mesh',id:'coil',geometry:'coil',material:'coil',missing:'group',position:WHIP_HOLD.made.coil.pos,rotation:WHIP_HOLD.made.coil.rot,visibleWhen:{object:'hero',present:false}},
-    {kind:'mesh',id:'cord',geometry:'cord',material:'cord',missing:'empty',visible:false},
-    {kind:'object',id:'glove',source:'hero',missing:'omit',position:WHIP_HOLD.hd.pos,rotation:WHIP_HOLD.hd.rot},
-    {kind:'anchor',id:'turn',source:'glove',path:[0,0],missing:'omit',children:['loop']},
+/**
+ * The held hierarchy and its materials. QA 11-23-b row 13: the glove and the hero coil ride the moving grip (the stroke
+ * moved an empty group, so only the lash's start twitched); the coil is its own group (`coilHold`, the stroke's resting
+ * part) so it goes while the lash is out; the crack's flash sits at the lash's end; the thrown lash is unrimmed like the
+ * coil (the dusk rim turned the thin cord a pale tan).
+ */
+export const WHIP_SCENE: PrivateSceneInput = { version: 1, root: 'root', nodes: [
+    {kind:'group',id:'root',children:['grip','coil','cord','crack']}, {kind:'group',id:'grip',children:['glove','coilHold']},
+    {kind:'mesh',id:'coil',geometry:'coil',material:'coil',missing:'group',position:[...WHIP_HOLD.made.coil.pos],rotation:[...WHIP_HOLD.made.coil.rot],visibleWhen:{object:'hero',present:false}},
+    {kind:'mesh',id:'cord',geometry:'cord',material:'cord',missing:'empty',visible:false,frustumCulled:false},
+    {kind:'mesh',id:'crack',geometry:'crack',material:'crack',missing:'empty',visible:false,frustumCulled:false,renderOrder:2},
+    {kind:'object',id:'glove',source:'hero',missing:'omit',position:[...WHIP_HOLD.hd.pos],rotation:[...WHIP_HOLD.hd.rot]},
+    {kind:'group',id:'coilHold',children:['loop'],position:[...LOOP_HOLD.position],rotation:[...LOOP_HOLD.rotation],scale:[...LOOP_HOLD.scale]},
     {kind:'mesh',id:'loop',geometry:'loop',material:'plait',missing:'omit',whenTexture:{texture:'plait.map',present:true}},
   ], materials:[
-    {kind:'standard',id:'coil',properties:{vertexColors:true,roughness:WHIP_HOLD.coil.roughness,metalness:0,emissive:WHIP_HOLD.leathers.emissive},userData:WHIP_HOLD.coilUserData},
-    {kind:'standard',id:'cord',properties:{vertexColors:true,roughness:WHIP_HOLD.lash.roughness,metalness:0,emissive:WHIP_HOLD.lash.emissive}},
-    {kind:'standard',id:'plait',properties:{roughness:1,metalness:0,fog:false},maps:{map:'plait.map',normalMap:'plait.normal',roughnessMap:'plait.roughness'},userData:WHIP_HOLD.coilUserData,decorate:'plait'},
+    {kind:'standard',id:'coil',properties:{vertexColors:true,roughness:WHIP_HOLD.coil.roughness,metalness:0,emissive:WHIP_HOLD.leathers.emissive},userData:{...WHIP_HOLD.coilUserData}},
+    {kind:'standard',id:'cord',properties:{vertexColors:true,roughness:WHIP_HOLD.lash.roughness,metalness:0,emissive:WHIP_HOLD.lash.emissive},userData:{...WHIP_HOLD.coilUserData}},
+    {kind:'standard',id:'crack',properties:{color:CRACK.color,emissive:CRACK.emissive,emissiveIntensity:CRACK.glow,roughness:1,metalness:0,fog:false,transparent:true,opacity:CRACK.opacity,depthWrite:false},userData:{...WHIP_HOLD.coilUserData}},
+    {kind:'standard',id:'plait',properties:{roughness:1,metalness:0,fog:false},maps:{map:'plait.map',normalMap:'plait.normal',roughnessMap:'plait.roughness'},userData:{...WHIP_HOLD.coilUserData},decorate:'plait'},
   ], textures:[
     {kind:'rgba',id:'plait.map',source:'plait',width:128,height:128,offset:0,bytes:196608,colorSpace:'srgb',repeat:{port:'plait.repeat'},wrapS:1000,wrapT:1000,magFilter:1006,minFilter:1008,mipmaps:true,anisotropy:4},
     {kind:'rgba',id:'plait.normal',source:'plait',width:128,height:128,offset:65536,bytes:196608,colorSpace:'',repeat:{port:'plait.repeat'},wrapS:1000,wrapT:1000,magFilter:1006,minFilter:1008,mipmaps:true,anisotropy:4},
     {kind:'rgba',id:'plait.roughness',source:'plait',width:128,height:128,offset:131072,bytes:196608,colorSpace:'',repeat:{port:'plait.repeat'},wrapS:1000,wrapT:1000,magFilter:1006,minFilter:1008,mipmaps:true,anisotropy:4},
-  ]} as const;
+  ]};
 
 /** Exact caught-wrap mesh and plain braid material; geometry is still the original committed helix. */
 export const WHIP_WRAP_SCENE: { readonly version: 1; readonly root: "wrap"; readonly nodes: readonly [{ readonly kind: "mesh"; readonly id: "wrap"; readonly geometry: "wrap"; readonly material: "braid"; readonly missing: "empty"; }]; readonly materials: readonly [{ readonly kind: "standard"; readonly id: "braid"; readonly properties: { readonly color: number; readonly roughness: number; readonly metalness: 0; readonly emissive: number; }; }]; } = {version:1,root:'wrap',nodes:[{kind:'mesh',id:'wrap',geometry:'wrap',material:'braid',missing:'empty'}],

@@ -51,7 +51,7 @@ export function signalSceneSources(world: SceneWorldBakes, rigs: NonNullable<Sce
   const { specimen: scoutSource, ...scout } = gear[5];
   const library = { rows: { ...models.DUNE_MODELS, geometryPools: pools, rigs }, inputs, specimens: SIGNAL_MODEL_SPECIMENS,
     held: [{ item: held.equipment.id, definition: whip, recipe: whipRecipe, resources: {
-      geometry: ['coil', 'loop', 'cord', 'wrap'].map(id => ({ id, source: { library: 'bakes', model: id }, piece: 'lash', index: 'array' as const })),
+      geometry: ['coil', 'loop', 'cord', 'wrap', 'crack'].map(id => ({ id, source: { library: 'bakes', model: id }, piece: 'lash', index: 'array' as const })),
       objects: [{ id: 'hero', source: { library: 'models', model: 'glove-hd4' }, fit: { size: HD_GLOVE_SIZE, by: 'span' } }],
       textures: [{ id: 'plait', source: { library: 'bakes', model: 'plait' }, resource: 'plait', bytes: 196608 }],
       decorators: [{ id: 'plait', rows: surfaces.COIL_SURFACE }], repeats: held.resources.repeats,

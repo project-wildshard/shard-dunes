@@ -1,13 +1,13 @@
 import { BufferAttribute, BufferGeometry, CatmullRomCurve3, InstancedMesh, MeshStandardMaterial, TubeGeometry, Vector3, Euler } from 'three';
 import { bakePiece, signalPiece, type SignalPieceBake } from './kinds';
-import { LASH_TIP, WHIP_HOLD, WHIP_VIEW, type CoilPath, type CordRgb, type CordStyle, type LashHoldRow, type LashView, type PlaitStyle } from './rows/whip';
+import { CRACK, LASH_TIP, WHIP_HOLD, WHIP_VIEW, type CoilPath, type CordRgb, type CordStyle, type LashHoldRow, type LashView, type PlaitStyle } from './rows/whip';
 
 /**
  * Build-time only (G345, the lash's graphical port): the bullwhip's held geometry, baked offline
  * (`generators/bake-signal-world.mjs` → `baked/lash.glb` + `data/lash.json`). The client builds no tube or braid: it
- * reads four kinds, `coil` (the braided rest coil the Model Explorer shows), `loop` (the plaited coil in the hero
+ * reads five kinds, `coil` (the braided rest coil the Model Explorer shows), `loop` (the plaited coil in the hero
  * glove's frame), `cord` (the thrown cord's rings, its braid painted, its positions rewritten every frame by
- * `runtime/items/lashView.ts`) and `wrap` (the helix a heavy lash winds round a caught lever), and the two numbers the generated glove's fit gives: where the lash leaves the hand
+ * `runtime/items/lashView.ts`) and `wrap` (the helix a heavy lash winds round a caught lever) and `crack` (the popper's flash), and the two numbers the generated glove's fit gives: where the lash leaves the hand
  * (`tip`) and the plait tile's repeat along the loop (`along`). The glove's fit is a frozen row (`LASH_TIP`, which
  * whip-view.test.ts recomputes from the generated glove); neither the bake nor the client loads the glove. The plait tile's texels go beside it (`baked/plait.bin`, `plaitTexels`).
  */
@@ -130,11 +130,33 @@ export function plaitTexels(p: PlaitStyle = WHIP_HOLD.plait): Uint8Array {
   return out;
 }
 
+/**
+ * The whip crack's flash (QA 11-23-b row 13): `spikes` thin three-sided rays out of a unit ball, spread evenly on a
+ * golden spiral and every other one half length, so the scaled flash reads as a burst of light at the popper.
+ */
+export function crackGeometry(row: typeof CRACK = CRACK): BufferGeometry {
+  const positions: number[] = [], up = new Vector3(), side = new Vector3(), other = new Vector3(), dir = new Vector3();
+  for (let i = 0; i < row.spikes; i++) {
+    const y = 1 - 2 * (i + 0.5) / row.spikes, r = Math.sqrt(1 - y * y), a = i * Math.PI * (3 - Math.sqrt(5));
+    dir.set(Math.cos(a) * r, y, Math.sin(a) * r);
+    up.set(Math.abs(dir.y) > 0.9 ? 1 : 0, Math.abs(dir.y) > 0.9 ? 0 : 1, 0);
+    side.crossVectors(dir, up).normalize(); other.crossVectors(dir, side).normalize();
+    const tip = dir.clone().multiplyScalar(i % 2 === 0 ? 1 : 0.55), w = row.width;
+    const base = [0, 1, 2].map(k => { const t = k / 3 * Math.PI * 2; return side.clone().multiplyScalar(Math.cos(t) * w).add(other.clone().multiplyScalar(Math.sin(t) * w)); });
+    for (let k = 0; k < 3; k++) { const b0 = base[k], b1 = base[(k + 1) % 3]; if (b0 === undefined || b1 === undefined) throw new Error('crack ray');
+      positions.push(b0.x, b0.y, b0.z, b1.x, b1.y, b1.z, tip.x, tip.y, tip.z); }
+  }
+  const geometry = new BufferGeometry();
+  geometry.setAttribute('position', new BufferAttribute(new Float32Array(positions), 3));
+  geometry.computeVertexNormals();
+  return geometry;
+}
+
 const kind = (geometry: BufferGeometry): InstancedMesh => new InstancedMesh(geometry, new MeshStandardMaterial(), 1);
 
 /** The lash's bake: its four kinds (no colliders), the hand's `tip` (the generated glove's fit, `LASH_TIP`) and the loop's `along`. */
 export function bakeSignalLash(tip: readonly [number, number, number] = LASH_TIP, row: LashHoldRow = WHIP_HOLD, view: LashView = WHIP_VIEW): SignalPieceBake {
   const loop = loopGeometry(row);
-  return bakePiece(signalPiece('lash', [['coil', kind(restCoilGeometry(row))], ['loop', kind(loop.geometry)], ['cord', kind(cordGeometry(row.lash))], ['wrap', kind(wrapGeometry(view.wrap))]], [],
+  return bakePiece(signalPiece('lash', [['coil', kind(restCoilGeometry(row))], ['loop', kind(loop.geometry)], ['cord', kind(cordGeometry(row.lash))], ['wrap', kind(wrapGeometry(view.wrap))], ['crack', kind(crackGeometry())]], [],
     { tip: [...tip], along: loop.along }));
 }
