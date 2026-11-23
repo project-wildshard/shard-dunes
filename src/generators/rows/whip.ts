@@ -74,7 +74,7 @@ export interface LashView {
 }
 
 /**
- * The bullwhip's look as rows (E374 polish; council rounds 1-25) on the lash item's view (`@wildshard/engine/game/systems/items/lashView`):
+ * The bullwhip's look as rows (E374 polish; council rounds 1-25) on the lash item's view (engine `game/systems/items/lashView`):
  * the braids' warm saddle-leather browns, the thrown lash, the held coil's plait tile and its path in the hero glove's frame.
  */
 

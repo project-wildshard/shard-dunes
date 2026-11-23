@@ -2,16 +2,16 @@
 // never a hook): signal-journey.test.mjs plays it, durable-ledger.test.mjs
 // plays it, saves, restores and plays on. Only what the page sends: walking,
 // [E] prompts, whip cracks and attacks; nothing here writes world state.
-import '@wildshard/engine/scripts/sim-node-loader.mjs';
+import '@wildshard/sdk/headless/scripts/sim-node-loader.mjs';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { join, resolve } from 'node:path';
 
-const { loadHeadlessFolder } = await import('@wildshard/engine/host/headlessFolder');
-const { outputDescriptor, serverReadsFile } = await import('@wildshard/engine/game/shardfile/outputDescriptor');
-const { loadRapier } = await import('@wildshard/engine/physics/rapier');
-const engineRequire = createRequire(import.meta.resolve('@wildshard/engine/package.json'));
+const { loadHeadlessFolder } = await import('@wildshard/sdk/headless/host/headlessFolder');
+const { outputDescriptor, serverReadsFile } = await import('@wildshard/sdk/headless/game/shardfile/outputDescriptor');
+const { loadRapier } = await import('@wildshard/sdk/headless/physics/rapier');
+import { engineRequire } from '@wildshard/sdk/headless';
 
 // The [E] prompts and world cracks the page sends (SIGNAL_ACT in signalInteractions.ts).
 export const ACT = { talk: 0, logbook: 1, well: 2, pour: 3, fire: 6, crank: 100, light: 101 };

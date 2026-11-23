@@ -30,7 +30,7 @@ const FIRE_GRAPHS = signalFireGraphs(fireBook.hash);
 // Legacy trusted runtime retains today's geometry/spawn; SF29 binds only its audio.
 // SF50-p / M3 (the runtime-owner binding): "The signal" quest, its ledger facts, the bullwhip and the creatures' homes and
 // the Matriarch's body (runtime.spawns) are declared rows here; the trusted runtime owns the world and play scope and binds
-// them (runtime.binds; @wildshard/engine/game/shardfile/hybridRows).
+// them (runtime.binds; engine `game/shardfile/hybridRows`).
 // SF50-g edges (G93 / G99 / G103 / G131): the four 8 m midpoint entryways (`emptyShardfile`'s, the engine's ENTRY_WIDTH, kind
 // ground) stand on Signal Dunes' real boundary rows: the engine's entry roads already hold each midpoint at exactly road
 // height, so each 8 × 15 m socket footprint is flat at y = 0, clear and dry with no change to the world.

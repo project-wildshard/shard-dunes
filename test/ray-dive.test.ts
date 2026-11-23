@@ -3,16 +3,16 @@
 // its swoop. The staging walk checks the same on the live server; this pins it on the built product.
 // oxlint-disable-next-line import/no-nodejs-modules -- The proof reads the admitted product and native physics.
 import { readFileSync } from 'node:fs';
-import { builtFolder } from '@wildshard/engine/test/builtFolder';
+import { builtFolder } from '@wildshard/sdk/internal/engine/test/builtFolder';
 import { expect, test } from 'vitest';
 import { nativeRapierFile } from './fixtures/native-rapier-file';
-import { loadHeadlessFolder } from '@wildshard/engine/host/headlessFolder';
-import { outputDescriptor } from '@wildshard/engine/game/shardfile/outputDescriptor';
-import { loadRapier } from '@wildshard/engine/physics/rapier';
-import { createSimHost } from '@wildshard/engine/sim';
-import { prepareRuntimeWorld } from '@wildshard/engine/game/plugin/simulation';
+import { loadHeadlessFolder } from '@wildshard/sdk/headless/host/headlessFolder';
+import { outputDescriptor } from '@wildshard/sdk/headless/game/shardfile/outputDescriptor';
+import { loadRapier } from '@wildshard/sdk/headless/physics/rapier';
+import { createSimHost } from '@wildshard/sdk/internal/engine/sim';
+import { prepareRuntimeWorld } from '@wildshard/sdk/internal/engine/game/plugin/simulation';
 import { parseNativeRuntimePlan } from '@wildshard/format/nativeRuntimePlan';
-import { leadPlayer } from '@wildshard/engine/sim/leadPlayer';
+import { leadPlayer } from '@wildshard/sdk/internal/engine/sim/leadPlayer';
 import { signalHeightAt } from '../src/generators/landscape';
 
 const RAY_HOME = 'sunscar.home:0', TICKS = 50 * 40, CHEST = 3;

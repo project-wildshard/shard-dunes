@@ -9,14 +9,14 @@
 // but on the room world the unchanged SignalTape wins without the storm-phase death
 // the original case requires. So the original bare/bare pair stays (mini-replay).
 // oxlint-disable-next-line import/no-unassigned-import -- The sim's Math goes in before any module body runs.
-import '@wildshard/engine/core/portableMathFirst';
+import '@wildshard/sdk/internal/engine/core/portableMathFirst';
 // oxlint-disable-next-line import/no-nodejs-modules -- Read the admitted product's own files.
 import {readFileSync} from 'node:fs';
-import {HeadlessSimulation} from '@wildshard/engine/host/headless';
-import {loadHeadlessFolder} from '@wildshard/engine/host/headlessFolder';
-import {folderHeadlessSections} from '@wildshard/engine/host/headlessSections';
-import {outputDescriptor} from '@wildshard/engine/game/shardfile/outputDescriptor';
-import {builtFolder} from '@wildshard/engine/test/builtFolder';
+import {HeadlessSimulation} from '@wildshard/sdk/headless/host/headless';
+import {loadHeadlessFolder} from '@wildshard/sdk/headless/host/headlessFolder';
+import {folderHeadlessSections} from '@wildshard/sdk/headless/host/headlessSections';
+import {outputDescriptor} from '@wildshard/sdk/headless/game/shardfile/outputDescriptor';
+import {builtFolder} from '@wildshard/sdk/internal/engine/test/builtFolder';
 
 type ProductSimulation=Pick<HeadlessSimulation,'verbTape'|'verbTapePart'|'streamVerbTape'|'journey'|'walkLeg'|'step'|'dispose'|'quarantined'|'checkpoint'>;
 

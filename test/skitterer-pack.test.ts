@@ -3,28 +3,28 @@
 // physics bytes come from the installed engine's rapier package (identical bytes).
 // oxlint-disable-next-line import/no-nodejs-modules -- The scenario reads the admitted product and native physics.
 import { readFileSync } from 'node:fs';
-import { builtFolder } from '@wildshard/engine/test/builtFolder';
+import { builtFolder } from '@wildshard/sdk/internal/engine/test/builtFolder';
 import { beforeAll, expect, test, vi } from 'vitest';
 import { nativeRapierFile } from './fixtures/native-rapier-file';
-import { loadHeadlessFolder } from '@wildshard/engine/host/headlessFolder';
+import { loadHeadlessFolder } from '@wildshard/sdk/headless/host/headlessFolder';
 import { actorDecisionRows, parseDecisionScripts } from '@wildshard/format/decisionScripts';
 import { parseActorMoves } from '@wildshard/format/actorMoves';
 import { parseWorldTargets } from '@wildshard/format/worldTargets';
 import { readCreatureStrikes } from '@wildshard/format/creatures';
 import { decisionStrikeRows } from '@wildshard/sdk/projectDecisions';
 import { buildDecisionRegistries, decisionBindingMap, DECISION_PLAYER_HANDLE } from '@wildshard/format/decisionBindings';
-import { DecisionHost, type DecisionScript, type DecisionTrace } from '@wildshard/engine/script/decision';
-import { DecisionModule } from '@wildshard/engine/script/decisionModule';
+import { DecisionHost, type DecisionScript, type DecisionTrace } from '@wildshard/sdk/internal/engine/script/decision';
+import { DecisionModule } from '@wildshard/sdk/internal/engine/script/decisionModule';
 import { ScenarioWorld, scenario } from '@wildshard/dev/test/scriptScenario';
 import { SCRIPT_V1_READS, SCRIPT_V1_LISTS, type ScriptV1ReadName, type ScriptV1ListName } from '@wildshard/format/scriptAbiV1';
-import { outputDescriptor } from '@wildshard/engine/game/shardfile/outputDescriptor';
-import { loadRapier } from '@wildshard/engine/physics/rapier';
-import { createSimHost } from '@wildshard/engine/sim';
-import { snapshotSimHost } from '@wildshard/engine/sim/snapshot';
-import { restoreSimHost } from '@wildshard/engine/sim/restore';
-import { prepareRuntimeWorld } from '@wildshard/engine/game/plugin/simulation';
+import { outputDescriptor } from '@wildshard/sdk/headless/game/shardfile/outputDescriptor';
+import { loadRapier } from '@wildshard/sdk/headless/physics/rapier';
+import { createSimHost } from '@wildshard/sdk/internal/engine/sim';
+import { snapshotSimHost } from '@wildshard/sdk/headless/sim/snapshot';
+import { restoreSimHost } from '@wildshard/sdk/internal/engine/sim/restore';
+import { prepareRuntimeWorld } from '@wildshard/sdk/internal/engine/game/plugin/simulation';
 import { nativeRuntimeActorIds, parseNativeRuntimePlan } from '@wildshard/format/nativeRuntimePlan';
-import { leadPlayer } from '@wildshard/engine/sim/leadPlayer';
+import { leadPlayer } from '@wildshard/sdk/internal/engine/sim/leadPlayer';
 
 let directory: string;
 beforeAll(() => { directory = builtFolder('sunscar-dunes'); });

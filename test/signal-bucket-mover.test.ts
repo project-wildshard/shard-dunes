@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
-import { Scope } from '@wildshard/engine/app/scope';
-import { createMoverHost, MoverRuntime } from '@wildshard/engine/game/plugin/mover';
+import { Scope } from '@wildshard/sdk/headless/app/scope';
+import { createMoverHost, MoverRuntime } from '@wildshard/sdk/internal/engine/game/plugin/mover';
 import { SIGNAL_BUCKET_MOVERS } from '../src/generators/bucket';
 import { FLAG } from '../src/generators/rows/flags';
 

@@ -4,36 +4,36 @@
 // oxlint-disable-next-line import/no-nodejs-modules -- The witness reads the shard's admitted in-tree bytes and the native physics module.
 import { readFileSync } from 'node:fs';
 import { Vector3 } from 'three';
-import { createSimHost, type SimHost } from '@wildshard/engine/sim';
-import { decodeSimSnapshot, serializeSimSnapshot, snapshotSimHost } from '@wildshard/engine/sim/snapshot';
-import { restoreSimHost } from '@wildshard/engine/sim/restore';
-import { loadRapier, type Rapier } from '@wildshard/engine/physics/rapier';
-import { canonicalSimDigest } from '@wildshard/engine/test/simState';
-import { SaveStore, type SaveStorage } from '@wildshard/engine/saves/store';
-import type { AnimalSim } from '@wildshard/engine/entities/AnimalSim';
-import { Ledger, LedgerEmitter, type LedgerReceipt } from '@wildshard/engine/game/ledger';
-import { loadHeadlessFolder } from '@wildshard/engine/host/headlessFolder';
-import { folderHeadlessSections } from '@wildshard/engine/host/headlessSections';
-import { hashImmutableBytes } from '@wildshard/engine/host/immutable';
-import { outputDescriptor } from '@wildshard/engine/game/shardfile/outputDescriptor';
-import { prepareNativeRuntime, type HeadlessRuntimeInstallation, type HeadlessRuntimePlan } from '@wildshard/engine/host/headlessRuntime';
-import type { HeadlessCommand, HeadlessEffect } from '@wildshard/engine/host/tickProtocol';
-import { HeadlessSimulation } from '@wildshard/engine/host/headless';
-import type { QuestGraphSpot as SignalSpot } from '@wildshard/engine/game/plugin/quests';
+import { createSimHost, type SimHost } from '@wildshard/sdk/internal/engine/sim';
+import { decodeSimSnapshot, serializeSimSnapshot, snapshotSimHost } from '@wildshard/sdk/headless/sim/snapshot';
+import { restoreSimHost } from '@wildshard/sdk/internal/engine/sim/restore';
+import { loadRapier, type Rapier } from '@wildshard/sdk/headless/physics/rapier';
+import { canonicalSimDigest } from '@wildshard/sdk/internal/engine/test/simState';
+import { SaveStore, type SaveStorage } from '@wildshard/sdk/internal/engine/saves/store';
+import type { AnimalSim } from '@wildshard/sdk/internal/engine/entities/AnimalSim';
+import { Ledger, LedgerEmitter, type LedgerReceipt } from '@wildshard/sdk/internal/engine/game/ledger';
+import { loadHeadlessFolder } from '@wildshard/sdk/headless/host/headlessFolder';
+import { folderHeadlessSections } from '@wildshard/sdk/headless/host/headlessSections';
+import { hashImmutableBytes } from '@wildshard/sdk/immutable';
+import { outputDescriptor } from '@wildshard/sdk/headless/game/shardfile/outputDescriptor';
+import { prepareNativeRuntime, type HeadlessRuntimeInstallation, type HeadlessRuntimePlan } from '@wildshard/sdk/headless/host/headlessRuntime';
+import type { HeadlessCommand, HeadlessEffect } from '@wildshard/sdk/headless/host/tickProtocol';
+import { HeadlessSimulation } from '@wildshard/sdk/headless/host/headless';
+import type { QuestGraphSpot as SignalSpot } from '@wildshard/sdk/internal/engine/game/plugin/quests';
 import { SIGNAL_ACT, SIGNAL_INTERACT, SIGNAL_INTERACTIONS } from '../../../src/generators/signalInteractions';
 import { MATRIARCH_ID } from '../../../src/generators/rows/matriarchEncounter';
 import { MATRIARCH_BOSS_PROFILE } from '../../../src/generators/rows/matriarchBoss';
-import { readRuntimeWorldMetadata, nativeMeleeVolumeHit } from '@wildshard/engine/game/plugin/simulation';
-import { weaponContactDistance } from '@wildshard/engine/combat/contactWeapon';
+import { readRuntimeWorldMetadata, nativeMeleeVolumeHit } from '@wildshard/sdk/internal/engine/game/plugin/simulation';
+import { weaponContactDistance } from '@wildshard/sdk/internal/engine/combat/contactWeapon';
 import { WHIP_ITEM, WHIP_PROFILE } from '../../../src/generators/rows/items';
 import { SCOUT_AT } from '../../../src/generators/rows/flags';
 import { COMPLETE_FLAG, MATRIARCH_FLAG } from '../../../src/generators/rows/signalQuest';
 import { BASIN } from "../../../src/generators/layout";
 import { SIGNAL_PHYSICS } from '../../../src/generators/physics';
-import { bindHeadlessPrompts, createHeadlessPromptPicker, parsePromptRegistrations, type HeadlessPrompt } from '@wildshard/engine/game/quest/interactionRows';
+import { bindHeadlessPrompts, createHeadlessPromptPicker, parsePromptRegistrations, type HeadlessPrompt } from '@wildshard/sdk/internal/engine/game/quest/interactionRows';
 import * as v from 'valibot';
 import { nativeRapierFile } from '../../fixtures/native-rapier-file';
-import { leadCommands, leadPlayer } from '@wildshard/engine/sim/leadPlayer';
+import { leadCommands, leadPlayer } from '@wildshard/sdk/internal/engine/sim/leadPlayer';
 
 // Preserve the original plain JSON boundary, including signed-zero normalization.
 const physicsDocument = JSON.stringify(SIGNAL_PHYSICS);
@@ -129,7 +129,7 @@ function bossAttempts(host: SimHost): number {
   return (JSON.parse(saved) as { boss: { attempts: number } }).boss.attempts;
 }
 
-/** The player's eyes: is a prompt in reach, is a creature inside the lash (the shared contact rule, @wildshard/engine/game/systems/items/lash)? */
+/** The player's eyes: is a prompt in reach, is a creature inside the lash (the shared contact rule, engine `game/systems/items/lash`)? */
 const eye = new Vector3(), ray = new Vector3(), at = new Vector3();
 const volumes = { head: new Vector3(), headRadius: 0, a: new Vector3(), b: new Vector3(), bodyRadius: 0 };
 const registrations = parsePromptRegistrations(v.parse(v.object({ promptRegistrations: v.unknown() }), baked).promptRegistrations);

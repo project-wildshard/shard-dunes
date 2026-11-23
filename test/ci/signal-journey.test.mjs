@@ -8,8 +8,8 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { EXPECT, FIGHT_TICKS, SEGMENTS, fightMatriarch, loadSignalOutput } from './signal-route.mjs';
 
-const { openWorld } = await import('@wildshard/engine/host/openWorld');
-const { runNativeHeadlessTape } = await import('@wildshard/engine/host/headlessTape');
+const { openWorld } = await import('@wildshard/sdk/internal/engine/host/openWorld');
+const { runNativeHeadlessTape } = await import('@wildshard/sdk/headless/host/headlessTape');
 
 test('sunscar-dunes: the full Signal journey on real inputs', { timeout: 9_500 }, async () => {
   const started = performance.now();

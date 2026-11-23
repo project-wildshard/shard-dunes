@@ -3,7 +3,7 @@ import type { SceneEffectField as EffectFieldRow } from '@wildshard/sdk/worldSce
 
 /**
  * Signal Dunes' fires as rows (review R5 / TOP-15 #8, style bible FX) on the platform's fire effect
- * (`@wildshard/engine/game/systems/looks/fireFx`): each fire's size, and the one look every fire shares, tuned against the mockups.
+ * (engine `game/systems/looks/fireFx`): each fire's size, and the one look every fire shares, tuned against the mockups.
  */
 
 /** A waymark's roaring log fire (mockup C: about one and a half bowls tall; round 9: taller, more embers). */

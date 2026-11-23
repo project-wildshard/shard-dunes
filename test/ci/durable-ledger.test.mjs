@@ -12,9 +12,9 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { ACT, DOWN_STAIR, MATRIARCH, SEGMENTS, TOWER_TO_BASIN, UP_STAIR, fightMatriarch, loadSignalOutput, press, walk } from './signal-route.mjs';
 
-const { openWorld } = await import('@wildshard/engine/host/openWorld');
-const { runNativeHeadlessTape } = await import('@wildshard/engine/host/headlessTape');
-const { regionalContinuation, serializeSimSnapshot, snapshotSimHostBytes } = await import('@wildshard/engine/sim/snapshot');
+const { openWorld } = await import('@wildshard/sdk/internal/engine/host/openWorld');
+const { runNativeHeadlessTape } = await import('@wildshard/sdk/headless/host/headlessTape');
+const { regionalContinuation, serializeSimSnapshot, snapshotSimHostBytes } = await import('@wildshard/sdk/headless/sim/snapshot');
 
 const LEDGER = new Set(['fact', 'coins']);
 const ledger = effects => effects.filter(row => LEDGER.has(row.kind));

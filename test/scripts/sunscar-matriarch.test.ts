@@ -1,7 +1,7 @@
 // CI21 C9 port of engine test/scripts/sunscar-matriarch.test.ts (engine blob edd0df93): every case, assertion and
 // budget unchanged; engine and SDK imports are public exports. Scenario creation moves
 // to beforeAll (as engine's far-reach-roc did), so each 2 s body times gameplay only.
-import { builtFolder } from '@wildshard/engine/test/builtFolder';
+import { builtFolder } from '@wildshard/sdk/internal/engine/test/builtFolder';
 import { beforeAll, expect, test } from 'vitest';
 import { scenario, type DiskScriptScenario } from '@wildshard/dev/test/scriptScenario';
 

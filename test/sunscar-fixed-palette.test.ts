@@ -8,7 +8,7 @@ import { expect, test } from 'vitest';
 import { mkdirSync, mkdtempSync, rmSync, symlinkSync } from 'node:fs';
 // oxlint-disable-next-line import/no-nodejs-modules -- Bind the manifest reader to this repository's source.
 import { resolve } from 'node:path';
-import { authoredManifestSource } from '@wildshard/engine/scripts/authored-manifest.mjs';
+import { authoredManifestSource } from '@wildshard/sdk/headless/scripts/authored-manifest.mjs';
 import { parseDiscoveryValues } from '@wildshard/format/discoveryValues';
 import { generated as signalProgram } from './fixtures/sunscar-source-program';
 import { SIGNAL_DUNES_MAP as signalMap } from '../src/generators/minimap';

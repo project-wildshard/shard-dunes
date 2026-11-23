@@ -4,7 +4,7 @@
 // runtime, no product folder) and physics bytes come from the installed engine's rapier
 // package (identical to engine's public/assets/physics/rapier.wasm).
 // oxlint-disable-next-line import/no-unassigned-import -- The sim's Math goes in before any module body runs.
-import '@wildshard/engine/core/portableMathFirst';
+import '@wildshard/sdk/internal/engine/core/portableMathFirst';
 // oxlint-disable-next-line import/no-nodejs-modules -- Only current admitted product files and the shipped native physics module.
 import {readFileSync} from 'node:fs';
 // oxlint-disable-next-line import/no-nodejs-modules -- Actual native command record/replay behavior, never stored goldens.
@@ -12,15 +12,15 @@ import assert from 'node:assert/strict';
 import * as v from 'valibot';
 import {nativeRapierFile} from '../native-rapier-file';
 import {openProductSession} from './productSession';
-import {builtFolder} from '@wildshard/engine/test/builtFolder';
-import {outputDescriptor} from '@wildshard/engine/game/shardfile/outputDescriptor';
-import {folderHeadlessSections} from '@wildshard/engine/host/headlessSections';
-import {createNativeHeadlessResident} from '@wildshard/engine/host/headlessRuntime';
-import type {HeadlessCommand,HeadlessEffect} from '@wildshard/engine/host/tickProtocol';
-import type {HeadlessTapeObservation,HeadlessTapeSegment} from '@wildshard/engine/host/headlessTape';
-import {loadRapier} from '@wildshard/engine/physics/rapier';
-import {installAppIdentity} from '@wildshard/engine/app/identity';
-import {WILDSHARD_IDENTITY} from '@wildshard/engine/game/identity';
+import {builtFolder} from '@wildshard/sdk/internal/engine/test/builtFolder';
+import {outputDescriptor} from '@wildshard/sdk/headless/game/shardfile/outputDescriptor';
+import {folderHeadlessSections} from '@wildshard/sdk/headless/host/headlessSections';
+import {createNativeHeadlessResident} from '@wildshard/sdk/headless/host/headlessRuntime';
+import type {HeadlessCommand,HeadlessEffect} from '@wildshard/sdk/headless/host/tickProtocol';
+import type {HeadlessTapeObservation,HeadlessTapeSegment} from '@wildshard/sdk/headless/host/headlessTape';
+import {loadRapier} from '@wildshard/sdk/headless/physics/rapier';
+import {installAppIdentity} from '@wildshard/sdk/internal/engine/app/identity';
+import {WILDSHARD_IDENTITY} from '@wildshard/sdk/internal/engine/game/identity';
 import {MATRIARCH_ID} from '../../../src/generators/rows/matriarchEncounter';
 import {MATRIARCH_BOSS_PROFILE} from '../../../src/generators/rows/matriarchBoss';
 
