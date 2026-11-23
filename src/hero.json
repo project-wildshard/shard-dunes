@@ -1,11 +1,11 @@
 {
   "content": "4753ec81682ade8c49ea559ff8e1d9960ac2618e6c36be05ddff4e5f61c97ddc",
-  "captured": "2026-11-23T14:21:13.858Z",
-  "base": "http://127.0.0.1:56116",
+  "captured": "2026-11-23T19:23:57.596Z",
+  "base": "http://127.0.0.1:60577",
   "card": {
-    "thumbs/sunscar-dunes.jpg": "bb94b39ba62fdebb1b6651cb339fdd876bcac2dfadb6eba025b1cdb2ce6bba4b",
-    "thumbs/sunscar-dunes-portrait.jpg": "298f6f999b04fad5684becb755f84b98610ad26b06a02b8e6e9ec3b435bc610a",
-    "thumbs/sunscar-dunes-landscape.jpg": "d49962448fe30868f29da75cdfc8e6506245b817d9a37b952f82e56d5540bf52"
+    "thumbs/sunscar-dunes.jpg": "b53bf690842aab698cf42c2a582b723be29a5f52b9be5e8a051eefabb425d886",
+    "thumbs/sunscar-dunes-portrait.jpg": "8ffd2ecd6b0440f2ed35f8a2f16e5b7124487a562237358c6ea51f1c17e74d6b",
+    "thumbs/sunscar-dunes-landscape.jpg": "d437a017a89fd1ca5731f2632af05b233a0b622d9d6e136942ed0d4379bed852"
   },
-  "look": "50b3bd046a25c211210da147d604279b64779cb00b5cbef7d991a72b8f1092c3"
+  "look": "76d1d243d7d47c27b67e4a9dcec0a68526649e5e8ab2c86bf810c1c6b473324f"
 }
