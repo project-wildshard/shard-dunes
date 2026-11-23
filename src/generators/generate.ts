@@ -1,4 +1,4 @@
-import type { GeneratedProject, ProjectGenerationContext } from '@wildshard/sharddev/projectGeneration';
+import type { GeneratedProject, ProjectGenerationContext } from '@wildshard/sdk/projectGeneration';
 import { signalShardfileRows } from './shardfile';
 import { signalFireBook } from './fireBookProgram';
 import { signalSourceOutput } from './sourceOutput';

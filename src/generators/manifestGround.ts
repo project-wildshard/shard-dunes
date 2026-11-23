@@ -1,4 +1,4 @@
-import { withPortableMath } from '@wildshard/sharddev/math/portableMath';
+import { withPortableMath } from '@wildshard/sdk/math/portableMath';
 import { signalHeightAt } from './landscape';
 import { SEED, SPAWN, TOWER } from "./layout";
 import { SCOUT_AT } from './rows/flags';

@@ -1,5 +1,5 @@
-import { parseKtx2 } from '@wildshard/sharddev/assets';
-import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/sharddev/immutable';
+import { parseKtx2 } from '@wildshard/sdk/assets';
+import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/sdk/immutable';
 import type { bakeSandFiles } from './sand';
 
 /** Verified existing texture rows and the original zero-mean grain constants. */

@@ -2,7 +2,7 @@
 import { mkdirSync, mkdtempSync, rmSync } from 'node:fs';
 // oxlint-disable-next-line import/no-nodejs-modules -- The source program binds its defining author project explicitly.
 import { resolve } from 'node:path';
-import { createProjectGeneration } from '@wildshard/sharddev/projectGeneration';
+import { createProjectGeneration } from '@wildshard/sdk/projectGeneration';
 import { projectAssets } from '@wildshard/build/project';
 import { signalRestWell, signalRestOil, signalRestFire } from '../../src/generators/restPoolProgram';
 import { REST_URLS } from '../../src/generators/rows/restFiles';

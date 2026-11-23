@@ -1,4 +1,4 @@
-import { programSpawnPhase, speciesProgramToRows, type ConvertedSpecies } from '@wildshard/sharddev/species/toRows';
+import { programSpawnPhase, speciesProgramToRows, type ConvertedSpecies } from '@wildshard/sdk/species/toRows';
 import rows from '../../data/physicsRows.json' with { type: 'json' };
 import { signalHeightAt } from '../landscape';
 import { SIGNAL_PHYSICS } from '../physics';
@@ -6,7 +6,7 @@ import { SIGNAL_SPECIES, SIGNAL_STRIKES } from './brains';
 import { SIGNAL_OWNER_ROWS } from './hostOwners';
 import { SIGNAL_SPAWNS } from './spawns';
 import { MAW_DATA, TAIL_SWEEP_DATA, BUFFET_DATA } from './species/matriarch';
-import type { StrikeData } from '@wildshard/sharddev/species';
+import type { StrikeData } from '@wildshard/sdk/species';
 import * as LAYOUT from '../layout';
 
 /** A decision strike as a species ability, as `speciesProgramToRows` writes one. */

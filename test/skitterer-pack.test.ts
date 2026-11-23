@@ -11,7 +11,7 @@ import { actorDecisionRows, parseDecisionScripts } from '@wildshard/format/decis
 import { parseActorMoves } from '@wildshard/format/actorMoves';
 import { parseWorldTargets } from '@wildshard/format/worldTargets';
 import { readCreatureStrikes } from '@wildshard/format/creatures';
-import { decisionStrikeRows } from '@wildshard/sharddev/projectDecisions';
+import { decisionStrikeRows } from '@wildshard/sdk/projectDecisions';
 import { buildDecisionRegistries, decisionBindingMap, DECISION_PLAYER_HANDLE } from '@wildshard/format/decisionBindings';
 import { DecisionHost, type DecisionScript, type DecisionTrace } from '@wildshard/engine/script/decision';
 import { DecisionModule } from '@wildshard/engine/script/decisionModule';

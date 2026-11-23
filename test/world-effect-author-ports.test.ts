@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { readTerrainTileSource } from '@wildshard/sharddev/bake/terrain';
+import { readTerrainTileSource } from '@wildshard/sdk/bake/terrain';
 import { encodeTerrainTile, decodeTerrainTile, terrainTileHeight } from '@wildshard/format/terrainTileBytes';
 
 // Keep the actual interpolation law; schema identity and diagnostic-object
