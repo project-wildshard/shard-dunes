@@ -218,6 +218,8 @@ jobs:
       upload_id: ${{ steps.report.outputs.upload_id }}
       revision: ${{ steps.report.outputs.revision }}
       hash: ${{ steps.report.outputs.hash }}
+      # QA-11-23-b row 45: the version the API holds the bytes as; unchanged bytes keep the version that holds them.
+      version: ${{ steps.report.outputs.version }}
     environment: ${{ inputs.channel }}
     env:
       APP_CLIENT_ID: ${{ secrets.APP_CLIENT_ID }}
@@ -347,7 +349,7 @@ jobs:
       contents: write
     env:
       SLUG: ${{ needs.build.outputs.slug }}
-      VERSION: ${{ needs.build.outputs.version }}
+      VERSION: ${{ needs.upload.outputs.version || needs.build.outputs.version }}
       REVISION: ${{ needs.cook.outputs.revision }}
       HASH: ${{ needs.upload.outputs.hash }}
       CHANNEL: ${{ inputs.channel }}

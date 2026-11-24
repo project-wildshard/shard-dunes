@@ -146,8 +146,9 @@ export function uploadLines(log) {
   const at = lines.findIndex((line) => /^(committed|already stored): /u.test(line));
   if (at < 0) {
     const queued = lines.find((line) => /^queued: /u.test(line));
+    const match = queued && /^queued: (\S+) (\S+) for \S+ \(upload (\S+)\)$/u.exec(queued);
     const id = queued && /\(upload (\S+)\)$/u.exec(queued)?.[1];
-    return { committed: undefined, after: [], ...(queued ? { queued, uploadId: id } : {}) };
+    return { committed: undefined, after: [], ...(queued ? { queued, uploadId: id } : {}), ...(match ? { slug: match[1], version: match[2] } : {}) };
   }
   const committed = lines[at];
   const match = /^(?:committed|already stored): (\S+) (\S+) catalogue number (\d+) for (\S+) \(([0-9a-f]{64})\)/u.exec(committed);
@@ -263,6 +264,8 @@ function report(slug, channel, logFile, shardFile) {
     summary(`### ${slug} on ${channel}: accepted, cooking\n\n~~~text\n${parsed.queued}\n~~~\n\nThe cook job waits for the verdict; by hand: \`pnpm exec wildshard upload status ${parsed.uploadId}\``);
     output('upload_id', parsed.uploadId);
     output('hash', hash);
+    // QA-11-23-b row 45: the version the API holds the bytes as (a re-upload of unchanged bytes keeps the one that holds them).
+    if (parsed.version) output('version', parsed.version);
     return;
   }
   if (!parsed.committed) throw new Refusal('the upload printed no committed or queued line');
@@ -270,6 +273,7 @@ function report(slug, channel, logFile, shardFile) {
   if (parsed.revision !== undefined) {
     output('revision', String(parsed.revision));
     output('hash', parsed.hash);
+    output('version', parsed.version);
   }
 }
 
