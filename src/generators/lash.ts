@@ -1,6 +1,7 @@
 import { BufferAttribute, BufferGeometry, CatmullRomCurve3, InstancedMesh, MeshStandardMaterial, TubeGeometry, Vector3, Euler } from 'three';
 import { bakePiece, signalPiece, type SignalPieceBake } from './kinds';
-import { CRACK, LASH_TIP, WHIP_HOLD, WHIP_VIEW, type CoilPath, type CordRgb, type CordStyle, type LashHoldRow, type LashView, type PlaitStyle } from './rows/whip';
+import { whipModel } from './whipModel';
+import { CRACK, WHIP_HOLD, WHIP_VIEW, type CoilPath, type CordRgb, type CordStyle, type LashHoldRow, type LashView, type PlaitStyle } from './rows/whip';
 
 /**
  * Build-time only (G345, the lash's graphical port): the bullwhip's held geometry, baked offline
@@ -155,8 +156,10 @@ export function crackGeometry(row: typeof CRACK = CRACK): BufferGeometry {
 const kind = (geometry: BufferGeometry): InstancedMesh => new InstancedMesh(geometry, new MeshStandardMaterial(), 1);
 
 /** The lash's bake: its four kinds (no colliders), the hand's `tip` (the generated glove's fit, `LASH_TIP`) and the loop's `along`. */
-export function bakeSignalLash(tip: readonly [number, number, number] = LASH_TIP, row: LashHoldRow = WHIP_HOLD, view: LashView = WHIP_VIEW): SignalPieceBake {
-  const loop = loopGeometry(row);
-  return bakePiece(signalPiece('lash', [['coil', kind(restCoilGeometry(row))], ['loop', kind(loop.geometry)], ['cord', kind(cordGeometry(row.lash))], ['wrap', kind(wrapGeometry(view.wrap))], ['crack', kind(crackGeometry())]], [],
-    { tip: [...tip], along: loop.along }));
+export function bakeSignalLash(tip?: readonly [number, number, number], row: LashHoldRow = WHIP_HOLD, view: LashView = WHIP_VIEW): SignalPieceBake {
+  // QA 11-24 row 11 (J510): the held whip is real geometry (`whipModel.ts`): `hand` the braided handle and gloved fist,
+  // `loop` the three-strand plaited coil; the lash leaves the handle's keeper.
+  const model = whipModel(), along = loopGeometry(row).along;
+  return bakePiece(signalPiece('lash', [['coil', kind(restCoilGeometry(row))], ['loop', kind(model.loop)], ['hand', kind(model.hand)], ['cord', kind(cordGeometry(row.lash))], ['wrap', kind(wrapGeometry(view.wrap))], ['crack', kind(crackGeometry())]], [],
+    { tip: [...(tip ?? model.tip)], along }));
 }

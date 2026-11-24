@@ -11,7 +11,6 @@ import * as surfaces from './rows/surfaces';
 import { SIGNAL_MODEL_SPECIMENS } from './rows/rigLibrary';
 import { gearSceneRows } from './rows/gearModels';
 import { whipHeldRecipe } from './rows/heldWeapon';
-import { HD_GLOVE_SIZE } from './rows/whip';
 
 type SceneModelSource = Parameters<typeof modelSceneSourceFile>[1];
 type SceneBakeSource = Parameters<typeof bakedSceneSourceFile>[1];
@@ -51,10 +50,8 @@ export function signalSceneSources(world: SceneWorldBakes, rigs: NonNullable<Sce
   const { specimen: scoutSource, ...scout } = gear[5];
   const library = { rows: { ...models.DUNE_MODELS, geometryPools: pools, rigs }, inputs, specimens: SIGNAL_MODEL_SPECIMENS,
     held: [{ item: held.equipment.id, definition: whip, recipe: whipRecipe, resources: {
-      geometry: ['coil', 'loop', 'cord', 'wrap', 'crack'].map(id => ({ id, source: { library: 'bakes', model: id }, piece: 'lash', index: 'array' as const })),
-      objects: [{ id: 'hero', source: { library: 'models', model: 'glove-hd4' }, fit: { size: HD_GLOVE_SIZE, by: 'span' } }],
-      textures: [{ id: 'plait', source: { library: 'bakes', model: 'plait' }, resource: 'plait', bytes: 196608 }],
-      decorators: [{ id: 'plait', rows: surfaces.COIL_SURFACE }], repeats: held.resources.repeats,
+      geometry: ['coil', 'loop', 'cord', 'wrap', 'crack', 'hand'].map(id => ({ id, source: { library: 'bakes', model: id }, piece: 'lash', index: 'array' as const })),
+      objects: [], textures: [], decorators: [{ id: 'leather', rows: surfaces.HELD_LEATHER }], repeats: held.resources.repeats,
     } }],
     scenes: [{ part: 'tower.root', step: 'tower', materialLibrary: 'models', effects: effects(bindings.tower), definition: gear[1] }, { part: 'caravan.root', step: 'caravan', materialLibrary: 'models', effects: effects(bindings.caravan), definition: gear[2] }, { part: 'well.root', step: 'well', materialLibrary: 'models', effects: effects(bindings.well), definition: gear[3] }, { part: 'brazier.0.root', step: 'brazier.0', materialLibrary: 'models', effects: effects(bindings.braziers[0]), definition: gear[4] }],
     npcs: [{ npc: scoutSource.npc, definition: scout, model: { kind: 'mesh', id: QUEST_NPC.npc.figure.model }, library: 'models' }],

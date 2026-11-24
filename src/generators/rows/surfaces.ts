@@ -61,3 +61,6 @@ export const HD_LOOKS: Readonly<Partial<Record<DuneHdName, HdLookRow>>> = {
   'crates-hd': { surface: CAMP_SURFACE },
   'sacks-hd': { surface: CAMP_SURFACE },
 };
+
+/** QA 11-24 row 11 (J510): the code-built whip's leather (glove, handle braid, plaited coil): the glove's viewer light, so the backlit fist reads as leather, not a silhouette. */
+export const HELD_LEATHER: readonly SurfaceLook[] = [viewer([0.2, 0.17, 0.14], 0.26)];

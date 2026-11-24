@@ -226,23 +226,20 @@ export const LASH_TIP: V3 = [-0.04935241128166193, -0.05003700856880042, 0.06305
  * coil (the dusk rim turned the thin cord a pale tan).
  */
 export const WHIP_SCENE: PrivateSceneInput = { version: 1, root: 'root', nodes: [
-    {kind:'group',id:'root',children:['grip','coil','cord','crack']}, {kind:'group',id:'grip',children:['glove','coilHold']},
-    {kind:'mesh',id:'coil',geometry:'coil',material:'coil',missing:'group',position:[...WHIP_HOLD.made.coil.pos],rotation:[...WHIP_HOLD.made.coil.rot],visibleWhen:{object:'hero',present:false}},
+    {kind:'group',id:'root',children:['grip','coil','cord','crack']}, {kind:'group',id:'grip',children:['hand','coilHold']},
+    // QA 11-24 row 11 (J510): the code coil stays for the Model Explorer only; the held whip is `hand` and `loop`.
+    {kind:'mesh',id:'coil',geometry:'coil',material:'coil',missing:'group',position:[...WHIP_HOLD.made.coil.pos],rotation:[...WHIP_HOLD.made.coil.rot],visible:false},
     {kind:'mesh',id:'cord',geometry:'cord',material:'cord',missing:'empty',visible:false,frustumCulled:false},
     {kind:'mesh',id:'crack',geometry:'crack',material:'crack',missing:'empty',visible:false,frustumCulled:false,renderOrder:2},
-    {kind:'object',id:'glove',source:'hero',missing:'omit',position:[...WHIP_HOLD.hd.pos],rotation:[...WHIP_HOLD.hd.rot]},
-    {kind:'group',id:'coilHold',children:['loop'],position:[...LOOP_HOLD.position],rotation:[...LOOP_HOLD.rotation],scale:[...LOOP_HOLD.scale]},
-    {kind:'mesh',id:'loop',geometry:'loop',material:'plait',missing:'omit',whenTexture:{texture:'plait.map',present:true}},
+    {kind:'mesh',id:'hand',geometry:'hand',material:'leather',missing:'empty',frustumCulled:false},
+    {kind:'group',id:'coilHold',children:['loop']},
+    {kind:'mesh',id:'loop',geometry:'loop',material:'leather',missing:'empty',frustumCulled:false},
   ], materials:[
     {kind:'standard',id:'coil',properties:{vertexColors:true,roughness:WHIP_HOLD.coil.roughness,metalness:0,emissive:WHIP_HOLD.leathers.emissive},userData:{...WHIP_HOLD.coilUserData}},
     {kind:'standard',id:'cord',properties:{vertexColors:true,roughness:WHIP_HOLD.lash.roughness,metalness:0,emissive:WHIP_HOLD.lash.emissive},userData:{...WHIP_HOLD.coilUserData}},
     {kind:'standard',id:'crack',properties:{color:CRACK.color,emissive:CRACK.emissive,emissiveIntensity:CRACK.glow,roughness:1,metalness:0,fog:false,transparent:true,opacity:CRACK.opacity,depthWrite:false},userData:{...WHIP_HOLD.coilUserData}},
-    {kind:'standard',id:'plait',properties:{roughness:1,metalness:0,fog:false},maps:{map:'plait.map',normalMap:'plait.normal',roughnessMap:'plait.roughness'},userData:{...WHIP_HOLD.coilUserData},decorate:'plait'},
-  ], textures:[
-    {kind:'rgba',id:'plait.map',source:'plait',width:128,height:128,offset:0,bytes:196608,colorSpace:'srgb',repeat:{port:'plait.repeat'},wrapS:1000,wrapT:1000,magFilter:1006,minFilter:1008,mipmaps:true,anisotropy:4},
-    {kind:'rgba',id:'plait.normal',source:'plait',width:128,height:128,offset:65536,bytes:196608,colorSpace:'',repeat:{port:'plait.repeat'},wrapS:1000,wrapT:1000,magFilter:1006,minFilter:1008,mipmaps:true,anisotropy:4},
-    {kind:'rgba',id:'plait.roughness',source:'plait',width:128,height:128,offset:131072,bytes:196608,colorSpace:'',repeat:{port:'plait.repeat'},wrapS:1000,wrapT:1000,magFilter:1006,minFilter:1008,mipmaps:true,anisotropy:4},
-  ]};
+    {kind:'standard',id:'leather',properties:{vertexColors:true,roughness:0.62,metalness:0,emissive:WHIP_HOLD.leathers.emissive,fog:false},userData:{...WHIP_HOLD.coilUserData},decorate:'leather'},
+  ], textures:[]};
 
 /** Exact caught-wrap mesh and plain braid material; geometry is still the original committed helix. */
 export const WHIP_WRAP_SCENE: { readonly version: 1; readonly root: "wrap"; readonly nodes: readonly [{ readonly kind: "mesh"; readonly id: "wrap"; readonly geometry: "wrap"; readonly material: "braid"; readonly missing: "empty"; }]; readonly materials: readonly [{ readonly kind: "standard"; readonly id: "braid"; readonly properties: { readonly color: number; readonly roughness: number; readonly metalness: 0; readonly emissive: number; }; }]; } = {version:1,root:'wrap',nodes:[{kind:'mesh',id:'wrap',geometry:'wrap',material:'braid',missing:'empty'}],
