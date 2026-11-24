@@ -6,7 +6,7 @@ name: publish-cook
 # for the pin when the verdict lands, and hands itself on again until its last hop (6 x 100 minutes, about 10 hours).
 # A refusal ends it red. When the publish names its version and built commit, `record` then tags that commit and
 # commits published.json, as publish.yml's own record job does (row 50; a repo whose script has no `record` skips it). Kit-owned (repo-kit files/): edit it there, never in a shard repo. By hand:
-#   gh workflow run publish-cook.yml -R project-wildshard/__REPO__ -f slug=<slug> -f channel=staging -f hash=<hash> \
+#   gh workflow run publish-cook.yml -R project-wildshard/shard-dunes -f slug=<slug> -f channel=staging -f hash=<hash> \
 #     -f upload_id=<upload id>
 on:
   workflow_dispatch:

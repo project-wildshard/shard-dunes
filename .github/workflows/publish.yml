@@ -43,11 +43,6 @@ on:
         description: Run every gate, the build and prepare; never upload
         type: boolean
         default: false
-      runner:
-        description: Where prepare's phone WebKit runs (SP5 measured both; hosted macOS arm64 is capacity-limited)
-        type: choice
-        options: [ubuntu-24.04, macos-15]
-        default: ubuntu-24.04
 
 permissions:
   contents: read
@@ -56,13 +51,14 @@ permissions:
 # Ships of one slug run one at a time; each rehearsal has its own group,
 # so a rehearsal never displaces a waiting ship.
 concurrency:
-  group: publish-${{ inputs.slug || github.repository }}-${{ inputs.rehearse && format('rehearse-{0}-{1}-{2}', github.ref_name, inputs.runner, github.run_id) || 'ship' }}
+  group: publish-${{ inputs.slug || github.repository }}-${{ inputs.rehearse && format('rehearse-{0}-{1}', github.ref_name, github.run_id) || 'ship' }}
   cancel-in-progress: false
 
 jobs:
   build:
-    runs-on: ${{ inputs.runner }}
-    timeout-minutes: 45
+    runs-on: ubuntu-24.04
+    # FR-A3: the gate waits up to 30 minutes for this commit's ci, then the slowest green build (open plots) is 43.
+    timeout-minutes: 80
     env:
       APP_CLIENT_ID: ${{ secrets.APP_CLIENT_ID }}
       CANDIDATE_ENGINE: ${{ inputs.engine }}
