@@ -308,8 +308,10 @@ jobs:
       CHANNEL: ${{ inputs.channel }}
       HASH: ${{ needs.upload.outputs.hash }}
       UPLOAD_ID: ${{ needs.upload.outputs.upload_id }}
+      # QA-11-23-b row 50: what the follow-up's record job writes to published.json.
+      VERSION: ${{ needs.upload.outputs.version || needs.build.outputs.version }}
       NIGHTLY_APP_CLIENT_ID: ${{ secrets.NIGHTLY_APP_CLIENT_ID }}
-      # QA-11-23-b row 48: past the wait, hand the cook to publish-cook.yml instead of ending red.
+      # QA-11-23-b row 49: past the wait, hand the cook to publish-cook.yml instead of ending red.
       PUBLISH_COOK_HANDOFF: 'true'
     permissions:
       contents: read
@@ -347,14 +349,15 @@ jobs:
             -F "client_payload[slug]=$SLUG" -F "client_payload[revision]=$REVISION" \
             -F "client_payload[hash]=$HASH" -F "client_payload[channel]=$CHANNEL"
           echo "engine shard-pin dispatched for $SLUG rev $REVISION" >> "$GITHUB_STEP_SUMMARY"
-      # QA-11-23-b row 48 (J505): a cook past this job's wait goes on in publish-cook.yml, which pins it on its verdict.
+      # QA-11-23-b row 49 (J505): a cook past this job's wait goes on in publish-cook.yml, which pins it on its verdict.
       - name: Hand a slow cook to publish-cook.yml
         if: steps.report.outputs.handoff == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh workflow run publish-cook.yml --repo "$GITHUB_REPOSITORY" --ref "$GITHUB_REF_NAME" \
-            -f slug="$SLUG" -f channel="$CHANNEL" -f hash="$HASH" -f upload_id="$UPLOAD_ID" -f hop=1
+            -f slug="$SLUG" -f channel="$CHANNEL" -f hash="$HASH" -f upload_id="$UPLOAD_ID" -f hop=1 \
+            -f version="$VERSION" -f built="$GITHUB_SHA"
           echo "the cook goes on in publish-cook.yml (hop 1); it asks engine for the pin on its verdict" >> "$GITHUB_STEP_SUMMARY"
 
   # SHARD-COMPAT CP13: the repo records what it published. The built commit gets tag r<revision> (<slug>-r<revision>
