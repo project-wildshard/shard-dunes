@@ -9,7 +9,8 @@ import { createRequire } from 'node:module';
 import { join, resolve } from 'node:path';
 
 const { loadHeadlessFolder } = await import('@wildshard/sdk/headless/host/headlessFolder');
-const { outputDescriptor, serverReadsFile } = await import('@wildshard/sdk/headless/game/shardfile/outputDescriptor');
+const { outputDescriptor } = await import('@wildshard/sdk/headless/game/shardfile/outputDescriptor');
+const { serverReadsFile } = await import('@wildshard/format/serverReads');
 const { loadRapier } = await import('@wildshard/sdk/headless/physics/rapier');
 import { engineRequire } from '@wildshard/sdk/headless';
 

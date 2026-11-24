@@ -39,13 +39,13 @@
   },
   "dependencies": {
     "@wildshard/format": "npm:@wildshard/shard-format@0.71.0",
-    "@wildshard/sdk": "0.4.28",
+    "@wildshard/sdk": "0.4.29",
     "three": "0.186.0",
     "valibot": "1.5.0",
     "vitest": "5.0.1",
-    "@wildshard/cli": "0.4.28",
-    "@wildshard/build": "0.4.28",
-    "@wildshard/dev": "0.4.28",
+    "@wildshard/cli": "0.4.29",
+    "@wildshard/build": "0.4.29",
+    "@wildshard/dev": "0.4.29",
     "@types/three": "0.186.0"
   },
   "devDependencies": {
