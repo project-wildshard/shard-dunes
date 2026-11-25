@@ -215,7 +215,7 @@ export const HD_GLOVE_SIZE = 0.14;
 /**
  * Where the lash leaves the hand in the hold's frame (the bake's `tip`): `lashTip(WHIP_HOLD, glove)` (generators/lash.ts)
  * over the generated glove (`whip-glove.glb`) as the client's model library takes it in, frozen as a row so the world bake
- * reads no public/ model (G320). test/shards/sunscar-dunes/whip-view.test.ts recomputes it from the GLB.
+ * reads no src/static/ model (G320). test/shards/sunscar-dunes/whip-view.test.ts recomputes it from the GLB.
  */
 export const LASH_TIP: V3 = [-0.04935241128166193, -0.05003700856880042, 0.06305454752961058];
 

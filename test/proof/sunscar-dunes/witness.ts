@@ -1,6 +1,6 @@
 // CI21 C9: engine test/proof/sunscar-dunes/witness.ts (engine blob e721d532) moved to its shard; only imports change
 // (public engine exports, this shard's src/) and physics bytes come from the installed
-// engine's rapier package (identical to engine's public/assets/physics/rapier.wasm).
+// engine's rapier package (identical to engine's src/static/assets/physics/rapier.wasm).
 // oxlint-disable-next-line import/no-nodejs-modules -- The witness reads the shard's admitted in-tree bytes and the native physics module.
 import { readFileSync } from 'node:fs';
 import { Vector3 } from 'three';

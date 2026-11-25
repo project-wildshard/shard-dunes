@@ -7,7 +7,7 @@ import type { BakedPiece } from '@wildshard/sdk/bake';
 
 /**
  * Build-time only (SHARD-PLATFORM SF72, SF67 fix 3 "bake the code-built worlds"): Signal Dunes' wind-cut rock field, baked
- * offline into a static GLB and its collider rows (`scripts/bake-signal-world.mjs` → `public/assets/sunscar-dunes/baked/
+ * offline into a static GLB and its collider rows (`scripts/bake-signal-world.mjs` → `src/static/assets/sunscar-dunes/baked/
  * <sha256>.glb` + `data/rocks.json`). The client loads the bake (`world/baked.ts`) and builds no rock mesh; nothing here is
  * imported by the client. The shapes are the runtime builder's, unchanged: the ground is the manifest's own field.
  */

@@ -4,7 +4,7 @@ import type { ModelFit } from './rows/hulls';
 
 /**
  * Build-time only (G320): the model library's facet intake, authored for the rig bake (`bake-signal-rigs.mjs`), so the bake
- * reads its generated models from the retained authoring copies (`assets/models/`) with no game module and no public/
+ * reads its generated models from the retained authoring copies (`assets/models/`) with no game module and no src/static/
  * file. `facetModel` is the library's `mesh` (every mesh of the GLB, through three's GLTFLoader and the meshopt decoder,
  * as one flat world-space soup: position, the facet colour times its baked AO kept down to `aoFloor`, flat normals);
  * `fitGeometry` is the library's own; rigid binding is the SDK bake's `bindRigid`. test/signal-rigs-authoring.test.ts

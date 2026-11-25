@@ -2,7 +2,7 @@
 // sunscar-dunes row of its discovery loop (the Sky half lives in shard-sky-reach
 // test/sky-fixed-layouts.test.ts). Every Sunscar assertion is unchanged. Engine and SDK
 // imports are public exports; the engine app-build reader takes a src/shards/<slug> root
-// (SDK gen-shards), so this repo's src/ and public/ are linked into a scratch root.
+// (SDK gen-shards), so this repo's src/ and src/static/ are linked into a scratch root.
 import { expect, test } from 'vitest';
 // oxlint-disable-next-line import/no-nodejs-modules -- Own and remove only this bounded app-build root.
 import { mkdirSync, mkdtempSync, rmSync, symlinkSync } from 'node:fs';
@@ -13,13 +13,13 @@ import { parseDiscoveryValues } from '@wildshard/format/discoveryValues';
 import { generated as signalProgram } from './fixtures/sunscar-source-program';
 import { SIGNAL_DUNES_MAP as signalMap } from '../src/generators/minimap';
 
-/** The engine app build reads a shard at src/shards/<slug>; this repo's src/ and public/ are linked there. */
+/** The engine app build reads a shard at src/shards/<slug>; this repo's src/ and src/static/ are linked there. */
 function appBuildRoot(): string {
   mkdirSync('tmp', { recursive: true });
   const root = mkdtempSync(resolve('tmp', 'sunscar-app-root-'));
   mkdirSync(resolve(root, 'src/shards'), { recursive: true });
   symlinkSync(resolve('src'), resolve(root, 'src/shards/sunscar-dunes'), 'dir');
-  symlinkSync(resolve('public'), resolve(root, 'public'), 'dir');
+  symlinkSync(resolve('src/static'), resolve(root, 'src/static'), 'dir');
   return root;
 }
 

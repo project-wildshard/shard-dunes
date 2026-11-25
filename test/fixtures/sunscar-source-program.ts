@@ -33,7 +33,7 @@ const { assets, strider, ...built } = await runSnapshot('sunscar-source-program'
   mkdirSync('tmp', { recursive: true });
   const cache = mkdtempSync(resolve('tmp', 'sunscar-program-fixture-')), assets = new Map<string, Uint8Array>();
   try {
-    const ctx = createProjectGeneration(root, 'a'.repeat(64), assets, cache, [{ prefix: '/assets/', directory: resolve('public/assets') }]);
+    const ctx = createProjectGeneration(root, 'a'.repeat(64), assets, cache, [{ prefix: '/assets/', directory: resolve('src/static/assets') }]);
     const generated = await generate(ctx), rigs = await signalRigs(ctx);
     const pools = [(await signalRestWell(ctx)).pool, (await signalRestOil(ctx)).pool, (await signalRestFire(ctx)).pool];
     const restPools = pools.map((pool, index) => {

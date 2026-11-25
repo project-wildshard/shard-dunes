@@ -2,7 +2,7 @@
 // assertion, limit and replay comparison is unchanged. Engine imports are public
 // exports, the replay session is the original harness (./productSession: ordinary
 // runtime, no product folder) and physics bytes come from the installed engine's rapier
-// package (identical to engine's public/assets/physics/rapier.wasm).
+// package (identical to engine's src/static/assets/physics/rapier.wasm).
 // oxlint-disable-next-line import/no-unassigned-import -- The sim's Math goes in before any module body runs.
 import '@wildshard/sdk/internal/engine/core/portableMathFirst';
 // oxlint-disable-next-line import/no-nodejs-modules -- Only current admitted product files and the shipped native physics module.

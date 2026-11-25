@@ -118,9 +118,9 @@
     ],
     "scenes": {
       "pools": [
-        "../../../public/assets/sunscar-dunes/baked/rest-well.glb",
-        "../../../public/assets/sunscar-dunes/baked/rest-oil.glb",
-        "../../../public/assets/sunscar-dunes/baked/rest-fire.glb"
+        "../../../src/static/assets/sunscar-dunes/baked/rest-well.glb",
+        "../../../src/static/assets/sunscar-dunes/baked/rest-oil.glb",
+        "../../../src/static/assets/sunscar-dunes/baked/rest-fire.glb"
       ],
       "bakes": [
         {
@@ -129,7 +129,7 @@
             "file": "data/rocks.json",
             "path": []
           },
-          "directory": "../../../public/assets/sunscar-dunes/baked"
+          "directory": "../../../src/static/assets/sunscar-dunes/baked"
         },
         {
           "piece": "dressing",
@@ -137,7 +137,7 @@
             "file": "data/dressing.json",
             "path": []
           },
-          "directory": "../../../public/assets/sunscar-dunes/baked"
+          "directory": "../../../src/static/assets/sunscar-dunes/baked"
         },
         {
           "piece": "tower",
@@ -145,7 +145,7 @@
             "file": "data/tower.json",
             "path": []
           },
-          "directory": "../../../public/assets/sunscar-dunes/baked"
+          "directory": "../../../src/static/assets/sunscar-dunes/baked"
         },
         {
           "piece": "caravan",
@@ -153,7 +153,7 @@
             "file": "data/caravan.json",
             "path": []
           },
-          "directory": "../../../public/assets/sunscar-dunes/baked"
+          "directory": "../../../src/static/assets/sunscar-dunes/baked"
         },
         {
           "piece": "well",
@@ -161,7 +161,7 @@
             "file": "data/well.json",
             "path": []
           },
-          "directory": "../../../public/assets/sunscar-dunes/baked"
+          "directory": "../../../src/static/assets/sunscar-dunes/baked"
         },
         {
           "piece": "lash",
@@ -169,7 +169,7 @@
             "file": "data/lash.json",
             "path": []
           },
-          "directory": "../../../public/assets/sunscar-dunes/baked"
+          "directory": "../../../src/static/assets/sunscar-dunes/baked"
         },
         {
           "piece": "braziers",
@@ -177,7 +177,7 @@
             "file": "data/braziers.json",
             "path": []
           },
-          "directory": "../../../public/assets/sunscar-dunes/baked"
+          "directory": "../../../src/static/assets/sunscar-dunes/baked"
         }
       ],
       "recipes": [
@@ -246,8 +246,8 @@
       ]
     },
     "glbs": [
-      "../../../public/assets/sunscar-dunes/baked/rocks.glb",
-      "../../../public/assets/sunscar-dunes/baked/dressing.glb"
+      "../../../src/static/assets/sunscar-dunes/baked/rocks.glb",
+      "../../../src/static/assets/sunscar-dunes/baked/dressing.glb"
     ],
     "program": true
   }

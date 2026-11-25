@@ -20,11 +20,11 @@ export function signalMapSources(world: ReadonlyMap<string, Uint8Array>, inputs:
   const bytes = new Map(inputs);
   for (const [name, value] of world) {
     if (name.endsWith('.json')) bytes.set(`data/${name}`, value);
-    else if (name.endsWith('.glb')) bytes.set(`../../../public/assets/sunscar-dunes/baked/${name}`, value);
+    else if (name.endsWith('.glb')) bytes.set(`../../../src/static/assets/sunscar-dunes/baked/${name}`, value);
   }
   for (const [index, made] of [wellRest(), oilRest(), fireRest()].entries()) {
     const url = REST_URLS[index]; if (url === undefined) throw new Error('Missing original rest pool');
-    bytes.set(`../../../public${url}`, made.glb);
+    bytes.set(`../../../src/static${url}`, made.glb);
   }
   const rest = { bindings: placeBindings() }, modelRows = { DUNE_HD_URLS };
   const need = (name: string): Uint8Array => {

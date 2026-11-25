@@ -15,7 +15,7 @@ import type { BakedPiece } from '@wildshard/sdk/bake';
  * never multi-draw).
  *
  * Build-time only (SHARD-PLATFORM SF72, SF67 fix 3 "bake the code-built worlds"): baked offline into a static GLB and its
- * collider rows (`scripts/bake-signal-world.mjs` → `public/assets/sunscar-dunes/baked/dressing.glb` + `data/dressing.json`);
+ * collider rows (`scripts/bake-signal-world.mjs` → `src/static/assets/sunscar-dunes/baked/dressing.glb` + `data/dressing.json`);
  * the client draws the bake (`world/baked.ts`) and builds no dressing mesh. The shapes are the runtime builder's,
  * unchanged. The shrubs and the grass (none since loop 5) swayed in the wind in the client; a kind with instances must
  * not need it: the bake refuses per-instance colours, and the sway would come back to the client with them.
