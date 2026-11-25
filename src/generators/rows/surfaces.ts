@@ -55,7 +55,6 @@ export const CAMP_SURFACE: readonly SurfaceLook[] = [FIRELIGHT];
  * the camp (the wagon, the crates, the sacks): the lantern and the cookfire light it.
  */
 export const HD_LOOKS: Readonly<Partial<Record<DuneHdName, HdLookRow>>> = {
-  'glove-hd4': { color: [0.92, 0.84, 0.76], roughness: 0.34, fog: false, userData: { sunscarNoRim: true }, surface: GLOVE_SURFACE },
   'brazier-hd': { color: [0.5, 0.46, 0.44], surface: BRAZIER_SURFACE },
   'wagon-hd2': { surface: CAMP_SURFACE },
   'crates-hd': { surface: CAMP_SURFACE },

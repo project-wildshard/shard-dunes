@@ -40,9 +40,9 @@ function effects(source: PlaceEffects | undefined) {
 }
 const bindings = placeEffects();
 const inputs = { dusk: 'dusk', lights: 'firelights' };
-const publicFiles = { urls: models.BAKED_URLS, resources: models.WORLD_BYTES };
+const publicFiles = { urls: models.BAKED_URLS };
 /** Original models, material decorations and bakes from explicit world rows; no rendering builder is mirrored. */
-export function signalSceneSources(world: SceneWorldBakes, rigs: NonNullable<SceneModelSource['rows']['rigs']>, pools: NonNullable<SceneModelSource['rows']['geometryPools']>, files: { readonly urls: SceneBakeSource['urls']; readonly resources: NonNullable<SceneBakeSource['resources']> } = publicFiles): NamedBlob[] {
+export function signalSceneSources(world: SceneWorldBakes, rigs: NonNullable<SceneModelSource['rows']['rigs']>, pools: NonNullable<SceneModelSource['rows']['geometryPools']>, files: { readonly urls: SceneBakeSource['urls'] } = publicFiles): NamedBlob[] {
   if (pools.length !== 3 || new Set(pools.map(pool => pool.url)).size !== 3 || pools.some(pool => pool.parts.length === 0)) throw new Error('Missing original rest pool inventory');
   const held = whipHeldRecipe(world.lash), gear = gearSceneRows(world, held);
   const { resources: _resources, ...whipRecipe } = held;
@@ -58,7 +58,7 @@ export function signalSceneSources(world: SceneWorldBakes, rigs: NonNullable<Sce
   } satisfies SceneModelSource;
   const rows = Object.fromEntries(Object.entries(world).map(([id, row]) => [id, { ...row, kinds: row.kinds.map(kind => ({ ...kind,
     ...('warm' in kind && kind.warm === true ? { surface: surfaces.CAMP_SURFACE } : {}) })) }]));
-  const baked = { rows, urls: files.urls, inputs, resources: files.resources,
+  const baked = { rows, urls: files.urls, inputs,
     placements: { rows: pieces, colliders: world.braziers.braziers.map((row, index) => ({ id: `sunscar.brazier.${String(index)}`, colliders: row.colliders })) } } satisfies SceneBakeSource;
   return [modelSceneSourceFile('world/sources/models.json', library), bakedSceneSourceFile('world/sources/bakes.json', baked)];
 }

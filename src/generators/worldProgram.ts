@@ -1,12 +1,11 @@
 import type { ProjectGenerationContext } from '@wildshard/sdk/projectGeneration';
 import { nameBlob, type NamedBlob } from '@wildshard/sdk/blobs';
 import { signalWorldMetadata, type SignalWorldMetadata } from './worldMetadata';
-import { WORLD_BYTES } from './rows/files';
 import { bakeSignalWorldSources } from './worldSources';
 
 const input = 'assets/models/dry-well.glb';
 const pieces = ['rocks', 'dressing', 'tower', 'caravan', 'well', 'braziers', 'lash'];
-const names = [...pieces.flatMap(piece => [`${piece}.glb`, `${piece}.json`]), 'plait.bin'];
+const names = pieces.flatMap(piece => [`${piece}.glb`, `${piece}.json`]);
 
 /** Cache the original world bake from its explicit model input, never from a generated piece or metadata file. */
 export async function signalWorldFiles(ctx: Pick<ProjectGenerationContext, 'cached'>): Promise<ReadonlyMap<string, Uint8Array>> {
@@ -24,16 +23,13 @@ export async function signalWorldFiles(ctx: Pick<ProjectGenerationContext, 'cach
 /** The world program's data: all original world bytes and their validated metadata. */
 export interface SignalWorldData {
   readonly world: SignalWorldMetadata; readonly blobs: readonly NamedBlob[];
-  readonly files: { readonly urls: Readonly<Record<string, string>>; readonly resources: readonly (Omit<(typeof WORLD_BYTES)[number], 'url'> & { readonly url: string })[] };
+  readonly files: { readonly urls: Readonly<Record<string, string>> };
 }
-/** Admit the unchanged seven GLBs and deflated three-map plait companion. */
+/** Admit the seven world GLBs (QA 11-24 row 50, J510: no plait texture companion; the held whip is code geometry). */
 export async function signalWorld(ctx: Pick<ProjectGenerationContext, 'cached' | 'asset'>): Promise<SignalWorldData> {
   const files = await signalWorldFiles(ctx), world = signalWorldMetadata(files);
   const need = (name: string): Uint8Array => { const bytes = files.get(name); if (bytes === undefined) throw new Error('Missing world asset'); return bytes; };
   const blobs = pieces.map(name => nameBlob(`geometry/world/${name}.glb`, 'glb', need(`${name}.glb`)));
-  // Three 128 x 128 RGBA maps, including their complete mip chains on the GPU.
-  blobs.push(nameBlob('textures/plait.bin', 'bin', need('plait.bin'), { decoded: 196608, gpu: 262140 }));
   for (const blob of blobs) if (ctx.asset(blob.bytes) !== blob.file.hash) throw new Error('World asset publication differs');
-  return { world, blobs, files: { urls: Object.fromEntries(pieces.map(name => [name, `geometry/world/${name}.glb`])),
-    resources: WORLD_BYTES.map(row => ({ id: row.id, url: 'textures/plait.bin', compression: row.compression, fault: row.fault })) } };
+  return { world, blobs, files: { urls: Object.fromEntries(pieces.map(name => [name, `geometry/world/${name}.glb`])) } };
 }

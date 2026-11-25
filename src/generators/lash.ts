@@ -1,7 +1,7 @@
 import { BufferAttribute, BufferGeometry, CatmullRomCurve3, InstancedMesh, MeshStandardMaterial, TubeGeometry, Vector3, Euler } from 'three';
 import { bakePiece, signalPiece, type SignalPieceBake } from './kinds';
 import { whipModel } from './whipModel';
-import { CRACK, WHIP_HOLD, WHIP_VIEW, type CoilPath, type CordRgb, type CordStyle, type LashHoldRow, type LashView, type PlaitStyle } from './rows/whip';
+import { CRACK, WHIP_HOLD, WHIP_VIEW, type CoilPath, type CordRgb, type CordStyle, type LashHoldRow, type LashView } from './rows/whip';
 
 /**
  * Build-time only (G345, the lash's graphical port): the bullwhip's held geometry, baked offline
@@ -10,7 +10,7 @@ import { CRACK, WHIP_HOLD, WHIP_VIEW, type CoilPath, type CordRgb, type CordStyl
  * glove's frame), `cord` (the thrown cord's rings, its braid painted, its positions rewritten every frame by
  * `runtime/items/lashView.ts`) and `wrap` (the helix a heavy lash winds round a caught lever) and `crack` (the popper's flash), and the two numbers the generated glove's fit gives: where the lash leaves the hand
  * (`tip`) and the plait tile's repeat along the loop (`along`). The glove's fit is a frozen row (`LASH_TIP`, which
- * whip-view.test.ts recomputes from the generated glove); neither the bake nor the client loads the glove. The plait tile's texels go beside it (`baked/plait.bin`, `plaitTexels`).
+ * whip-view.test.ts recomputes from the generated glove); neither the bake nor the client loads the glove. QA 11-24 row 50 (J510): no plait texture ships; the held whip is code geometry.
  */
 
 /** Paints a tube's rings with two strands laid in a spiral (the plait), so the braid reads without a texture; the last `popperRings` are the popper. */
@@ -99,36 +99,6 @@ export function lashTip(row: LashHoldRow, glove: BufferGeometry): [number, numbe
   glove.rotateZ(Math.PI / 2); glove.rotateY(fit.turn); glove.scale(fit.scale, fit.scale, fit.scale);
   const top = (b.max.x - fist - fit.keeper) * fit.scale;
   return new Vector3(0, top, 0).applyEuler(new Euler(...row.made.grip)).toArray();
-}
-
-/**
- * The plait's tile as raw RGBA texels (`baked/plait.bin`, deflated; `runtime/items/lashHold.ts` reads them): strand columns
- * round the cord, each leaning 45 deg the other way from its neighbour, so the strands meet in the chevrons a plaited thong
- * shows. Each strand is a raised lozenge (a crown, dark creases between); the normal tile carries that relief and the
- * roughness tile puts a sheen on the crowns only. Three `size`² tiles in a row: the colour (sRGB), the normal, the roughness.
- */
-export function plaitTexels(p: PlaitStyle = WHIP_HOLD.plait): Uint8Array {
-  const n = p.size, h = new Float32Array(n * n), tone = new Float32Array(n * n);
-  const hash = (a: number, b: number): number => { const s = Math.sin(a * 127.1 + b * 311.7) * 43758.5453; return s - Math.floor(s); };
-  for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) {
-    const v = (y + 0.5) / n * p.columns, col = Math.floor(v), cv = v - col, lean = col % 2 === 0 ? 1 : -1;
-    const q = (x + 0.5) / n * p.rows + lean * cv, row = Math.floor(q), across = q - row;
-    // the strand's width profile (round crown, creased edges) times its fall-off into the column's spine
-    const crown = Math.sin(Math.PI * across) ** 0.7 * Math.sin(Math.PI * cv) ** 0.35;
-    h[y * n + x] = crown; tone[y * n + x] = hash(row + 17 * col, col * 3.1); // each strand a little lighter or darker
-  }
-  const out = new Uint8Array(n * n * 12), map = out.subarray(0, n * n * 4), nor = out.subarray(n * n * 4, n * n * 8), rough = out.subarray(n * n * 8);
-  for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) {
-    const i = y * n + x, c = h[i] ?? 0, t = tone[i] ?? 0.5;
-    const dx = (h[y * n + (x + 1) % n] ?? 0) - (h[y * n + (x + n - 1) % n] ?? 0), dy = (h[((y + 1) % n) * n + x] ?? 0) - (h[((y + n - 1) % n) * n + x] ?? 0);
-    const k = Math.min(1, Math.max(0, c)), base = 0.55 + 0.45 * k, w = 0.85 + 0.3 * t;
-    map[i * 4] = Math.round(Math.min(255, (p.crease[0] + p.crown[0] * base * k) * w)); map[i * 4 + 1] = Math.round(Math.min(255, (p.crease[1] + p.crown[1] * base * k) * w));
-    map[i * 4 + 2] = Math.round(Math.min(255, (p.crease[2] + p.crown[2] * base * k) * w)); map[i * 4 + 3] = 255;
-    const s = p.relief, nx = -dx * s, ny = -dy * s, l = Math.hypot(nx, ny, 1);
-    nor[i * 4] = Math.round(255 * (0.5 + 0.5 * nx / l)); nor[i * 4 + 1] = Math.round(255 * (0.5 + 0.5 * ny / l)); nor[i * 4 + 2] = Math.round(255 * (0.5 + 0.5 / l)); nor[i * 4 + 3] = 255;
-    rough[i * 4 + 1] = Math.round(255 * (p.rough[0] - p.rough[1] * k * k)); rough[i * 4 + 3] = 255;
-  }
-  return out;
 }
 
 /**
