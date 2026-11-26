@@ -1,6 +1,6 @@
 {
   "name": "@wildshard/shard-dunes",
-  "version": "0.0.5",
+  "version": "0.0.9",
   "private": true,
   "description": "Signal Dunes: a Wildshard shard.",
   "type": "module",

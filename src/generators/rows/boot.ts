@@ -20,4 +20,4 @@ export function signalOwnedBoot(poolUrls: readonly string[] = []): { files: type
   return { sources: boot, files: { ...BOOT_FILES, sources: boot } };
 }
 /** The learned grade remains the only late read. */
-export const LATE_READS: string[] = ['/assets/lut/sunscar-dunes.bin'];
+export const LATE_READS: string[] = ['/assets/sunscar-dunes/lut.bin'];

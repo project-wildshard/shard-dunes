@@ -16,5 +16,5 @@ export async function signalNavigation(ctx: Pick<ProjectGenerationContext, 'cach
   if (files.size !== 1 || bytes === undefined) throw new Error('Navigation cache inventory differs');
   const { assets, ...metadata } = declareNavigation(bytes);
   for (const [hash, owned] of assets) if (ctx.asset(owned) !== hash) throw new Error('Navigation publication differs');
-  return { ...metadata, url: '/assets/baked/sunscar-dunes/navmesh.bin' };
+  return { ...metadata, url: '/assets/sunscar-dunes/baked/navmesh.bin' };
 }

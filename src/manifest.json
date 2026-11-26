@@ -13,8 +13,8 @@
   },
   "assetGlobs": [
     "public/assets/sunscar-dunes/**",
-    "public/assets/lut/sunscar-dunes.bin",
-    "public/assets/baked/sunscar-dunes/navmesh.bin"
+    "public/assets/sunscar-dunes/lut.bin",
+    "public/assets/sunscar-dunes/baked/navmesh.bin"
   ],
   "slug": "sunscar-dunes",
   "name": "Signal Dunes",
