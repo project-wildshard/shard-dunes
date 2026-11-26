@@ -5,7 +5,7 @@
   "description": "Signal Dunes: a Wildshard shard.",
   "type": "module",
   "engines": {
-    "node": ">=24.18.0 <25"
+    "node": ">=24.18.0 <27"
   },
   "packageManager": "pnpm@10.34.9",
   "scripts": {
@@ -36,11 +36,11 @@
   },
   "dependencies": {
     "@types/three": "0.186.0",
-    "@wildshard/build": "0.6.2",
-    "@wildshard/cli": "0.6.2",
-    "@wildshard/dev": "0.6.2",
-    "@wildshard/format": "npm:@wildshard/shard-format@0.79.2",
-    "@wildshard/sdk": "0.6.2",
+    "@wildshard/build": "0.7.0",
+    "@wildshard/cli": "0.7.0",
+    "@wildshard/dev": "0.7.0",
+    "@wildshard/format": "npm:@wildshard/shard-format@0.79.3",
+    "@wildshard/sdk": "0.7.0",
     "three": "0.186.0",
     "valibot": "1.5.0",
     "vitest": "5.0.1"
@@ -139,7 +139,7 @@
     "overrides": {
       "binaryen": "npm:@pre-bundled/binaryen@132.0.0-patch-1",
       "assemblyscript>binaryen": "npm:@pre-bundled/binaryen@131.0.0-nightly.20260721-patch-1",
-      "@wildshard/format": "npm:@wildshard/shard-format@0.79.2"
+      "@wildshard/format": "npm:@wildshard/shard-format@0.79.3"
     }
   },
   "binDependencies": {
@@ -149,7 +149,7 @@
   },
   "binDependenciesInstaller": "pnpm",
   "wildshard": {
-    "migrated": "0.6.2"
+    "migrated": "0.7.0"
   },
   "binDependenciesProjectSettings": false
 }

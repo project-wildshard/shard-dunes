@@ -26,7 +26,7 @@ test('a freed Dune Ray dives at a player standing under its circle and its swoop
   const rapier = await loadRapier(Uint8Array.from(readFileSync(nativeRapierFile)));
   const world = await prepareRuntimeWorld(product.shardfile, assets, plan.baked, plan.recipe, descriptor.sections), host = createSimHost(world.level, { ...world.ports, rapier });
   try {
-    world.install(host, { restoring: false, emit: () => undefined }).keeper.settle();
+    world.install(host, { restoring: false, emit: () => undefined });
     const ray = host.entities.get(RAY_HOME); if (ray === undefined) throw new Error('Missing the first ray');
     host.flags.set('sunscar.scout'); host.step();
     const player = leadPlayer(host);

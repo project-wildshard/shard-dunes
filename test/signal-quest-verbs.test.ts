@@ -13,7 +13,7 @@ import * as v from 'valibot';
 const resultSchema=v.object({phase:v.literal('replayed'),slug:v.literal('sunscar-dunes'),ticks:v.number(),quest:v.literal('sunscar.signal'),complete:v.literal(true),segments:v.number(),
   retries:v.pipe(v.number(),v.integer(),v.minValue(1)),stormRetry:v.literal(true),arenaBounded:v.literal(true)});
 test('Signal earns the full quest and a bounded Matriarch storm retry through real input replay',()=>{
-  const child=spawnSync(process.execPath,['--experimental-transform-types','--import',import.meta.resolve('@wildshard/sdk/headless/scripts/sim-node-loader.mjs'),
+  const child=spawnSync(process.execPath,['--import',import.meta.resolve('@wildshard/sdk/headless/scripts/sim-node-loader.mjs'),
     resolve('test/fixtures/headless/signal-story-run.ts')],{encoding:'utf8',timeout:30_000});
   expect(child.status,child.stdout+child.stderr).toBe(0);
   const line=child.stdout.split('\n').find(row=>row.includes('"phase":"replayed"'));

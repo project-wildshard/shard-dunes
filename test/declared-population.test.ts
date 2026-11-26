@@ -31,7 +31,7 @@ test('every home is a declared spawn: held ray, pack and striders stand, a skitt
     Uint8Array.from(readFileSync(`${directory}/${file.path}`))]));
   const rapier = await loadRapier(Uint8Array.from(readFileSync(nativeRapierFile)));
   const world = await prepareRuntimeWorld(shard, assets, plan.baked, plan.recipe, descriptor.sections), host = createSimHost(world.level, { ...world.ports, rapier });
-  world.install(host, { restoring: false, emit: () => undefined }).keeper.settle();
+  world.install(host, { restoring: false, emit: () => undefined });
   for (const row of shard.creatures.spawns.filter(row => row.id !== 'sunscar.matriarch')) expect(host.entities.get(row.id)?.alive, row.id).toBe(true);
   // OF19c1: the keeper keeps nothing; the Matriarch is a declared spawned boss, out of the world until her fight begins
   expect(plan.recipe.population.rows.boss).toBeUndefined();
@@ -53,7 +53,7 @@ test('every home is a declared spawn: held ray, pack and striders stand, a skitt
   expect(skitterer.alive).toBe(true);
   const saved = snapshotSimHost(host);
   const resumed = restoreSimHost(world.level, { ...world.ports, rapier }, saved, fresh => {
-    world.install(fresh, { restoring: true, emit: () => undefined, snapshot: saved }).keeper.settle();
+    world.install(fresh, { restoring: true, emit: () => undefined, snapshot: saved });
   });
   try {
     for (let i = 0; i < 60; i++) { host.step(); resumed.step(); }

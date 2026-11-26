@@ -102,7 +102,7 @@ test('native pack uses one module, real contacts and an exact fresh-host continu
   // (it starts at install), not the keeper's borrowed authority, so the keeper-only restart and `mem` checks went
   const calls = vi.spyOn(DecisionModule.prototype, 'invoke');
   try {
-    world.install(host, { restoring: false, emit: () => undefined }).keeper.settle();
+    world.install(host, { restoring: false, emit: () => undefined });
     const actor = host.entities.get('sunscar.home:1'); if (actor === undefined) throw new Error('Missing pack member');
     leadPlayer(host).position.copy(actor.position); leadPlayer(host).position.z += 1;
     let hits = 0; host.events.on('damage.dealt', event => { if (event.req.target === leadPlayer(host).health) hits++; }, host.scope);
@@ -114,7 +114,7 @@ test('native pack uses one module, real contacts and an exact fresh-host continu
     expect(hits).toBeGreaterThan(0);
     const saved = snapshotSimHost(host);
     resumed = restoreSimHost(world.level, { ...world.ports, rapier }, saved, fresh => {
-      world.install(fresh, { restoring: true, emit: () => undefined, snapshot: saved }).keeper.settle();
+      world.install(fresh, { restoring: true, emit: () => undefined, snapshot: saved });
     });
     expect(calls.mock.calls.filter(call => call[0] === 'ws_handle')).toHaveLength(0);
     // OF19c1: the Matriarch's decision row is the declared host's too (her encounter's), so two modules start
