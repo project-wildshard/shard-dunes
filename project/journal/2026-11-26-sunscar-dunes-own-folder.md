@@ -10,3 +10,5 @@ zone's own folder first (engine plan/repacks, zoneAssets.ts). Shard version 0.0.
 (meta R2 layout RL2).
 
 Left for the row: the hero capture from a served engine build, and the local cook entry proof.
+
+The hero is captured again from `wildshard dev` (the same view; only the flying ray moved).
