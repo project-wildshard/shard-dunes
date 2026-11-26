@@ -26,7 +26,7 @@ test('the build preload refuses the retired scheduler before module resolution',
   retired.hash = '#scheduler';
   for (const [cwd, specifier] of [
     [process.cwd(), './scripts/generate.mjs'],
-    [resolve('scripts'), './generate.mjs'],
+    [resolve('src/scripts'), './generate.mjs'], // a scripts/ folder as the cwd; the lean move made it src/scripts/
     [process.cwd(), retired.href],
   ]) {
     const control = spawnSync(process.execPath, [
