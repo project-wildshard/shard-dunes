@@ -52,7 +52,8 @@ export const held = whipHeldRecipe(world.lash), gear = gearSceneRows(world, held
 export const markers = signalQuestMarkers(world), page = signalQuestPage(markers), client = signalClientPlan(page);
 export const sourceBlobs = signalSceneSources(world, rigLibrary, restPools), scene = signalWorldScenes(world, sourceBlobs, placeBindings());
 export const originalOutput = signalSceneOutput(scene, client);
-const fireBytes = [...assets.values()].find(bytes => bytes[0] === 0xab && bytes[1] === 0x4b && bytes[2] === 0x54 && bytes[3] === 0x58);
+// SF17: the fire book is the one PNG among the source-owned assets (the sand maps are the sand program's)
+const fireBytes = [...assets.values()].find(bytes => bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47);
 if (fireBytes === undefined || assets.size !== 19) throw new Error('Missing source-owned fire-book, pools, rigs or world');
 export const signalShardfileRows = () => shardfileRows(fireBookFile(fireBytes), sand, navigation);
 export const source = generated.shard;

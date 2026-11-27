@@ -56,3 +56,19 @@ test('sand maps refuse missing, changed and reused texture references', () => {
     expect(() => signalSandMetadata(invalid)).toThrow();
   }
 });
+
+// SF17 (J525): the maps are lossless PNGs of the bake's texels, grey for R8 and RGBA for the grain tile.
+test('each sand map PNG decodes to the bake texel for texel', async () => {
+  const { readImagePixels } = await import('@wildshard/sdk/bake/image');
+  const { bakeSignalSand } = await import('./sand');
+  const baked = bakeSignalSand(), maps = signalSandMetadata(files).maps;
+  for (const [name, channels] of [['grain', 4], ['trail', 1], ['shadow', 1]] as const) {
+    const bytes = files.get(`assets/${maps[name].hash}`);
+    if (bytes === undefined) throw new Error(`no ${name} map`);
+    expect([...bytes.subarray(0, 4)]).toEqual([0x89, 0x50, 0x4e, 0x47]);
+    const image = await readImagePixels(bytes, { flipY: false }), want = baked[name];
+    const got = channels === 4 ? image.pixels : image.pixels.filter((_, i) => i % 4 === 0);
+    expect(got.length).toBe(want.length);
+    expect(Buffer.compare(Buffer.from(got), Buffer.from(want))).toBe(0);
+  }
+}, 120_000);

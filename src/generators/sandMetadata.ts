@@ -1,4 +1,4 @@
-import { parseKtx2 } from '@wildshard/sdk/assets';
+import { assetCost } from '@wildshard/sdk/assets';
 import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/sdk/immutable';
 import type { bakeSandFiles } from './sand';
 
@@ -15,7 +15,7 @@ function document(files: ReadonlyMap<string, Uint8Array>, name: string): unknown
   if (bytes === undefined || bytes.length === 0 || bytes.length > 4096) throw new Error('Missing or oversized sand metadata');
   return JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes));
 }
-/** Recompute costs and hashes from owned KTX2 bytes; cached declarations cannot understate them. */
+/** Recompute costs and hashes from owned PNG bytes (SF17); cached declarations cannot understate them. */
 export function signalSandMetadata(files: ReadonlyMap<string, Uint8Array>): SignalSandMetadata {
   const means = document(files, 'sand.json'), maps = document(files, 'sandMaps.json');
   if (!record(means) || Object.keys(means).sort().join(',') !== 'meanGlint,meanR'
@@ -28,7 +28,7 @@ export function signalSandMetadata(files: ReadonlyMap<string, Uint8Array>): Sign
     if (!record(row) || typeof row['hash'] !== 'string' || !/^[a-f0-9]{64}$/u.test(row['hash'])) throw new Error('Invalid sand map reference');
     const hash = row['hash'], bytes = files.get(`assets/${hash}`);
     if (bytes === undefined || hashes.has(hash) || hashImmutableBytes(bytes) !== hash) throw new Error('Sand map bytes differ');
-    const expected = { hash, kind: 'ktx2' as const, compressed: bytes.length, ...parseKtx2(bytes), dependencies: [], critical: false as const };
+    const expected = { hash, kind: 'image' as const, compressed: bytes.length, ...assetCost('image', bytes), dependencies: [], critical: false as const };
     if (encodeCanonicalJson(row) !== encodeCanonicalJson(expected)) throw new Error('Sand map costs differ');
     hashes.add(hash); return expected;
   };
