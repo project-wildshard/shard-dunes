@@ -15,7 +15,7 @@ export async function signalFireBook(ctx: Pick<ProjectGenerationContext, 'cached
   const image = await ctx.readImagePixels(source, { flipY: false });
   const pixels = new Uint8Array(image.pixels.buffer, image.pixels.byteOffset, image.pixels.byteLength);
   const key = hashImmutableBytes(new TextEncoder().encode(`${String(image.width)}x${String(image.height)}:${hashImmutableBytes(pixels)}`));
-  const bytes = only(await ctx.cached({ id: `fire-book-${key}`, native: true }, () => new Map([['fire-book.ktx2', bakeFireBook(image).bytes]])), 'fire-book.ktx2');
+  const bytes = only(await ctx.cached({ id: `fire-book-png-${key}`, native: true }, () => new Map([['fire-book.png', bakeFireBook(image).bytes]])), 'fire-book.png');
   const file = fireBookFile(bytes);
   if (ctx.asset(bytes) !== file.hash) throw new Error('Fire-book publication differs');
   return { bytes, file };
